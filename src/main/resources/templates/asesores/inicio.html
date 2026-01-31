@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ASESOR</title>
+</head>
+<body>
+
+<div th:replace="~{fragmentos/alertas :: alertas(${alertaRespuesta})}"></div>
+
+    <h1>HOLA ASESOR</h1>
+
+    <form th:action="@{/logout}" method="post" class="d-inline">
+        <button class="btn btn-danger">Logout</button>
+    </form>
+
+
+<a th:href="@{/usuarios/perfil}">
+    <button> IR A MI PERFIL </button>
+</a>
+</body>
+</html>

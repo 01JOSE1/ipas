@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title th:text="'Error ' + ${error.estado}">
+        Error
+    </title>
+</head>
+<body>
+
+<h1>Ups 😵</h1>
+
+<p>
+    <strong>Estado HTTP:</strong>
+    <span th:text="${error.estado}">500</span>
+</p>
+
+<p>
+    <strong>Tipo de error:</strong>
+    <span th:text="${error.nombre}">Internal Server Error</span>
+</p>
+
+<p>
+    <strong>Mensaje:</strong>
+    <span th:text="${error.mensaje}">Algo salió mal</span>
+</p>
+
+</body>
+</html>

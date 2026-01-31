@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | Registro</title>
+    <link th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            gap: 40px;
+        }
+        .box {
+            width: 45%;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        .success {
+            background: #e6ffe6;
+            color: #0a7a0a;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        input {
+            width: 100%;
+            margin-bottom: 6px;
+            padding: 6px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 8px 15px;
+        }
+
+
+
+        /* Posicionamiento en la esquina superior izquierda */
+        .alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999; /* Asegura que esté por encima de todo */
+            width: auto;
+            min-width: 250px;
+            max-width: 400px;
+        }
+
+        /* Evita que los estilos de Bootstrap choquen con tus estilos manuales */
+        .alert {
+            display: block !important;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid transparent;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Acceso de Usuarios</h1>
+
+<div th:replace="~{fragmentos/alertas :: alertas(${alertaRespuesta})}"></div>
+
+
+<div class="container">
+
+    <!-- =================== LOGIN =================== -->
+    <div class="box">
+        <h2>Iniciar Sesión</h2>
+
+        <form th:action="@{/usuarios/login}" method="POST">
+            <label>Correo</label>
+            <input type="email" name="username" required>
+
+            <label>Clave</label>
+            <input type="password" name="password" required>
+
+            <button type="submit">Ingresar</button>
+        </form>
+
+        </div>
+    </div>
+
+    <!-- =================== REGISTRO =================== -->
+    <div class="box">
+        <h2>Registro</h2>
+
+        <form th:action="@{/usuarios/registro}"
+              th:object="${registroDTO}"
+              method="post">
+
+            <!-- NOMBRE -->
+            <label>Nombre</label>
+            <input type="text" th:field="*{nombre}">
+            <div class="error"
+                 th:if="${#fields.hasErrors('nombre')}"
+                 th:errors="*{nombre}">
+            </div>
+
+            <!-- APELLIDO -->
+            <label>Apellido</label>
+            <input type="text" th:field="*{apellido}">
+            <div class="error"
+                 th:if="${#fields.hasErrors('apellido')}"
+                 th:errors="*{apellido}">
+            </div>
+
+            <!-- CORREO -->
+            <label>Correo</label>
+            <input type="email" th:field="*{correo}">
+            <div class="error"
+                 th:if="${#fields.hasErrors('correo')}"
+                 th:errors="*{correo}">
+            </div>
+
+            <!-- CLAVE -->
+            <label>Clave</label>
+            <input type="password" th:field="*{clave}">
+            <div class="error"
+                 th:if="${#fields.hasErrors('clave')}"
+                 th:errors="*{clave}">
+            </div>
+
+            <button type="submit">Registrarse</button>
+        </form>
+
+    </div>
+
+</div>
+
+<script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

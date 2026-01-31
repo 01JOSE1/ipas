@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1> PERFIL </h1>
+
+<div th:replace="~{fragmentos/alertas :: alertas(${alertaRespuesta})}"></div>
+
+
+<form th:object="${usuarioActualizarDTO}"
+      th:action="@{/usuarios/actualizar}"
+      method="post">
+
+    <!-- NOMBRE -->
+    <div>
+        <label>Nombre</label>
+        <input type="text"
+               th:field="*{nombre}">
+        <small th:if="${#fields.hasErrors('nombre')}"
+               th:errors="*{nombre}"></small>
+    </div>
+
+    <!-- APELLIDO -->
+    <div>
+        <label>Apellido</label>
+        <input type="text"
+               th:field="*{apellido}">
+        <small th:if="${#fields.hasErrors('apellido')}"
+               th:errors="*{apellido}"></small>
+    </div>
+
+    <!-- TIPO DOCUMENTO -->
+    <div>
+        <label>Tipo de documento</label>
+        <select th:field="*{tipoDocumento}">
+            <option value="">Seleccione</option>
+            <option th:each="tipo : ${T(com.proyecto.ipas.negocio.dominio.enums.TipoDocumentoUsuario).values()}"
+                    th:value="${tipo}"
+                    th:text="${tipo}"
+                    th:selected="${tipo == tipoDocumento}">
+            </option>
+        </select>
+        <small th:if="${#fields.hasErrors('tipoDocumento')}"
+               th:errors="*{tipoDocumento}"></small>
+    </div>
+
+    <!-- NÚMERO DOCUMENTO -->
+    <div>
+        <label>Número de documento</label>
+        <input type="text"
+               th:field="*{numeroDocumento}">
+        <small th:if="${#fields.hasErrors('numeroDocumento')}"
+               th:errors="*{numeroDocumento}"></small>
+    </div>
+
+    <!-- TELÉFONO -->
+    <div>
+        <label>Teléfono</label>
+        <input type="text"
+               th:field="*{telefono}">
+        <small th:if="${#fields.hasErrors('telefono')}"
+               th:errors="*{telefono}"></small>
+    </div>
+
+    <!-- DIRECCIÓN -->
+    <div>
+        <label>Dirección</label>
+        <input type="text"
+               th:field="*{direccion}">
+        <small th:if="${#fields.hasErrors('direccion')}"
+               th:errors="*{direccion}"></small>
+    </div>
+
+    <!-- CORREO (SOLO MOSTRAR) -->
+    <div>
+        <label>Correo electrónico</label>
+        <input type="email"
+               th:value="${correo}"
+               disabled>
+    </div>
+
+    <button type="submit">Actualizar perfil</button>
+</form>
+
+
+</body>
+</html>

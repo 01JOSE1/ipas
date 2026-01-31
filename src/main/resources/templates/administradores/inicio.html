@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ADMINISTRADOR</title>
+</head>
+<body>
+
+<div th:replace="~{fragmentos/alertas :: alertas(${alertaRespuesta})}"></div>
+
+<h1>HOLA ADMINISTRADOR</h1>
+
+<form th:action="@{/logout}" method="post" class="d-inline">
+    <button class="btn btn-danger">Logout</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<th:block th:fragment="alertas(alertaRespuesta)">
+
+    <div th:if="${alertaRespuesta != null}"
+         class="alert-container">
+
+        <div class="alert"
+             th:classappend="${alertaRespuesta.tipo.name() == 'EXITO' ? 'alert-success' :
+                     (alertaRespuesta.tipo.name() == 'INFO' ? 'alert-info' :
+                     (alertaRespuesta.tipo.name() == 'ERROR' or alertaRespuesta.tipo.name() == 'FATAL' ? 'alert-danger' :
+                     (alertaRespuesta.tipo.name() == 'ADVERTENCIA' ? 'alert-warning' : '')))}">
+            <span th:text="${alertaRespuesta.mensaje}"></span>
+        </div>
+
+    </div>
+
+</th:block>
+
+</body>
+</html>
