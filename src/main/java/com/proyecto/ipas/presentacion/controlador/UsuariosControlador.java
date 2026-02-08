@@ -111,7 +111,9 @@ public class UsuariosControlador {
             redirectAttributes.addFlashAttribute("alertaRespuesta", alertaRespuesta);
 
         } catch (ConflictoExcepcion ex) {
-            validacion.rejectValue("correo", "USUARIO_DUPLICADO", ex.getMessage()); // SOLO EL NOMBRE DEL CAMPO AGREGAR
+            ex.getCampoErrorLista().forEach(error -> {
+                validacion.rejectValue(error.getCampo(), ex.getErrorCodigo(), error.getMensaje());
+            });
             return "usuarios/loginRegistroFormulario";
         } catch (NegocioExcepcion ex) {
             AlertaRespuesta alertaRespuesta = new AlertaRespuesta(TipoAlerta.ERROR, ex.getMessage());
@@ -165,7 +167,6 @@ public class UsuariosControlador {
 
         } catch (NegocioExcepcion ex) {
 
-            System.out.println("CAPTURA DE EXCEPCION DE NEGOCIO");
             AlertaRespuesta alertaRespuesta = new AlertaRespuesta(
                     HttpStatus.BAD_REQUEST.value(),
                     TipoAlerta.ERROR,
@@ -176,14 +177,10 @@ public class UsuariosControlador {
             redirectAttributes.addFlashAttribute("alertaRespuesta", alertaRespuesta);
             return "redirect:/usuarios/perfil";
         } catch (ConflictoExcepcion ex) {
-            String campo = ex.getMessage();
-            if (campo.contains("documento")) {
-                campo = "numeroDocumento";
-            } else if (campo.contains("telefono")) {
-                campo = "telefono";
-            }
+            ex.getCampoErrorLista().forEach(error -> {
+                validacion.rejectValue(error.getCampo(), ex.getErrorCodigo(), error.getMensaje());
+            });
 
-            validacion.rejectValue(campo, "USUARIO_DUPLICADO", ex.getMessage());
             mantenerCorreoPerfil(usuarioSesion, modelo);
             return "usuarios/actualizar";
         }

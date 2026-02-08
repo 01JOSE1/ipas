@@ -15,8 +15,6 @@ public class Usuario {
     private Long id;
     private final String nombre;
     private final String apellido;
-    private TipoDocumentoUsuario tipoDocumento;
-    private String numeroDocumento;
     private final String email;
     private EstadoUsuario estado;
     private Rol rol ;
@@ -188,7 +186,7 @@ public class Usuario {
 
     private static void validarIdUsuario(Long idUsuario) {
         if (idUsuario == null || idUsuario <= 0) {
-            throw new IllegalArgumentException("ID de rol debe ser positivo");
+            throw new IllegalArgumentException("ID de usuario debe ser positivo");
         }
     }
 
@@ -273,14 +271,6 @@ public class Usuario {
         return apellido;
     }
 
-    public TipoDocumentoUsuario getTipoDocumento() {
-        return tipoDocumento;
-    }
-
-    public String getNumeroDocumento() {
-        return numeroDocumento;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -320,8 +310,6 @@ public class Usuario {
         return "Usuario{" +
                 "nombre=" + nombre +
                 ", apellido='" + apellido + '\'' +
-                ", tipoDocumento=" + tipoDocumento +
-                ", numeroDocumento='" + numeroDocumento + '\'' +
                 ", email='" + email + '\'' +
                 ", estadoUsuario=" + estado +
                 ", rol=" + rol +

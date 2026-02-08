@@ -11,7 +11,6 @@ import com.proyecto.ipas.negocio.dominio.modelo.Usuario;
 import com.proyecto.ipas.presentacion.excepcion.ConflictoExcepcion;
 import com.proyecto.ipas.presentacion.excepcion.NegocioExcepcion;
 import com.proyecto.ipas.presentacion.excepcion.RecursoNOEncontradoException;
-import com.proyecto.ipas.presentacion.excepcion.ValidacionDatosExcepcion;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.autenticacion.RegistroDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.autenticacion.RespuestaDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.usuario.UsuarioActualizarDTO;
@@ -54,8 +53,14 @@ public class UsuarioServicio {
 
         registro.debug("Creando usuario con email: {}", registroDTO.getCorreo());
 
+        ArrayList<ConflictoExcepcion.ErrorCampo> errores = new ArrayList<>();
+
         if (usuarioRepositorio.existsByCorreo(registroDTO.getCorreo())) {
-            throw new ConflictoExcepcion("El correo ya existe");
+            errores.add(new ConflictoExcepcion.ErrorCampo("correo", registroDTO.getCorreo()));
+        }
+
+        if (errores.size()>0){
+            throw new ConflictoExcepcion("Conflicto de datos del usuario", errores);
         }
 
         RolEntidad rolEntidad = rolRepositorio.findByNombreRol(ROL_PREDETERMINADO).orElseThrow(() -> new RecursoNOEncontradoException("ROL", "NOMBRE", ROL_PREDETERMINADO));
@@ -71,7 +76,7 @@ public class UsuarioServicio {
             usuarioEntidad.setClave(passwordEncoder.encode(registroDTO.getClave()));
 
             UsuarioEntidad usuarioGuardado = usuarioRepositorio.save(usuarioEntidad);
-
+            usuarioRepositorio.flush();
             registro.info("Usuario creado exitosamente con ID: {}", usuarioGuardado.getIdUsuario());
 
             return usuarioMapper.toRespuestaDTO(usuarioGuardado);
@@ -99,14 +104,20 @@ public class UsuarioServicio {
 
         UsuarioEntidad usuarioEntidad = usuarioRepositorio.findById(idUsuario).orElseThrow(() -> new RecursoNOEncontradoException("USUARIO", "ID", idUsuario));
 
+        ArrayList<ConflictoExcepcion.ErrorCampo> errores = new ArrayList<>();
 
         if (usuarioRepositorio.existsByNumeroDocumentoAndIdUsuarioNot(usuarioActualizarDTO.getNumeroDocumento(), usuarioEntidad.getIdUsuario())) {
-            throw new ConflictoExcepcion("Numero de documento ya existe");
+            errores.add(new ConflictoExcepcion.ErrorCampo("numeroDocumento", "Numero de documento ya existe"));
         }
 
         if (usuarioRepositorio.existsBytelefonoAndIdUsuarioNot(usuarioActualizarDTO.getTelefono(), usuarioEntidad.getIdUsuario())) {
-            throw new ConflictoExcepcion("Numero de telefono ya existe");
+            errores.add(new ConflictoExcepcion.ErrorCampo("telefono", "Numero de telefono ya existe"));
         }
+
+        if (errores.size() > 0) {
+            throw new ConflictoExcepcion("Conflicto de datos del usuario", errores);
+        }
+
 
         try {
 
@@ -126,12 +137,6 @@ public class UsuarioServicio {
         }
     }
 
-
-
-//
-//    List<UsuarioRespuestaDTO> obtenerTodosLosUsuarios(){};
-//
-//    void eliminarUsuario(Long id){};
 }
 
 
