@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro Cliente</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{fragmentos/alertas :: alertas(${alertaRespuesta})}"></div>
+
+<div class="container mt-5">
+    <h2 class="mb-4"
+        th:text="${modo == 'CREAR'} ? 'Crear Cliente' : 'Editar Cliente'">
+    </h2>
+
+    <h2 class="mb-4"
+        th:text="${gestionClienteDTO.idCliente}">
+    </h2>
+
+    <form th:action="${modo == 'CREAR'}
+        ? @{/asesor/registro-cliente}
+        : @{/asesor/actualizacion-cliente/{idCliente}(idCliente=${gestionClienteDTO.idCliente})}"
+          th:object="${gestionClienteDTO}"
+          method="post">
+
+
+        <!-- Nombre -->
+        <div class="mb-3">
+            <label class="form-label">Nombre *</label>
+            <input type="text" class="form-control" th:field="*{nombre}">
+            <div class="text-danger" th:errors="*{nombre}"></div>
+        </div>
+
+        <!-- Apellido -->
+        <div class="mb-3">
+            <label class="form-label">Apellido *</label>
+            <input type="text" class="form-control" th:field="*{apellido}">
+            <div class="text-danger" th:errors="*{apellido}"></div>
+        </div>
+
+        <!-- Tipo Documento -->
+        <div class="mb-3">
+            <label class="form-label">Tipo de Documento *</label>
+            <select class="form-select" th:field="*{tipoDocumento}">
+                <option value="">Seleccione</option>
+                <option th:each="tipo : ${T(com.proyecto.ipas.negocio.dominio.enums.TipoDocumentoCliente).values()}"
+                        th:value="${tipo}"
+                        th:text="${tipo}">
+
+                </option>
+            </select>
+            <div class="text-danger" th:errors="*{tipoDocumento}"></div>
+        </div>
+
+
+        <!-- Número Documento -->
+        <div class="mb-3">
+            <label class="form-label">Número de Documento *</label>
+            <input type="text" class="form-control" th:field="*{numeroDocumento}">
+            <div class="text-danger" th:errors="*{numeroDocumento}"></div>
+        </div>
+
+        <!-- Fecha Nacimiento -->
+        <div class="mb-3">
+            <label class="form-label">Fecha de Nacimiento *</label>
+            <input type="date" class="form-control" th:field="*{fechaNacimiento}">
+            <div class="text-danger" th:errors="*{fechaNacimiento}"></div>
+        </div>
+
+        <!-- Estado Civil -->
+        <div class="mb-3">
+            <label class="form-label">Estado Civil *</label>
+            <select class="form-select" th:field="*{estadoCivil}">
+                <option value="">Seleccione</option>
+                <option th:each="estado : ${T(com.proyecto.ipas.negocio.dominio.enums.EstadoCivilCliente).values()}"
+                        th:value="${estado}"
+                        th:text="${estado}">
+                </option>
+            </select>
+            <div class="text-danger" th:errors="*{estadoCivil}"></div>
+        </div>
+
+
+
+        <!-- Teléfono -->
+        <div class="mb-3">
+            <label class="form-label">Teléfono *</label>
+            <input type="text" class="form-control" th:field="*{telefono}">
+            <div class="text-danger" th:errors="*{telefono}"></div>
+        </div>
+
+        <!-- Correo -->
+        <div class="mb-3">
+            <label class="form-label">Correo *</label>
+            <input type="email" class="form-control" th:field="*{correo}">
+            <div class="text-danger" th:errors="*{correo}"></div>
+        </div>
+
+        <!-- Dirección (Opcional) -->
+        <div class="mb-3">
+            <label class="form-label">Dirección</label>
+            <input type="text" class="form-control" th:field="*{direccion}">
+            <div class="text-danger" th:errors="*{direccion}"></div>
+        </div>
+
+        <!-- Ciudad (Opcional) -->
+        <div class="mb-3">
+            <label class="form-label">Ciudad</label>
+            <input type="text" class="form-control" th:field="*{ciudad}">
+            <div class="text-danger" th:errors="*{ciudad}"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Registrar</button>
+
+    </form>
+</div>
+
+</body>
+</html>

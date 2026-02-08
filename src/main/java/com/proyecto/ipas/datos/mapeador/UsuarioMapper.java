@@ -48,7 +48,6 @@ public interface UsuarioMapper {
     @Mapping(target = "idUsuario", source = "id")
     @Mapping(target = "correo", source = "email")
     @Mapping(target = "rol", source = "rol")
-    @Mapping(target = "clave", ignore = true)
     UsuarioEntidad toUsuarioEntidad(Usuario usuario);
 
 

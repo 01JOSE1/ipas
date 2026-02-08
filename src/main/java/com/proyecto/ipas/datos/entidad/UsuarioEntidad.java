@@ -15,6 +15,7 @@ public class UsuarioEntidad {
 //    @GeneratedValue → valor automático
 //    IDENTITY → lo genera la BD
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario")
     private Long idUsuario;
 
     @Column(nullable = false, length = 40)
@@ -24,6 +25,7 @@ public class UsuarioEntidad {
     private String apellido;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_documento")
     private TipoDocumentoUsuario tipoDocumento;
 
     @Column(name = "numero_documento", length = 40)
@@ -173,7 +175,7 @@ public class UsuarioEntidad {
         if (idUsuario == null || that.idUsuario == null) {
             return false; // Objetos nuevos nunca son iguales
         }
-        return Objects.equals(idUsuario, that.idUsuario);
+        return Objects.equals(idUsuario, that.idUsuario); // Compara los dos objetos por su id
     }
 
     @Override
