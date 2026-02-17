@@ -1,6 +1,5 @@
 package com.proyecto.ipas.datos.entidad;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.proyecto.ipas.negocio.dominio.enums.EstadoCivilCliente;
 import com.proyecto.ipas.negocio.dominio.enums.TipoDocumentoCliente;
 import jakarta.persistence.*;

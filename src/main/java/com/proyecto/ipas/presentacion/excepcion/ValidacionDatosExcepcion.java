@@ -1,26 +1,22 @@
 package com.proyecto.ipas.presentacion.excepcion;
 
 
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class ValidacionDatosExcepcion extends BaseExcepcion {
 
-    private List<ErrorCampo> campoErrorLista = new ArrayList<>();
+    private List<ErrorCampo> campoErrorLista;
 
 
-    public ValidacionDatosExcepcion(String message) {
+    public ValidacionDatosExcepcion(String message,  List<ErrorCampo> campoErrorLista) {
         super(message, "DATOS_INVALIDOS");
+        this.campoErrorLista = List.copyOf(campoErrorLista);
     }
 
     public List<ErrorCampo> getCampoErrorLista() {
         return campoErrorLista;
     }
 
-    public void agregarCampoError(String campo, String mensaje){
-        campoErrorLista.add(new ValidacionDatosExcepcion.ErrorCampo(campo, mensaje));
-    }
 
     public static class ErrorCampo {
         private final String campo;
@@ -29,6 +25,14 @@ public class ValidacionDatosExcepcion extends BaseExcepcion {
         public ErrorCampo(String campo, String mensaje) {
             this.campo = campo;
             this.mensaje = mensaje;
+        }
+
+        public String getCampo() {
+            return campo;
+        }
+
+        public String getMensaje() {
+            return mensaje;
         }
     }
 }

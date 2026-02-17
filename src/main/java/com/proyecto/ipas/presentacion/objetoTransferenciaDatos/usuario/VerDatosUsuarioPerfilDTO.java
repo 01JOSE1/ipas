@@ -1,4 +1,4 @@
-package com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.usuario;
+package com.proyecto.ipas.presentacion.objetoTransferenciaDatos.usuario;
 
 
 import com.proyecto.ipas.negocio.dominio.enums.TipoDocumentoUsuario;

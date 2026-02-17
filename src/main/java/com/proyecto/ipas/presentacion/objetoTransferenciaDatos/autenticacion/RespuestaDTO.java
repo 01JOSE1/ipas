@@ -1,4 +1,4 @@
-package com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.autenticacion;
+package com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion;
 
 
 public record RespuestaDTO (

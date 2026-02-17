@@ -211,7 +211,7 @@ public class Usuario {
 
         if (nombres.length() > 40) {
             throw new IllegalArgumentException(
-                    "Los nombres no pueden exceder 100 caracteres"
+                    "Los nombres no pueden exceder 40 caracteres"
             );
         }
 
@@ -302,7 +302,7 @@ public class Usuario {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id);
+        return Objects.hashCode(id);
     }
 
     @Override

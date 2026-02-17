@@ -1,4 +1,4 @@
-package com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.cliente;
+package com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente;
 
 import com.proyecto.ipas.datos.entidad.ClienteEntidad;
 import com.proyecto.ipas.infraestructura.utilidades.EnCreacion;

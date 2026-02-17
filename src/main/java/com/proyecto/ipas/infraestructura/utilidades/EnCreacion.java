@@ -1,4 +1,4 @@
-package com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.cliente;
+package com.proyecto.ipas.infraestructura.utilidades;
 
 public interface EnCreacion {
 }

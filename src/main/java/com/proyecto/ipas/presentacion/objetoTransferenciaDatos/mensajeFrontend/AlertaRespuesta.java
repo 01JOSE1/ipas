@@ -1,4 +1,4 @@
-package com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.mensajeFrontend;
+package com.proyecto.ipas.presentacion.objetoTransferenciaDatos.mensajeFrontend;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.proyecto.ipas.infraestructura.utilidades.TipoAlerta;
