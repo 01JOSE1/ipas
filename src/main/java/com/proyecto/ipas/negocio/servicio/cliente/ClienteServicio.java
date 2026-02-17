@@ -9,8 +9,9 @@ import com.proyecto.ipas.negocio.dominio.modelo.Cliente;
 import com.proyecto.ipas.presentacion.excepcion.ConflictoExcepcion;
 import com.proyecto.ipas.presentacion.excepcion.NegocioExcepcion;
 import com.proyecto.ipas.presentacion.excepcion.RecursoNOEncontradoException;
-import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.cliente.GestionClienteDTO;
-import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.cliente.RespuestaClienteDTO;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.BusquedaClienteDTO;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.GestionClienteDTO;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.RespuestaClienteDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ClienteServicio {
@@ -59,6 +61,11 @@ public class ClienteServicio {
         Pageable pageable = PageRequest.of(pagina, cantidad);
 
         return clienteRepositorio.findAll(pageable).map(RespuestaClienteDTO::new);
+    }
+
+    @Transactional(readOnly = true)
+    public List<BusquedaClienteDTO> buscarClientes(String termino) {
+        return clienteRepositorio.buscarClientes(termino);
     }
 
 
@@ -166,8 +173,7 @@ public class ClienteServicio {
              * @param idUsuarioActual Identificador del usuario que realiza la operación.
              */
             jdbcTemplate.update(
-                    "SET @usuario_actual = ?",
-                    idUsuarioActual
+                    "SET @usuario_actual = ?", idUsuarioActual
             );
 
             clienteRepositorio.save(clienteEntidad);
