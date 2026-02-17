@@ -132,6 +132,11 @@ public class SeguridadConfiguracion {
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(manejadorPuntoEntradaAutenticacion)
                         .accessDeniedHandler(manejadorAccesoDenegado)  // Página cuando no tiene permisos
+                )
+
+                // Para permitir iframes
+                .headers(headers -> headers
+                    .frameOptions(frameOptions -> frameOptions.sameOrigin()) // ESTA ES LA CLAVE
                 );
 
         return http.build();

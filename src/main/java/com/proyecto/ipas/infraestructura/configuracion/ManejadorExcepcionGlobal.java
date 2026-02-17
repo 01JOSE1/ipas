@@ -2,7 +2,7 @@ package com.proyecto.ipas.infraestructura.configuracion;
 
 import com.proyecto.ipas.infraestructura.utilidades.TipoAlerta;
 import com.proyecto.ipas.presentacion.excepcion.*;
-import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.mensajeFrontend.AlertaRespuesta;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.mensajeFrontend.AlertaRespuesta;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
@@ -234,6 +236,68 @@ public class ManejadorExcepcionGlobal {
 //
 //        return new ModelAndView("redirect:/login?error=credenciales-invalidas");
 //    }
+
+    /**
+     * 413 - Payload Too Large
+     *
+     * Se lanza cuando el archivo enviado supera el tamaño máximo
+     * configurado en spring.servlet.multipart.max-file-size.
+     */
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public Object manejarTamañoMaximoArchivo(
+            MaxUploadSizeExceededException ex,
+            HttpServletRequest peticion,
+            RedirectAttributes redirectAttributes) {
+
+        registro.warn("413 - Archivo excede el tamaño máximo permitido: {}", ex.getMessage());
+
+        AlertaRespuesta alertaRespuesta = new AlertaRespuesta(
+                HttpStatus.PAYLOAD_TOO_LARGE.value(),
+                TipoAlerta.ERROR,
+                "Archivo demasiado grande",
+                "El archivo supera el tamaño máximo permitido. Por favor, verifica el tamaño e intenta nuevamente.",
+                "ERROR_ARCHIVO_TAMANO_EXCEDIDO",
+                peticion.getRequestURI()
+        );
+
+        if (esAjaxPeticion(peticion)) {
+            return ResponseEntity
+                    .status(HttpStatus.PAYLOAD_TOO_LARGE)
+                    .body(alertaRespuesta);
+        }
+
+        redirectAttributes.addFlashAttribute("alertaRespuesta", alertaRespuesta);
+
+
+        return "redirect:/asesor/registro-poliza";
+    }
+
+
+
+    /**
+     * Falla tecnica para almacenar el archivo (500)
+     */
+    @ExceptionHandler(AlmacenamientoExcepcion.class)
+    public Object manejarAlmacenamiento(Exception ex, HttpServletRequest peticion) {
+        registro.error("Almacenamiento no encontrado: {}", ex.getMessage());
+
+        AlertaRespuesta alertaRespuesta = new AlertaRespuesta(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                TipoAlerta.FATAL,
+                "Error interno del servidor al almacenar archivos",
+                "Ha ocurrido un error inesperado al momento de almacenar el archivo. Por favor, intenta nuevamente más tarde.",
+                "ERROR_ALMACENAMIENTO_INTERNO",
+                peticion.getRequestURI()
+        );
+
+        if (esAjaxPeticion(peticion)) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(alertaRespuesta);
+        }
+
+        ModelAndView vistaDato = new ModelAndView("excepciones/error");
+        vistaDato.addObject("error", alertaRespuesta);
+        return vistaDato;
+    }
 
 
     // CAPTURAR TODAS LAS DEMAS EXCEPCIONES

@@ -3,7 +3,7 @@ package com.proyecto.ipas.infraestructura.configuracion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.proyecto.ipas.infraestructura.seguridad.UsuarioSeguridad;
 import com.proyecto.ipas.infraestructura.utilidades.TipoAlerta;
-import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.mensajeFrontend.AlertaRespuesta;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.mensajeFrontend.AlertaRespuesta;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
