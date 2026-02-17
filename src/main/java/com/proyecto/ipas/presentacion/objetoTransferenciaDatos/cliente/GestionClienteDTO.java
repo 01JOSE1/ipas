@@ -1,6 +1,7 @@
 package com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.cliente;
 
 import com.proyecto.ipas.datos.entidad.ClienteEntidad;
+import com.proyecto.ipas.infraestructura.utilidades.EnCreacion;
 import com.proyecto.ipas.negocio.dominio.enums.EstadoCivilCliente;
 import com.proyecto.ipas.negocio.dominio.enums.TipoDocumentoCliente;
 import jakarta.validation.constraints.*;
@@ -13,10 +14,9 @@ import java.time.LocalDate;
 @Data
 public class GestionClienteDTO {
 
-
     private Long idCliente;
 
-    @Length(min = 2, max = 40, message = "El nombre no debe ser a 2 y mayor a 40 caracteres")
+    @Length(min = 2, max = 40, message = "El nombre no debe ser menor a 2 y mayor a 40 caracteres")
     @NotBlank(message = "El nombre no debe estar vacio", groups = EnCreacion.class)
     @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$", message = "Solo se permiten letras y espacios")
     private String nombre;
