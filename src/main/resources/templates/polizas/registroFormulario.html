@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Gestión Póliza</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            margin-bottom: 25px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .error {
+            color: #c0392b;
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+
+        .actions {
+            margin-top: 30px;
+            text-align: right;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #2c3e50;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1a252f;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragmentos/alertas :: alertas(${alertaRespuesta})}"></div>
+
+<div class="container">
+
+    <h2 th:text="${modo == 'CREAR'} ? 'Registrar Póliza' : 'Editar Póliza'"></h2>
+
+    <form th:action="${modo == 'CREAR'}
+            ? @{/asesor/registro-poliza/{idCliente}(idCliente=${gestionPolizaDTO.idCliente})}
+            : @{/asesor/actualizacion-poliza/{idPoliza}(idPoliza=${gestionPolizaDTO.idPoliza})}"
+          th:object="${gestionPolizaDTO}"
+          method="post"
+          enctype="multipart/form-data">
+
+        <!-- Ocultos -->
+        <input type="hidden" th:field="*{idPoliza}" />
+
+        <div class="grid">
+
+            <!-- Código -->
+            <div>
+                <label>Código Póliza</label>
+                <input type="text" th:field="*{codigoPoliza}" />
+                <div class="error" th:errors="*{codigoPoliza}"></div>
+            </div>
+
+            <!-- Cliente -->
+            <div class="full-width">
+                <label>Buscar Cliente</label>
+
+                <input type="text"
+                       id="busquedaCliente"
+                       th:value="*{nombreCliente}"
+                       placeholder="Buscar por nombre o documento"
+                       autocomplete="off" />
+
+                <!-- ID real que se envía -->
+                <input type="hidden" th:field="*{idCliente}" id="idCliente" />
+
+                <div id="resultadosCliente"
+                     style="background: white; border: 1px solid #ccc; max-height:150px; overflow-y:auto;"></div>
+            </div>
+
+            <!-- Ramo -->
+            <div>
+                <label>Ramo</label>
+                <select th:field="*{idRamo}">
+                    <option value="">Seleccione</option>
+                    <option th:each="ramo : ${ramos}"
+                            th:value="${ramo.idRamo}"
+                            th:text="${ramo.nombre}">
+                    </option>
+                </select>
+                <div class="error" th:errors="*{idRamo}"></div>
+            </div>
+
+            <!-- Aseguradora -->
+            <div>
+                <label>Aseguradora</label>
+                <select th:field="*{idAseguradora}">
+                    <option value="">Seleccione</option>
+                    <option th:each="aseguradora : ${aseguradoras}"
+                            th:value="${aseguradora.idAseguradora}"
+                            th:text="${aseguradora.nombre}">
+                    </option>
+                </select>
+                <div class="error" th:errors="*{idAseguradora}"></div>
+            </div>
+
+            <!-- Placa -->
+            <div>
+                <label>Placa</label>
+                <input type="text" th:field="*{placa}" />
+                <div class="error" th:errors="*{placa}"></div>
+            </div>
+
+            <!-- Fecha Inicio -->
+            <div>
+                <label>Fecha Inicio</label>
+                <input type="date" th:field="*{fechaInicio}" />
+                <div class="error" th:errors="*{fechaInicio}"></div>
+            </div>
+
+            <!-- Fecha Fin -->
+            <div>
+                <label>Fecha Fin</label>
+                <input type="date" th:field="*{fechaFin}" />
+                <div class="error" th:errors="*{fechaFin}"></div>
+            </div>
+
+            <!-- Prima Neta -->
+            <div>
+                <label>Prima Neta</label>
+                <input type="number" step="0.01" th:field="*{primaNeta}" />
+                <div class="error" th:errors="*{primaNeta}"></div>
+            </div>
+
+            <!-- Prima Total -->
+            <div>
+                <label>Prima Total</label>
+                <input type="number" step="0.01" th:field="*{primaTotal}" />
+                <div class="error" th:errors="*{primaTotal}"></div>
+            </div>
+
+            <!-- Estado -->
+            <div>
+                <label>Estado</label>
+                <select th:field="*{estado}">
+                    <option value="">Seleccione</option>
+                    <option th:each="e : ${T(com.proyecto.ipas.negocio.dominio.enums.EstadoPoliza).values()}"
+                            th:value="${e}"
+                            th:text="${e}">
+                    </option>
+                </select>
+            </div>
+
+            <!-- Estado Pago -->
+            <div>
+                <label>Estado Pago</label>
+                <select th:field="*{estadoPago}">
+                    <option value="">Seleccione</option>
+                    <option th:each="e : ${T(com.proyecto.ipas.negocio.dominio.enums.EstadoPagoPoliza).values()}"
+                            th:value="${e}"
+                            th:text="${e}">
+                    </option>
+                </select>
+            </div>
+
+            <!-- Descripción -->
+            <div class="full-width">
+                <label>Descripción</label>
+                <textarea th:field="*{descripcion}"></textarea>
+                <div class="error" th:errors="*{descripcion}"></div>
+            </div>
+
+            <!-- Archivo -->
+            <div class="full-width">
+                <label>Archivo PDF de la Póliza</label>
+
+                <div th:if="*{numeroPdf != null and !#strings.isEmpty(numeroPdf)}" style="margin-bottom: 15px; border: 1px solid #ddd; padding: 10px; border-radius: 5px;">
+        <span style="color: #2c3e50; font-weight: bold; display: block; margin-bottom: 8px;">
+            📄 Archivo actual: <span th:text="*{numeroPdf}">nombre-del-archivo.pdf</span>
+        </span>
+
+                    <a th:href="@{/asesor/ver-archivo/{nombre}(nombre=*{numeroPdf})}"
+                       target="_blank"
+                       class="btn btn-primary"
+                       style="text-decoration: none; padding: 5px 10px; background-color: #3498db; color: white; border-radius: 3px; font-size: 0.9em;">
+                        <i class="fas fa-eye"></i> Visualizar PDF Actual
+                    </a>
+
+                    <div class="mt-3" style="margin-top: 15px;">
+                        <iframe th:src="@{/asesor/ver-archivo/{nombre}(nombre=*{numeroPdf})}"
+                                width="100%"
+                                height="400px"
+                                style="border: 1px solid #ccc;">
+                        </iframe>
+                    </div>
+                </div>
+
+                <input type="file" th:field="*{archivoPoliza}" accept=".pdf" />
+
+                <p style="font-size: 0.8em; color: #7f8c8d; margin-top: 5px;" th:if="*{numeroPdf != null}">
+                    * Seleccione un archivo nuevo solo si desea reemplazar el anterior.
+                </p>
+
+                <div class="error" th:if="${#fields.hasErrors('archivoPoliza')}" th:errors="*{archivoPoliza}" style="color: red; font-size: 0.8em;"></div>
+            </div>
+
+            <input type="hidden" th:field="*{numeroPdf}" />
+
+        <div class="actions">
+            <button type="submit"
+                    th:text="${modo == 'CREAR'} ? 'Registrar' : 'Actualizar'">
+            </button>
+        </div>
+
+    </form>
+
+</div>
+
+<script>
+    let timeout = null;
+
+    document.getElementById("busquedaCliente").addEventListener("keyup", function() {
+
+        clearTimeout(timeout);
+
+        const termino = this.value;
+
+        if (termino.length < 3) {
+            document.getElementById("resultadosCliente").innerHTML = "";
+            return;
+        }
+
+        timeout = setTimeout(() => {
+
+            fetch(`/ipas/asesor/buscar-cliente?termino=${termino}`)
+                .then(response => response.json())
+                .then(data => {
+
+                    const resultados = document.getElementById("resultadosCliente");
+                    resultados.innerHTML = "";
+
+                    data.forEach(cliente => {
+
+                        const div = document.createElement("div");
+                        div.style.padding = "8px";
+                        div.style.cursor = "pointer";
+                        div.style.borderBottom = "1px solid #eee";
+
+                        div.textContent = cliente.numeroDocumento +
+                                          " - " +
+                                          cliente.nombreCompleto;
+
+                        div.onclick = function() {
+                            document.getElementById("idCliente").value = cliente.idCliente;
+                            document.getElementById("busquedaCliente").value = cliente.nombreCompleto;
+                            resultados.innerHTML = "";
+                        };
+
+                        resultados.appendChild(div);
+                    });
+
+                });
+
+        }, 300); // debounce 300ms
+
+    });
+</script>
+
+
+</body>
+</html>

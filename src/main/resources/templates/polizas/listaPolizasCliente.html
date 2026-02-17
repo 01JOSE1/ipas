@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Pólizas</title>
+</head>
+<body>
+
+<h2>Lista de Pólizas</h2>
+
+<div th:if="${#lists.isEmpty(polizas)}">
+    <p>No hay pólizas registradas.</p>
+</div>
+
+<table border="1" th:if="${!#lists.isEmpty(polizas)}">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Código</th>
+        <th>Fecha Inicio</th>
+        <th>Fecha Fin</th>
+        <th>Prima Neta</th>
+        <th>Prima Total</th>
+        <th>Estado</th>
+        <th>Estado Pago</th>
+        <th>Placa</th>
+        <th>Descripción</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="poliza : ${polizas}">
+        <td th:text="${poliza.idPoliza}"></td>
+        <td th:text="${poliza.codigoPoliza}"></td>
+        <td th:text="${poliza.fechaInicio}"></td>
+        <td th:text="${poliza.fechaFin}"></td>
+        <td th:text="${poliza.primaNeta}"></td>
+        <td th:text="${poliza.primaTotal}"></td>
+        <td th:text="${poliza.estado}"></td>
+        <td th:text="${poliza.estadoPago}"></td>
+        <td th:text="${poliza.placa}"></td>
+        <td th:text="${poliza.descripcion}"></td>
+        <td>
+            <a th:href="@{/asesor/actualizacion-poliza/{idPoliza}(idPoliza=${poliza.idPoliza})}"
+               class="btn btn-sm btn-warning">Actualizar poliza</a>
+            <a th:href="@{/asesor/ver-archivo/{nombre}(nombre=${poliza.numeroPdf})}"
+               target="_blank"
+               class="btn btn-sm btn-warning">Ver PDF</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
