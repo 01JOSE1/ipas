@@ -4,10 +4,9 @@ import com.proyecto.ipas.datos.entidad.RolEntidad;
 import com.proyecto.ipas.datos.entidad.UsuarioEntidad;
 import com.proyecto.ipas.negocio.dominio.modelo.Rol;
 import com.proyecto.ipas.negocio.dominio.modelo.Usuario;
-import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.autenticacion.RegistroDTO;
-import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.autenticacion.RespuestaDTO;
-import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.usuario.UsuarioActualizarDTO;
-import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.usuario.VerDatosUsuarioPerfilDTO;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.RespuestaDTO;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.usuario.UsuarioActualizarDTO;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.usuario.VerDatosUsuarioPerfilDTO;
 import org.mapstruct.*;
 
 @Mapper(

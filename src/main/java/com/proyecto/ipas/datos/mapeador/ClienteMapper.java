@@ -1,13 +1,9 @@
 package com.proyecto.ipas.datos.mapeador;
 
 import com.proyecto.ipas.datos.entidad.ClienteEntidad;
-import com.proyecto.ipas.datos.entidad.RolEntidad;
-import com.proyecto.ipas.datos.entidad.UsuarioEntidad;
 import com.proyecto.ipas.negocio.dominio.modelo.Cliente;
-import com.proyecto.ipas.negocio.dominio.modelo.Rol;
-import com.proyecto.ipas.negocio.dominio.modelo.Usuario;
-import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.cliente.GestionClienteDTO;
-import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.cliente.RespuestaClienteDTO;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.GestionClienteDTO;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.RespuestaClienteDTO;
 import org.mapstruct.*;
 
 @Mapper(
