@@ -34,12 +34,10 @@ public class GestionClienteDTO {
     private String numeroDocumento;
 
     @Past(message = "selecciona una fecha del pasado")
-    @NotNull(message = "La fecha de nacimiento es obligatoria", groups = EnCreacion.class)
     @DateTimeFormat(pattern = "yyyy-MM-dd") // Formato correcto de fecha para trabajar Thymleaf
     //    @JsonFormat(pattern = "dd-MM-yyyy") // El formato que verás en el JSON de la API
     private LocalDate fechaNacimiento;
 
-    @NotNull(message = "El estado civil es obligatorio", groups = EnCreacion.class)
     private EstadoCivilCliente estadoCivil;
 
     @Length(min = 10, max = 10, message = "El numero de telefono debe ser de 10 numeros")
@@ -48,7 +46,6 @@ public class GestionClienteDTO {
     private String telefono;
 
     @Length(max = 100, message = "El correo no debe ser mayor a 100 caracteres")
-    @NotBlank(message = "El correo no debe estar vacio",  groups = EnCreacion.class)
     @Email(message = "Email invalido")
     private String correo;
 

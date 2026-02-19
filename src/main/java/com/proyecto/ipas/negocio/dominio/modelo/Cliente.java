@@ -72,9 +72,6 @@ public class Cliente {
         if (numeroDocumento == null || numeroDocumento.isBlank()) {
             throw new IllegalArgumentException("El numero de documento es obligatorio");
         }
-        if (fechaNacimiento == null) {
-            throw new IllegalArgumentException("La fecha de nacimiento es obligatorio");
-        }
     }
 
     private static void validarIdCliente(Long idCliente) {

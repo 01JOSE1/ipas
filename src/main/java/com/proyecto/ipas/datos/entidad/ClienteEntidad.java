@@ -31,20 +31,20 @@ public class ClienteEntidad {
     @Column(name = "numero_documento", nullable = false, length = 15)
     private String numeroDocumento;
 
-    @Column(name = "fecha_nacimiento", nullable = false)
+    @Column(name = "fecha_nacimiento")
 //    @JsonFormat(pattern = "dd-MM-yyyy") // El formato que verás en el JSON de la API
     @Past
     private LocalDate fechaNacimiento;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado_civil", nullable = false, length = 40)
+    @Column(name = "estado_civil", length = 40)
     private EstadoCivilCliente estadoCivil;
 
     @Column(nullable = false, length = 15)
     private String telefono;
 
     @Email
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String correo;
 
     @Column(nullable = true, length = 100)
