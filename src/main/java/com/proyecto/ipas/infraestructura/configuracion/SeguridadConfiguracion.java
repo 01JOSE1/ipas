@@ -68,7 +68,7 @@ public class SeguridadConfiguracion {
 
 
                         // RUTAS PUBLICAS
-                        .requestMatchers("/", "/usuarios/login", "/usuarios/registro", "/usuarios/error-403", "/css/**", "/js/**", "/webjars/**", "/images/**").permitAll()
+                        .requestMatchers("/", "/usuarios/login", "/usuarios/registro", "/usuarios/error-403", "/css/**", "/js/**", "/webjars/**", "/images/**", "/ai/test/**").permitAll()
 
                         // RUTAS PARA UN ROL ESPECIFICO
                         .requestMatchers("/administrador/**").hasRole("ADMINISTRADOR")
