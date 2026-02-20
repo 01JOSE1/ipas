@@ -6,6 +6,7 @@ import com.proyecto.ipas.datos.repositorio.*;
 import com.proyecto.ipas.infraestructura.externo.almacenamiento.ArchivoAlmacenamientoServicio;
 import com.proyecto.ipas.negocio.dominio.enums.EstadoPoliza;
 import com.proyecto.ipas.negocio.dominio.modelo.Poliza;
+import com.proyecto.ipas.presentacion.excepcion.ArchivoInvalidoExcepcion;
 import com.proyecto.ipas.presentacion.excepcion.ConflictoExcepcion;
 import com.proyecto.ipas.presentacion.excepcion.NegocioExcepcion;
 import com.proyecto.ipas.presentacion.excepcion.RecursoNOEncontradoException;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,10 +45,11 @@ public class PolizaServicio {
     PolizaMapper polizaMapper;
 
     ArchivoAlmacenamientoServicio archivoAlmacenamientoServicio;
+    private final PdfPolizaServicio pdfPolizaServicio;
 
     private final JdbcTemplate jdbcTemplate;
 
-    public PolizaServicio(JdbcTemplate jdbcTemplate, PolizaRepositorio polizaRepositorio, ClienteRepositorio clienteRepositorio, UsuarioRepositorio usuarioRepositorio, RamoRepositorio ramoRepositorio, AseguradoraRepositorio aseguradoraRepositorio,  PolizaMapper polizaMapper, ArchivoAlmacenamientoServicio archivoAlmacenamientoServicio) {
+    public PolizaServicio(JdbcTemplate jdbcTemplate, PolizaRepositorio polizaRepositorio, ClienteRepositorio clienteRepositorio, UsuarioRepositorio usuarioRepositorio, RamoRepositorio ramoRepositorio, AseguradoraRepositorio aseguradoraRepositorio, PolizaMapper polizaMapper, ArchivoAlmacenamientoServicio archivoAlmacenamientoServicio, PdfPolizaServicio pdfPolizaServicio, PdfPolizaServicio pdfPolizaServicio1) {
         this.jdbcTemplate = jdbcTemplate;
         this.polizaRepositorio = polizaRepositorio;
         this.clienteRepositorio = clienteRepositorio;
@@ -55,6 +58,7 @@ public class PolizaServicio {
         this.aseguradoraRepositorio = aseguradoraRepositorio;
         this.polizaMapper = polizaMapper;
         this.archivoAlmacenamientoServicio = archivoAlmacenamientoServicio;
+        this.pdfPolizaServicio = pdfPolizaServicio1;
     }
 
     @Transactional(readOnly = true)
@@ -78,6 +82,21 @@ public class PolizaServicio {
         }
         return archivoAlmacenamientoServicio.cargarRecurso(nombreArchivo);
     }
+
+    @Transactional
+    public void procesarDatosPdfConIa(MultipartFile archivo) throws IOException {
+
+        try {
+            registro.debug("Preparando documento pdf de la poliza a texto para el prompt: {}", archivo.getOriginalFilename());
+            String texto = pdfPolizaServicio.prepararParaIa(archivo);
+
+            System.out.println(texto);
+        } catch (IOException ex) {
+            throw new ArchivoInvalidoExcepcion(ex.getMessage());
+        }
+    }
+
+
 
     @Transactional
     public RespuestaPolizaDTO registrarPoliza(GestionPolizaDTO gestionPolizaDTO, Long idUsuario) {
