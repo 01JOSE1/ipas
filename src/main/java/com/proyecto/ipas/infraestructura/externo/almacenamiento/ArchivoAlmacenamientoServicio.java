@@ -101,7 +101,7 @@ public class ArchivoAlmacenamientoServicio implements ArchivoAlmacenamiento {
         return UUID.randomUUID().toString() + "_" + codigoPoliza + extension;
     }
 
-    private void validarArchivo(MultipartFile archivo) {
+    public void validarArchivo(MultipartFile archivo) {
 
         if (archivo == null || archivo.isEmpty()) {
             throw new ArchivoInvalidoExcepcion("El archivo es nulo o vacio.");
