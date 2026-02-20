@@ -31,22 +31,9 @@
         <org.projectlombok.version>1.18.34</org.projectlombok.version>
         <org.mapstruct.version>1.6.0</org.mapstruct.version>
 
+        <!--  Version estable del entorno de ia de spring boot  -->
         <spring-ai.version>1.1.0-M1</spring-ai.version>
 	</properties>
-
-    <!--  Catálogo de versiones oficial de Spring AI, para que todas las librerías de inteligencia artificial
-que añadas después sean compatibles entre sí sin que tengas que escribir la versión en cada una.  -->
-<!--    <dependencyManagement>-->
-<!--        <dependencies>-->
-<!--            <dependency>-->
-<!--                <groupId>org.springframework.ai</groupId>-->
-<!--                <artifactId>spring-ai-bom</artifactId>-->
-<!--                <version>${spring-ai.version}</version>-->
-<!--                <type>pom</type>-->
-<!--                <scope>import</scope>-->
-<!--            </dependency>-->
-<!--        </dependencies>-->
-<!--    </dependencyManagement>-->
 
 	<dependencies>
 		<dependency>
@@ -126,8 +113,27 @@ que añadas después sean compatibles entre sí sin que tengas que escribir la v
         </dependency>
 
 
+        <!-- Apache PDFBox para la gestion del pdf-->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+        <!-- FontBox para entender y trabajar con los tipos de letra dentro del pdf (se incluye automáticamente con PDFBox) -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>fontbox</artifactId>
+            <version>3.0.2</version>
+        </dependency>
 
 
+        <!--  Prueba unitarias  -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 
