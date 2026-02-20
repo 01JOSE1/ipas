@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargar PDF de Póliza</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <style>
+        .drop-zone {
+            border: 2px dashed #6c757d;
+            border-radius: 8px;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background-color 0.2s;
+            background-color: #f8f9fa;
+        }
+        .drop-zone:hover,
+        .drop-zone.dragover {
+            border-color: #0d6efd;
+            background-color: #e8f0fe;
+        }
+        .drop-zone .icon {
+            font-size: 2.5rem;
+        }
+        .file-info {
+            display: none;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+
+<div class="container mt-5" style="max-width: 600px;">
+
+    <h4 class="mb-1">Cargar PDF de Póliza</h4>
+    <p class="text-muted mb-4">Sube el PDF de la póliza para que la IA extraiga los datos automáticamente.</p>
+
+    <!-- Alerta -->
+    <div th:replace="~{fragmentos/alertas :: alertas(${alertaRespuesta})}"></div>
+
+    <form th:action="@{/asesor/generar-datos-ia}" method="post" enctype="multipart/form-data" id="formPdf">
+
+        <!-- Zona de arrastre -->
+        <div class="drop-zone" id="dropZone" onclick="document.getElementById('archivo').click()">
+            <div class="icon mb-2">📄</div>
+            <p class="mb-1 fw-semibold">Arrastra el PDF aquí o haz clic para seleccionar</p>
+            <small class="text-muted">Solo archivos PDF. Tamaño máximo: 10 MB</small>
+        </div>
+
+        <!-- Input oculto -->
+        <input type="file" id="archivo" name="archivo" accept="application/pdf" class="d-none">
+
+        <!-- Info del archivo seleccionado -->
+        <div class="file-info alert alert-secondary d-flex align-items-center gap-2" id="fileInfo">
+            <span>📎</span>
+            <span id="fileName">-</span>
+        </div>
+
+        <div class="mt-3 d-flex gap-2">
+            <button type="submit" class="btn btn-primary" id="btnEnviar" disabled>
+                Procesar con IA
+            </button>
+<!--            <a th:href="@{/polizas}" class="btn btn-outline-secondary">Cancelar</a>-->
+        </div>
+
+    </form>
+</div>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script>
+    const input = document.getElementById('archivo');
+    const dropZone = document.getElementById('dropZone');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const btnEnviar = document.getElementById('btnEnviar');
+
+    input.addEventListener('change', () => mostrarArchivo(input.files[0]));
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        const file = e.dataTransfer.files[0];
+        if (file) {
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            input.files = dt.files;
+            mostrarArchivo(file);
+        }
+    });
+
+    function mostrarArchivo(file) {
+        if (!file) return;
+        fileName.textContent = file.name;
+        fileInfo.style.display = 'flex';
+        btnEnviar.disabled = false;
+    }
+</script>
+
+</body>
+</html>

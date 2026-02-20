@@ -31,8 +31,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -110,10 +112,39 @@ public class AsesorPolizaControlador {
         modelo.addAttribute("aseguradoras", aseguradoraServicio.obtenerAseguradorasParaSelect());
     }
 
+    @GetMapping("cargar-pdf-poliza")
+    public String verFormularioPdf() {
+        return "polizas/subirPdf";
+    }
+
+
+    @PostMapping("generar-datos-ia")
+    public String generarDatosConIa(@RequestParam("archivo") MultipartFile archivo,
+                                    Model modelo,
+                                    RedirectAttributes redirectAttributes) {
+        try {
+            polizaServicio.procesarDatosPdfConIa(archivo);
+
+            redirectAttributes.addFlashAttribute("alertaRespuesta",
+                    new AlertaRespuesta(HttpStatus.OK.value(), TipoAlerta.EXITO,
+                            "Datos generados correctamente con IA",
+                            "Datos generados correctamente con IA",
+                            "DATOS_GENERADOS"));
+
+            return "redirect:/asesor/registro-poliza";
+
+        } catch (IOException | ArchivoInvalidoExcepcion ex) {
+            modelo.addAttribute("alertaRespuesta",
+                    new AlertaRespuesta(TipoAlerta.ERROR, ex.getMessage()));
+            return "polizas/subirPdf";
+        }
+    }
+
 
     @GetMapping("registro-poliza")
     public String verRegistroPoliza(GestionPolizaDTO gestionPolizaDTO, Model modelo) {
         modelo.addAttribute("modo", "CREAR");
+
         GestionClienteDTO gestionClienteDTO = new GestionClienteDTO();
 
         alistarFormulario(gestionClienteDTO.getIdCliente(), modelo, gestionPolizaDTO);
