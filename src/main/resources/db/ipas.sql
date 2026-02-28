@@ -441,6 +441,83 @@ END//
 DELIMITER ;
 
 
+-- ==========================================
+-- DATOS INICIALES - SISTEMA IPAS
+-- ==========================================
+-- Esta función sirve para medir qué tan similares son dos textos calculando cuántos cambios mínimos (letras borradas, añadidas o sustituidas) se necesitan para transformar uno en otro.
+-- En tu caso, es la herramienta perfecta para que tu sistema sea "tolerante a errores", permitiendo que si la IA extrae "Seguros de Estado" y en tu base de datos dice "Seguros del Estado",
+-- el programa entienda que se trata de la misma empresa a pesar de esa pequeña diferencia de una o dos letras.
+DELIMITER $$
+
+CREATE FUNCTION levenshtein(s1 VARCHAR(255), s2 VARCHAR(255))
+RETURNS INT
+DETERMINISTIC
+BEGIN
+    -- Declaración de variables para longitudes y manejo de la matriz
+    DECLARE s1_len, s2_len, i, j, c, c_temp, cost INT;
+    DECLARE s1_char CHAR;
+    -- cv0 y cv1 actúan como los vectores (filas) de la matriz de edición
+    DECLARE cv0, cv1 VARBINARY(256);
+
+    SET s1_len = CHAR_LENGTH(s1),
+        s2_len = CHAR_LENGTH(s2),
+        cv1 = 0x00,
+        j = 1,
+        i = 1,
+        c = 0;
+
+    -- Caso base: Si los textos son idénticos, la distancia es 0
+    IF s1 = s2 THEN
+        RETURN 0;
+    -- Si una de las cadenas está vacía, la distancia es el largo de la otra
+    ELSEIF s1_len = 0 THEN
+        RETURN s2_len;
+    ELSEIF s2_len = 0 THEN
+        RETURN s1_len;
+    ELSE
+        -- Inicialización del primer vector de la matriz
+        WHILE j <= s2_len DO
+            SET cv1 = CONCAT(cv1, CHAR(j)), j = j + 1;
+        END WHILE;
+
+        -- Inicio del ciclo principal por cada carácter de la primera cadena
+        WHILE i <= s1_len DO
+            SET s1_char = SUBSTRING(s1, i, 1),
+                c = i, -- Representa el costo de inserción
+                cv0 = CHAR(i),
+                j = 1;
+
+            -- Ciclo interno: Compara el carácter de s1 con cada carácter de s2
+            WHILE j <= s2_len DO
+                SET c = c + 1;
+                -- Si los caracteres son iguales, el costo es 0, si no, es 1 (sustitución)
+                SET cost = IF(s1_char = SUBSTRING(s2, j, 1), 0, 1);
+
+                -- Cálculo del valor mínimo entre:
+                -- 1. Eliminación (celda de arriba + 1)
+                -- 2. Inserción (celda de la izquierda + 1)
+                -- 3. Sustitución (celda diagonal + costo)
+                SET c_temp = ORD(SUBSTRING(cv1, j, 1)) + cost;
+                IF c > c_temp THEN SET c = c_temp; END IF;
+
+                SET c_temp = ORD(SUBSTRING(cv1, j+1, 1)) + 1;
+                IF c > c_temp THEN SET c = c_temp; END IF;
+
+                -- Guardar el resultado en el vector actual
+                SET cv0 = CONCAT(cv0, CHAR(c)), j = j + 1;
+            END WHILE;
+
+            -- Pasar al siguiente vector (fila siguiente de la matriz)
+            SET cv1 = cv0, i = i + 1;
+        END WHILE;
+    END IF;
+
+    -- El último valor calculado en la matriz es la Distancia de Levenshtein
+    RETURN c;
+END$$
+
+DELIMITER ;
+
 
 
 -- ==========================================
