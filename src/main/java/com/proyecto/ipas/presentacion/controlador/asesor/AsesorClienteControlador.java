@@ -11,9 +11,12 @@ import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.BusquedaC
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.GestionClienteDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.RespuestaClienteDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.mensajeFrontend.AlertaRespuesta;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.poliza.GestionPolizaDTO;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.groups.Default;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -21,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -32,6 +36,11 @@ public class AsesorClienteControlador {
 
     @Autowired
     private ClienteServicio clienteServicio;
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+    }
 
     @GetMapping("ver-clientes")
     public String verClientes(
@@ -81,6 +90,7 @@ public class AsesorClienteControlador {
     @PostMapping("registro-cliente")
     public String registrarCliente(@Validated({Default.class, EnCreacion.class}) @ModelAttribute("gestionClienteDTO") GestionClienteDTO gestionClienteDTO,
                                    BindingResult validacion,
+                                   HttpSession session,
                                    Model modelo,
                                    RedirectAttributes redirectAttributes,
                                    Authentication usuarioAutenticado
@@ -96,6 +106,26 @@ public class AsesorClienteControlador {
 
         try {
             RespuestaClienteDTO respuestaClienteDTO = clienteServicio.registrarCliente(sesion.getIdUsuario(), gestionClienteDTO);
+
+            // Verificar si hay una póliza esperando este cliente
+            GestionPolizaDTO polizaPendiente = (GestionPolizaDTO) session.getAttribute("polizaPendiente");
+
+            if (polizaPendiente != null) {
+                polizaPendiente.setIdCliente(respuestaClienteDTO.idCliente());
+                polizaPendiente.setNombreCliente(respuestaClienteDTO.nombre() + " " + respuestaClienteDTO.apellido());
+                polizaPendiente.setClienteExiste(false);
+
+                session.removeAttribute("polizaPendiente");
+
+                redirectAttributes.addFlashAttribute("gestionPolizaDTO", polizaPendiente);
+                redirectAttributes.addFlashAttribute("alertaRespuesta",
+                        new AlertaRespuesta(HttpStatus.OK.value(), TipoAlerta.EXITO,
+                                "Cliente creado. Ahora completa el registro de la póliza.",
+                                "Cliente creado. Ahora completa el registro de la póliza.",
+                                "CLIENTE_CREADO"));
+
+                return "redirect:/asesor/registro-poliza";
+            }
 
             AlertaRespuesta alertaRespuesta = new AlertaRespuesta(
                     HttpStatus.CREATED.value(),

@@ -15,6 +15,7 @@ import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.GestionCl
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.mensajeFrontend.AlertaRespuesta;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.poliza.GestionPolizaDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.poliza.RespuestaPolizaDTO;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.groups.Default;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,18 @@ public class AsesorPolizaControlador {
                 .body(recurso);
     }
 
+    @GetMapping("ver-archivo-temporal/{nombreArchivo}")
+    public ResponseEntity<Resource> verArchivoTemporal(@PathVariable String nombreArchivo) {
+        // 1. Cargamos el archivo temporal como un recurso de Spring
+        Resource recurso = polizaServicio.obtenerArchivoTemporal(nombreArchivo);
+
+        // 2. Retornamos el archivo con las cabeceras correctas
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "application/pdf") // Le dice al navegador que es un PDF
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + recurso.getFilename() + "\"") // "inline" abre en el navegador, "attachment" descarga
+                .body(recurso);
+    }
+
     @GetMapping("ver-polizas")
     public String verPolizas(
             @RequestParam(defaultValue = "0") int pagina,
@@ -103,7 +116,8 @@ public class AsesorPolizaControlador {
         if (idCliente != null) {
             gestionPolizaDTO.setIdCliente(idCliente);
             GestionClienteDTO gestionClienteDTO = clienteServicio.obtenerCliente(idCliente);
-            gestionPolizaDTO.setNombreCliente(gestionClienteDTO.getNombre() + " " + gestionClienteDTO.getApellido());
+
+            gestionPolizaDTO.setNombreCliente(gestionClienteDTO.getNombre() + " " + (gestionClienteDTO.getApellido() != null ? " " + gestionClienteDTO.getApellido() : ""));
         }
 
         modelo.addAttribute("gestionPolizaDTO", gestionPolizaDTO);
@@ -112,18 +126,44 @@ public class AsesorPolizaControlador {
         modelo.addAttribute("aseguradoras", aseguradoraServicio.obtenerAseguradorasParaSelect());
     }
 
-    @GetMapping("cargar-pdf-poliza")
-    public String verFormularioPdf() {
+    @GetMapping({"cargar-pdf-poliza", "cargar-pdf-poliza/{idCliente}"})
+    public String verFormularioPdf(@PathVariable(required = false) Long idCliente, Model modelo) {
+        if (idCliente != null) {
+            modelo.addAttribute("idCliente", idCliente);
+        }
         return "polizas/subirPdf";
     }
 
 
-    @PostMapping("generar-datos-ia")
+    @PostMapping({"generar-datos-ia", "generar-datos-ia/{idCliente}"})
     public String generarDatosConIa(@RequestParam("archivo") MultipartFile archivo,
+                                    @PathVariable(required = false) Long idCliente,
+                                    HttpSession session,
                                     Model modelo,
                                     RedirectAttributes redirectAttributes) {
+
         try {
-            polizaServicio.procesarDatosPdfConIa(archivo);
+
+            GestionPolizaDTO gestionPolizaDTO = polizaServicio.procesarDatosPdfConIa(archivo, idCliente);
+
+            if (gestionPolizaDTO.isClienteExiste()) {
+
+                // Guardar la póliza en sesión para recuperarla después y romper el flujo
+                gestionPolizaDTO.setArchivoPoliza(null); // No serializar el MultipartFile
+                session.setAttribute("polizaPendiente", gestionPolizaDTO);
+
+                redirectAttributes.addFlashAttribute("gestionClienteDTO", gestionPolizaDTO.getGestionClienteDTO());
+
+                redirectAttributes.addFlashAttribute("alertaRespuesta",
+                        new AlertaRespuesta(HttpStatus.OK.value(), TipoAlerta.ADVERTENCIA,
+                                "El cliente no existe, créalo primero para continuar con la póliza",
+                                "El cliente no existe, créalo primero para continuar con la póliza",
+                                "CLIENTE_REQUERIDO"));
+
+                return "redirect:/asesor/registro-cliente";
+            }
+
+            redirectAttributes.addFlashAttribute("gestionPolizaDTO", gestionPolizaDTO);
 
             redirectAttributes.addFlashAttribute("alertaRespuesta",
                     new AlertaRespuesta(HttpStatus.OK.value(), TipoAlerta.EXITO,
