@@ -18,18 +18,20 @@ public class GestionClienteDTO {
 
     @Length(min = 2, max = 40, message = "El nombre no debe ser menor a 2 y mayor a 40 caracteres")
     @NotBlank(message = "El nombre no debe estar vacio", groups = EnCreacion.class)
-    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$", message = "Solo se permiten letras y espacios")
+    @Pattern(
+            regexp = "^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ .&,-]+$",
+            message = "La razón social contiene caracteres no permitidos"
+    )
     private String nombre;
 
     @Length(min = 2, max = 40, message = "El apellido no debe ser menor a 2 y mayor a 40 caracteres")
-    @NotBlank(message = "El apellido no debe estar vacio", groups = EnCreacion.class)
     @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$", message = "Solo se permiten letras y espacios")
     private String apellido;
 
     @NotNull(message = "El tipo de documento es obligatorio", groups = EnCreacion.class)
     private TipoDocumentoCliente tipoDocumento;
 
-    @Length(min = 10, max = 15, message = "El numero de documento no debe ser menor a 10 y mayor a 15 caracteres")
+    @Length(min = 9, max = 15, message = "El numero de documento no debe ser menor a 9 y mayor a 15 caracteres")
     @NotBlank(message = "El numero de documento es obligatorio", groups = EnCreacion.class)
     private String numeroDocumento;
 

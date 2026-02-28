@@ -4,6 +4,7 @@ import com.proyecto.ipas.datos.entidad.PolizaEntidad;
 import com.proyecto.ipas.infraestructura.utilidades.EnCreacion;
 import com.proyecto.ipas.negocio.dominio.enums.EstadoPagoPoliza;
 import com.proyecto.ipas.negocio.dominio.enums.EstadoPoliza;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.GestionClienteDTO;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -19,9 +20,9 @@ public class GestionPolizaDTO {
     @Positive
     private Long idPoliza;
 
-    @Length(min = 10, max = 20, message = "El codigo de la poliza debe contener entre 10 y 20 caracteres")
+    @Length(min = 7, max = 20, message = "El codigo de la poliza debe contener entre 7 y 20 caracteres")
     @NotBlank(message = "El codigo de poliza no debe estar vacio", groups = EnCreacion.class)
-    @Pattern(regexp = "^\\w+$", message = "El código de póliza solo puede contener letras y números, sin espacios.")
+    @Pattern(regexp = "^[a-zA-Z0-9-]+$", message = "El código de póliza solo puede contener letras, números y guiones, sin espacios.")
     private String codigoPoliza;
 
     @NotNull(message = "La fecha de registro es obligatoria", groups = EnCreacion.class)
@@ -56,6 +57,9 @@ public class GestionPolizaDTO {
     @NotNull(message = "Debes agregar un cliente valido", groups = EnCreacion.class)
     private Long idCliente;
     private String nombreCliente;
+    // Objeto para el proceso de la ia
+    private GestionClienteDTO gestionClienteDTO;
+    private boolean clienteExiste;
 
     @Positive
     @NotNull(message = "Debes agregar un ramo de poliza valido", groups = EnCreacion.class)
@@ -64,10 +68,14 @@ public class GestionPolizaDTO {
     @Positive
     @NotNull(message = "Debes agregar una aseguradora valida", groups = EnCreacion.class)
     private Long idAseguradora;
+    private String numeroDocumentoAseguradora;
+    private String nombreAseguradora;
 
-    @NotNull(message = "Debes agregar el archivo PDF de la poliza", groups = EnCreacion.class)
     private MultipartFile archivoPoliza;
     private String numeroPdf;
+
+    public GestionPolizaDTO() {
+    }
 
     public GestionPolizaDTO(Long idPoliza, String codigoPoliza, LocalDate fechaInicio, LocalDate fechaFin, BigDecimal primaNeta, BigDecimal primaTotal, EstadoPoliza estado, EstadoPagoPoliza estadoPago, String placa, String descripcion, Long idCliente, String nombreCliente, Long idRamo, Long idAseguradora, String numeroPdf) {
         this.idPoliza = idPoliza;
