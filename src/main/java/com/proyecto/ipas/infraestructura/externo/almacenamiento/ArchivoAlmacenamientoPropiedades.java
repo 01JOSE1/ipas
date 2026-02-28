@@ -18,6 +18,12 @@ public class ArchivoAlmacenamientoPropiedades {
     private String destino = "almacenamientoPolizaPDF";
 
     /**
+     * Directorio raíz donde se almacenan los archivos
+     */
+    @NotBlank(message = "La ubicación de almacenamiento temporal no puede estar vacía")
+    private String destinoTemporal = "almacenamientoPolizaPDFTemporal";
+
+    /**
      * Tamaño máximo de archivo en MB
      */
     @Positive(message = "El tamaño máximo debe ser positivo")
@@ -51,6 +57,14 @@ public class ArchivoAlmacenamientoPropiedades {
 
     public void setDestino(String destino) {
         this.destino = destino;
+    }
+
+    public String getDestinoTemporal() {
+        return destinoTemporal;
+    }
+
+    public void setDestinoTemporal(String destinoTemporal) {
+        this.destinoTemporal = destinoTemporal;
     }
 
     public long getTamanoMaximoArchivo() {

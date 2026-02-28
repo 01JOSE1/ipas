@@ -26,17 +26,20 @@ import java.util.UUID;
 public class ArchivoAlmacenamientoServicio implements ArchivoAlmacenamiento {
 
     private final Path rutaLocal;
+    private final Path rutaTemporal;
     private final ArchivoAlmacenamientoPropiedades propiedades;
 
     public ArchivoAlmacenamientoServicio(ArchivoAlmacenamientoPropiedades propiedades) {
         this.propiedades = propiedades;
         this.rutaLocal = Paths.get(propiedades.getDestino());
+        this.rutaTemporal = Paths.get(propiedades.getDestinoTemporal());
     }
 
     @PostConstruct
     public void init() {
         try {
             Files.createDirectories(rutaLocal);
+            Files.createDirectories(rutaTemporal);
         } catch (IOException e) {
             throw new AlmacenamientoExcepcion("No se pudo inicializar el almacenamiento: " + e);
         }
@@ -44,15 +47,14 @@ public class ArchivoAlmacenamientoServicio implements ArchivoAlmacenamiento {
 
 
     @Override
-    public String almacenar(MultipartFile archivo, String codigoPoliza) {
+    public void almacenar(MultipartFile archivo, Path destino, String nombreArchivo) {
         validarArchivo(archivo);
 
         try {
-            String nombreArchivo = generarNombreArchivo(codigoPoliza, archivo.getOriginalFilename());
 
-            Path destinoArchivo = rutaLocal.resolve(nombreArchivo).normalize(); // Con normalize(): Limpia la ruta y previene ataques tipo Path Traversal
+            Path destinoArchivo = destino.resolve(nombreArchivo).normalize(); // Con normalize(): Limpia la ruta y previene ataques tipo Path Traversal
 
-            if (!destinoArchivo.getParent().equals(rutaLocal)) {
+            if (!destinoArchivo.startsWith(destino.normalize())) {
                 throw new AlmacenamientoExcepcion("No se puede almacenar fuera del directorio permitido");
             }
 
@@ -60,22 +62,51 @@ public class ArchivoAlmacenamientoServicio implements ArchivoAlmacenamiento {
                 Files.copy(archivoOrigen, destinoArchivo, StandardCopyOption.REPLACE_EXISTING);
             }
 
-            return nombreArchivo;
-
         } catch (IOException e) {
             throw new AlmacenamientoExcepcion("Error al almacenar el archivo: " + e);
         }
 
     }
 
+
     @Override
-    public Resource cargarRecurso(String numeroPdf) {
+    public void moverRecurso(String numeroPdf) {
         try {
-            Path archivo = rutaLocal.resolve(numeroPdf);
+            Path origen = rutaTemporal.resolve(numeroPdf).normalize();
+            Path destino = rutaLocal.resolve(numeroPdf).normalize();
+
+            if (!origen.startsWith(rutaTemporal)) {
+                throw new SecurityException("Ruta origen inválida");
+            }
+
+            if (!destino.startsWith(rutaLocal)) {
+                throw new SecurityException("Ruta destino inválida");
+            }
+
+            if (!Files.exists(origen) || !Files.isRegularFile(origen)) {
+                throw new RecursoNOEncontradoException(
+                        "archivo pdf",
+                        "nombre del archivo: ",
+                        numeroPdf
+                );
+            }
+
+            Files.move(origen, destino, StandardCopyOption.REPLACE_EXISTING);
+
+        } catch (IOException e) {
+            throw new AlmacenamientoExcepcion("Error al mover el archivo: " + e);
+        }
+    }
+
+
+    @Override
+    public Resource cargarRecurso(String numeroPdf, Path destino) {
+        try {
+            Path archivo = destino.resolve(numeroPdf);
 
             Resource recurso = new UrlResource(archivo.toUri());
 
-            if (recurso.exists() || recurso.isReadable()) {
+            if (recurso.exists() && recurso.isReadable()) {
                 return recurso;
             } else {
                 throw new RecursoNOEncontradoException("archivo pdf", "nombre del archivo: ", numeroPdf);
@@ -85,15 +116,28 @@ public class ArchivoAlmacenamientoServicio implements ArchivoAlmacenamiento {
         }
     }
 
+    public Path getRutaTemporal() {
+        return rutaTemporal;
+    }
+
+    public Path getRutaLocal() {
+        return rutaLocal;
+    }
+
     @Override
     public String getRutaArchivo(String numeroPdf) {
         return rutaLocal.resolve(numeroPdf).toString();
     }
 
-    private String generarNombreArchivo(String codigoPoliza, String nombreArchivoOriginal) {
+    @Override
+    public String getRutaArchivoTemporal(String numeroPdf) {
+        return rutaTemporal.resolve(numeroPdf).toString();
+    }
+
+    public String generarNombreArchivo(String codigoPoliza, String nombreArchivoOriginal) {
 
         if (codigoPoliza.isBlank()) {
-            throw new ArchivoInvalidoExcepcion("Faltan datos (idPoliza) para generar nombre del archivo.");
+            throw new ArchivoInvalidoExcepcion("Faltan datos (codigoPoliza) para generar nombre del archivo.");
         }
 
         String extension = getExtensionArchivo(nombreArchivoOriginal);
