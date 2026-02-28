@@ -21,7 +21,7 @@ public class ClienteEntidad {
     @Column(nullable = false, length = 40)
     private String nombre;
 
-    @Column(nullable = false, length = 40)
+    @Column(length = 40)
     private String apellido;
 
     @Enumerated(EnumType.STRING)

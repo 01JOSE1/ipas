@@ -27,18 +27,19 @@ public class Cliente {
     }
 
     public static Cliente registrarNuevo (String nombre, String apellido, TipoDocumentoCliente tipoDocumento, String numeroDocumento, LocalDate fechaNacimiento) {
-        validarNombres(nombre);
-        validarApellidos(apellido);
+        validarNombres(nombre, tipoDocumento);
+        validarApellidos(apellido, tipoDocumento);
 
         Cliente cliente = new Cliente(nombre, apellido, tipoDocumento, numeroDocumento, fechaNacimiento);
+
         cliente.esMayorDeEdad();
 
         return cliente;
     }
 
     public static Cliente reconstruir (Long idCliente, String nombre, String apellido, TipoDocumentoCliente tipoDocumento, String numeroDocumento, LocalDate fechaNacimiento) {
-        validarNombres(nombre);
-        validarApellidos(apellido);
+        validarNombres(nombre, tipoDocumento);
+        validarApellidos(apellido, tipoDocumento);
         validarIdCliente(idCliente);
         Cliente cliente = new Cliente(nombre, apellido, tipoDocumento, numeroDocumento, fechaNacimiento);
         cliente.esMayorDeEdad();
@@ -49,6 +50,7 @@ public class Cliente {
 
 
     public void esMayorDeEdad() {
+        if (fechaNacimiento == null) {return;}
 
         Long edad = fechaNacimiento.until(LocalDate.now(), ChronoUnit.YEARS);
 
@@ -63,8 +65,8 @@ public class Cliente {
         if (nombre == null || nombre.isBlank()) {
             throw new IllegalArgumentException("Los nombres son obligatorios");
         }
-        if (apellido == null || apellido.isBlank()) {
-            throw new IllegalArgumentException("Los apellidos son obligatorios");
+        if ((apellido == null || apellido.isBlank()) && tipoDocumento != TipoDocumentoCliente.NUMERO_IDENTIFICACION_TRIBUTARIA) {
+            throw new IllegalArgumentException("Los apellidos son obligatorios 1");
         }
         if (tipoDocumento == null) {
             throw new IllegalArgumentException("El tipo de documento es obligatorio");
@@ -80,9 +82,10 @@ public class Cliente {
         }
     }
 
-    private static void validarNombres(String nombres) {
-        if (nombres == null || nombres.isBlank()) {
-            throw new IllegalArgumentException("El nombre es obligatorio");
+    private static void validarNombres(String nombres, TipoDocumentoCliente tipoDocumento) {
+
+        if (tipoDocumento == TipoDocumentoCliente.NUMERO_IDENTIFICACION_TRIBUTARIA) {
+            return;
         }
 
         nombres = nombres.trim();
@@ -106,7 +109,11 @@ public class Cliente {
         }
     }
 
-    private static void validarApellidos(String apellidos) {
+    private static void validarApellidos(String apellidos, TipoDocumentoCliente tipoDocumento) {
+        if (tipoDocumento == TipoDocumentoCliente.NUMERO_IDENTIFICACION_TRIBUTARIA) {
+            return;
+        }
+
         if (apellidos == null || apellidos.isBlank()) {
             throw new IllegalArgumentException("Los apellidos son obligatorios");
         }
@@ -121,7 +128,7 @@ public class Cliente {
 
         if (apellidos.length() > 100) {
             throw new IllegalArgumentException(
-                    "Los apellidos no pueden exceder 40 caracteres"
+                    "Los apellidos no pueden exceder 100 caracteres"
             );
         }
 

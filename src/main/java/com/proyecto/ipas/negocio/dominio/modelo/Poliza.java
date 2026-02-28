@@ -90,8 +90,8 @@ public class Poliza {
     public static void validarCodigoPoliza(String codigoPoliza) {
         // Usamos \w para letras, números y guiones bajos.
         // El "!" al principio evalúa si el código NO coincide con el patrón.
-        if (codigoPoliza == null || !codigoPoliza.matches("^[\\w]+$")) {
-            throw new IllegalArgumentException("El código de póliza solo puede contener letras, números y guion bajo, sin espacios.");
+        if (codigoPoliza == null || !codigoPoliza.matches("^[a-zA-Z0-9-]+$")) {
+            throw new IllegalArgumentException("El código de póliza solo puede contener letras, números y guiones, sin espacios.");
         }
     }
 
