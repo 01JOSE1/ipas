@@ -1,6 +1,8 @@
 package com.proyecto.ipas;
 
 import com.proyecto.ipas.infraestructura.externo.almacenamiento.ArchivoAlmacenamientoServicio;
+import com.proyecto.ipas.negocio.dominio.enums.TipoDocumentoCliente;
+import com.proyecto.ipas.negocio.dominio.modelo.Cliente;
 import com.proyecto.ipas.negocio.servicio.poliza.PdfPolizaServicio;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
@@ -52,5 +53,23 @@ class PdfPolizaServicioTest {
         assertNotNull(resultado);
         assertFalse(resultado.isBlank(), "El texto extraído está vacío");
     }
+
+    @Test
+    void deberiaLanzarExcepcionCuandoNombreEsNulo() {
+        // Definimos la ejecución y capturamos la excepción
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            Cliente.registrarNuevo(
+                    "jose",
+                    null,
+                    TipoDocumentoCliente.NUMERO_IDENTIFICACION_TRIBUTARIA,
+                    "123456",
+                    null
+            );
+        });
+
+        // Assertion adicional para el mensaje de error
+        assertEquals("El nombre es obligatorio", exception.getMessage());
+    }
+
 
 }
