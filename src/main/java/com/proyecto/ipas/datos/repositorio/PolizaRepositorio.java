@@ -31,7 +31,10 @@ public interface PolizaRepositorio extends JpaRepository<PolizaEntidad, Long> {
 
     boolean existsByNumeroPdf(String numeroPdf);
 
-
+    /**
+     * TRIM(CONCAT(c.nombre, ' ', COALESCE(c.apellido, ''))): Esta función une el nombre con el apellido (sustituyendo el valor nulo por un texto vacío
+     * para evitar que toda la mezcla se anule) y elimina los espacios sobrantes al principio o al final si alguno de los datos falta.
+     */
     @Query("""
         SELECT new com.proyecto.ipas.presentacion.objetoTransferenciaDatos.poliza.GestionPolizaDTO(
             p.idPoliza,
@@ -45,7 +48,7 @@ public interface PolizaRepositorio extends JpaRepository<PolizaEntidad, Long> {
             p.placa,
             p.descripcion,
             c.idCliente,
-            CONCAT(c.nombre, ' ', c.apellido),
+            TRIM(CONCAT(c.nombre, ' ', COALESCE(c.apellido, ''))),
             r.idRamo,
             a.idAseguradora,
             p.numeroPdf

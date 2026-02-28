@@ -12,6 +12,8 @@ public interface ClienteRepositorio extends JpaRepository<ClienteEntidad, Long> 
 
     boolean existsByNumeroDocumento(String documento);
 
+    ClienteEntidad findByNumeroDocumento(String documento);
+
     boolean existsByCorreo(String correo);
 
     boolean existsByTelefono(String telefono);
