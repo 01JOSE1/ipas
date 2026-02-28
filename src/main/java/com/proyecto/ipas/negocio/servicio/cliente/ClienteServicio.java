@@ -80,8 +80,10 @@ public class ClienteServicio {
             errores.add( new ConflictoExcepcion.ErrorCampo("numeroDocumento", "El numero de documento ya se encuentra registrado"));
         }
 
-        if (clienteRepositorio.existsByCorreo(gestionClienteDTO.getCorreo())) {
-            errores.add( new ConflictoExcepcion.ErrorCampo("correo", "El correo ya se encuentra registrado"));
+        if (gestionClienteDTO.getCorreo() != null && !gestionClienteDTO.getCorreo().isBlank()) {
+            if (clienteRepositorio.existsByCorreo(gestionClienteDTO.getCorreo())) {
+                errores.add( new ConflictoExcepcion.ErrorCampo("correo", "El correo ya se encuentra registrado"));
+            }
         }
 
         if (clienteRepositorio.existsByTelefono(gestionClienteDTO.getTelefono())) {
