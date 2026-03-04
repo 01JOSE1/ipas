@@ -1,120 +1,149 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{plantillas/asesor}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Registro Cliente</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title th:text="${modo == 'CREAR'} ? 'Crear Cliente' : 'Editar Cliente'">Cliente</title>
+    <th:block layout:fragment="cssVista">
+        <link rel="stylesheet" th:href="@{/css/usuarios/asesor/cliente/registroFormulario.css}">
+    </th:block>
 </head>
+
 <body>
+<th:block layout:fragment="contenidoVista">
 
-<div th:replace="~{fragmentos/alertas :: alertas(${alertaRespuesta})}"></div>
-
-<div class="container mt-5">
-    <h2 class="mb-4"
-        th:text="${modo == 'CREAR'} ? 'Crear Cliente' : 'Editar Cliente'">
-    </h2>
-
-    <h2 class="mb-4"
-        th:text="${gestionClienteDTO.idCliente}">
-    </h2>
-
-    <form th:action="${modo == 'CREAR'}
-        ? @{/asesor/registro-cliente}
-        : @{/asesor/actualizacion-cliente/{idCliente}(idCliente=${gestionClienteDTO.idCliente})}"
-          th:object="${gestionClienteDTO}"
-          method="post">
-
-
-        <!-- Nombre -->
-        <div class="mb-3">
-            <label class="form-label">Nombre *</label>
-            <input type="text" class="form-control" th:field="*{nombre}">
-            <div class="text-danger" th:errors="*{nombre}"></div>
+    <!-- Encabezado -->
+    <div class="page-header">
+        <div class="header-icon" th:classappend="${modo == 'CREAR'} ? 'icon-green' : 'icon-blue'">
+            <i class="fa" th:classappend="${modo == 'CREAR'} ? 'fa-user-plus' : 'fa-user-edit'"></i>
         </div>
-
-        <!-- Apellido -->
-        <div class="mb-3">
-            <label class="form-label">Apellido *</label>
-            <input type="text" class="form-control" th:field="*{apellido}">
-            <div class="text-danger" th:errors="*{apellido}"></div>
+        <div>
+            <h1 class="page-title"
+                th:text="${modo == 'CREAR'} ? 'Crear Cliente' : 'Editar Cliente'">Cliente</h1>
+            <p class="page-subtitle"
+               th:text="${modo == 'CREAR'} ? 'Completa los datos para registrar un nuevo cliente' : 'Modifica los datos del cliente'">
+            </p>
         </div>
+    </div>
 
-        <!-- Tipo Documento -->
-        <div class="mb-3">
-            <label class="form-label">Tipo de Documento *</label>
-            <select class="form-select" th:field="*{tipoDocumento}">
-                <option value="">Seleccione</option>
-                <option th:each="tipo : ${T(com.proyecto.ipas.negocio.dominio.enums.TipoDocumentoCliente).values()}"
-                        th:value="${tipo}"
-                        th:text="${tipo}">
+    <!-- Formulario -->
+    <div class="form-card">
+        <form th:action="${modo == 'CREAR'}
+                ? @{/asesor/cliente/registro-cliente}
+                : @{/asesor/cliente/actualizacion-cliente/{idCliente}(idCliente=${gestionClienteDTO.idCliente})}"
+              th:object="${gestionClienteDTO}"
+              method="post">
 
-                </option>
-            </select>
-            <div class="text-danger" th:errors="*{tipoDocumento}"></div>
-        </div>
+            <!-- Sección: Datos personales -->
+            <div class="form-section">
+                <h3 class="section-label">
+                    <i class="fa fa-user"></i> Datos Personales
+                </h3>
+                <div class="fields-grid">
 
+                    <div class="field-group">
+                        <label>Nombre <span class="required">*</span></label>
+                        <input type="text" th:field="*{nombre}" placeholder="Ej: Juan">
+                        <span class="field-error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+                    </div>
 
-        <!-- Número Documento -->
-        <div class="mb-3">
-            <label class="form-label">Número de Documento *</label>
-            <input type="text" class="form-control" th:field="*{numeroDocumento}">
-            <div class="text-danger" th:errors="*{numeroDocumento}"></div>
-        </div>
+                    <div class="field-group">
+                        <label>Apellido <span class="required">*</span></label>
+                        <input type="text" th:field="*{apellido}" placeholder="Ej: Pérez">
+                        <span class="field-error" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></span>
+                    </div>
 
-        <!-- Fecha Nacimiento -->
-        <div class="mb-3">
-            <label class="form-label">Fecha de Nacimiento *</label>
-            <input type="date" class="form-control" th:field="*{fechaNacimiento}">
-            <div class="text-danger" th:errors="*{fechaNacimiento}"></div>
-        </div>
+                    <div class="field-group">
+                        <label>Tipo de Documento <span class="required">*</span></label>
+                        <select th:field="*{tipoDocumento}">
+                            <option value="">Seleccione...</option>
+                            <option th:each="tipo : ${T(com.proyecto.ipas.negocio.dominio.enums.TipoDocumentoCliente).values()}"
+                                    th:value="${tipo}"
+                                    th:text="${tipo}">
+                            </option>
+                        </select>
+                        <span class="field-error" th:if="${#fields.hasErrors('tipoDocumento')}" th:errors="*{tipoDocumento}"></span>
+                    </div>
 
-        <!-- Estado Civil -->
-        <div class="mb-3">
-            <label class="form-label">Estado Civil *</label>
-            <select class="form-select" th:field="*{estadoCivil}">
-                <option value="">Seleccione</option>
-                <option th:each="estado : ${T(com.proyecto.ipas.negocio.dominio.enums.EstadoCivilCliente).values()}"
-                        th:value="${estado}"
-                        th:text="${estado}">
-                </option>
-            </select>
-            <div class="text-danger" th:errors="*{estadoCivil}"></div>
-        </div>
+                    <div class="field-group">
+                        <label>Número de Documento <span class="required">*</span></label>
+                        <input type="text" th:field="*{numeroDocumento}" placeholder="Ej: 1234567890">
+                        <span class="field-error" th:if="${#fields.hasErrors('numeroDocumento')}" th:errors="*{numeroDocumento}"></span>
+                    </div>
 
+                    <div class="field-group">
+                        <label>Fecha de Nacimiento </label>
+                        <input type="date" th:field="*{fechaNacimiento}">
+                        <span class="field-error" th:if="${#fields.hasErrors('fechaNacimiento')}" th:errors="*{fechaNacimiento}"></span>
+                    </div>
 
+                    <div class="field-group">
+                        <label>Estado Civil</label>
+                        <select th:field="*{estadoCivil}">
+                            <option value="">Seleccione...</option>
+                            <option th:each="estado : ${T(com.proyecto.ipas.negocio.dominio.enums.EstadoCivilCliente).values()}"
+                                    th:value="${estado}"
+                                    th:text="${estado}">
+                            </option>
+                        </select>
+                        <span class="field-error" th:if="${#fields.hasErrors('estadoCivil')}" th:errors="*{estadoCivil}"></span>
+                    </div>
 
-        <!-- Teléfono -->
-        <div class="mb-3">
-            <label class="form-label">Teléfono *</label>
-            <input type="text" class="form-control" th:field="*{telefono}">
-            <div class="text-danger" th:errors="*{telefono}"></div>
-        </div>
+                </div>
+            </div>
 
-        <!-- Correo -->
-        <div class="mb-3">
-            <label class="form-label">Correo *</label>
-            <input type="email" class="form-control" th:field="*{correo}">
-            <div class="text-danger" th:errors="*{correo}"></div>
-        </div>
+            <!-- Sección: Contacto -->
+            <div class="form-section">
+                <h3 class="section-label">
+                    <i class="fa fa-address-book"></i> Contacto
+                </h3>
+                <div class="fields-grid">
 
-        <!-- Dirección (Opcional) -->
-        <div class="mb-3">
-            <label class="form-label">Dirección</label>
-            <input type="text" class="form-control" th:field="*{direccion}">
-            <div class="text-danger" th:errors="*{direccion}"></div>
-        </div>
+                    <div class="field-group">
+                        <label>Teléfono <span class="required">*</span></label>
+                        <input type="text" th:field="*{telefono}" placeholder="Ej: 3001234567">
+                        <span class="field-error" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></span>
+                    </div>
 
-        <!-- Ciudad (Opcional) -->
-        <div class="mb-3">
-            <label class="form-label">Ciudad</label>
-            <input type="text" class="form-control" th:field="*{ciudad}">
-            <div class="text-danger" th:errors="*{ciudad}"></div>
-        </div>
+                    <div class="field-group">
+                        <label>Correo Electrónico </label>
+                        <input type="email" th:field="*{correo}" placeholder="Ej: cliente@correo.com">
+                        <span class="field-error" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></span>
+                    </div>
 
-        <button type="submit" class="btn btn-primary">Registrar</button>
+                    <div class="field-group">
+                        <label>Dirección</label>
+                        <input type="text" th:field="*{direccion}" placeholder="Ej: Calle 10 #20-30">
+                        <span class="field-error" th:if="${#fields.hasErrors('direccion')}" th:errors="*{direccion}"></span>
+                    </div>
 
-    </form>
-</div>
+                    <div class="field-group">
+                        <label>Ciudad</label>
+                        <input type="text" th:field="*{ciudad}" placeholder="Ej: Bucaramanga">
+                        <span class="field-error" th:if="${#fields.hasErrors('ciudad')}" th:errors="*{ciudad}"></span>
+                    </div>
 
+                </div>
+            </div>
+
+            <!-- Botones -->
+            <div class="form-actions">
+                <button type="button" class="btn-cancelar" onclick="history.back()">
+                    <i class="fa fa-arrow-left"></i>
+                    Cancelar
+                </button>
+                <button type="submit" class="btn-submit"
+                        th:classappend="${modo == 'CREAR'} ? 'btn-submit-green' : 'btn-submit-blue'">
+                    <i class="fa" th:classappend="${modo == 'CREAR'} ? 'fa-user-plus' : 'fa-save'"></i>
+                    <span th:text="${modo == 'CREAR'} ? 'Crear Cliente' : 'Guardar Cambios'"></span>
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</th:block>
 </body>
 </html>

@@ -5,16 +5,38 @@
 <th:block th:fragment="alertas(alertaRespuesta)">
 
     <div th:if="${alertaRespuesta != null}"
-         class="alert-container">
+         class="toast-wrapper">
 
-        <div class="alert"
-             th:classappend="${alertaRespuesta.tipo.name() == 'EXITO' ? 'alert-success' :
-                     (alertaRespuesta.tipo.name() == 'INFO' ? 'alert-info' :
-                     (alertaRespuesta.tipo.name() == 'ERROR' or alertaRespuesta.tipo.name() == 'FATAL' ? 'alert-danger' :
-                     (alertaRespuesta.tipo.name() == 'ADVERTENCIA' ? 'alert-warning' : '')))}">
-            <span th:text="${alertaRespuesta.mensaje}"></span>
+        <div class="toast-alert"
+             th:classappend="${alertaRespuesta.tipo.name() == 'EXITO' ? 'toast-success' :
+                     (alertaRespuesta.tipo.name() == 'INFO' ? 'toast-info' :
+                     (alertaRespuesta.tipo.name() == 'ERROR' or alertaRespuesta.tipo.name() == 'FATAL' ? 'toast-danger' :
+                     (alertaRespuesta.tipo.name() == 'ADVERTENCIA' ? 'toast-warning' : '')))}">
+
+            <div class="toast-icon">
+                <i class="fa"
+                   th:classappend="${alertaRespuesta.tipo.name() == 'EXITO' ? 'fa-check-circle' :
+                           (alertaRespuesta.tipo.name() == 'INFO' ? 'fa-info-circle' :
+                           (alertaRespuesta.tipo.name() == 'ERROR' or alertaRespuesta.tipo.name() == 'FATAL' ? 'fa-times-circle' :
+                           (alertaRespuesta.tipo.name() == 'ADVERTENCIA' ? 'fa-exclamation-triangle' : 'fa-bell')))}">
+                </i>
+            </div>
+
+            <div class="toast-body">
+                <span class="toast-tipo"
+                      th:text="${alertaRespuesta.tipo.name() == 'EXITO' ? 'Éxito' :
+                              (alertaRespuesta.tipo.name() == 'INFO' ? 'Información' :
+                              (alertaRespuesta.tipo.name() == 'ERROR' or alertaRespuesta.tipo.name() == 'FATAL' ? 'Error' :
+                              (alertaRespuesta.tipo.name() == 'ADVERTENCIA' ? 'Advertencia' : '')))}">
+                </span>
+                <span class="toast-mensaje" th:text="${alertaRespuesta.mensaje}"></span>
+            </div>
+
+            <button class="toast-close" onclick="this.closest('.toast-alert').remove()">
+                <i class="fa fa-times"></i>
+            </button>
+
         </div>
-
     </div>
 
 </th:block>

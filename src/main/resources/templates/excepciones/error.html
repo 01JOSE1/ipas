@@ -1,30 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-
-    <title th:text="'Error ' + ${error.estado}">
-        Error
-    </title>
+    <title th:text="'Error ' + ${error.estado}">IPAS - Error de Sistema</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/plantillas/tema.css}">
+    <link rel="stylesheet" th:href="@{/css/excepciones/error.css}">
 </head>
 <body>
 
-<h1>Ups 😵</h1>
+<div class="main-container">
+    <div class="logo-stage">
+        <canvas id="logoCanvas"></canvas>
+    </div>
 
-<p>
-    <strong>Estado HTTP:</strong>
-    <span th:text="${error.estado}">500</span>
-</p>
+    <div class="error-card" id="errorCard">
+        <div class="badge-error">SISTEMA INTERRUMPIDO</div>
 
-<p>
-    <strong>Tipo de error:</strong>
-    <span th:text="${error.nombre}">Internal Server Error</span>
-</p>
+        <h1 class="http-code" th:text="${error.estado}">500</h1>
 
-<p>
-    <strong>Mensaje:</strong>
-    <span th:text="${error.mensaje}">Algo salió mal</span>
-</p>
+        <h3 class="error-type" th:text="${error.nombre}">Internal Server Error</h3>
 
+        <p class="error-message" th:text="${error.mensaje}">
+            Lo sentimos, el servidor experimentó un problema inesperado.
+            Nuestro equipo técnico ha sido notificado automáticamente.
+        </p>
+
+        <div class="button-group">
+            <a href="javascript:history.back()" class="btn-secundario">
+                Regresar atrás
+            </a>
+            <a th:href="${#authorization.expression('isAuthenticated()')} ? @{/usuarios/login} : @{/}"
+               class="btn-primario">
+                Ir al inicio
+            </a>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/excepciones/error.js}"></script>
 </body>
 </html>

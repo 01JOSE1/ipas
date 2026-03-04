@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{plantillas/plantillaAdministrador}">
+
+<head>
+    <title>Mi Perfil</title>
+    <th:block layout:fragment="cssVista">
+        <link rel="stylesheet" th:href="@{/css/fragmentos/perfil.css}">
+    </th:block>
+</head>
+
+<body>
+<th:block layout:fragment="contenidoVista">
+    <div th:replace="~{fragmentos/perfilFormulario :: perfilFormulario}"></div>
+</th:block>
+</body>
+</html>

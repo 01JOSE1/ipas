@@ -1,112 +1,157 @@
 <!DOCTYPE html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{plantillas/asesor}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Gestión de Pólizas</title>
+    <th:block layout:fragment="cssVista">
+        <link rel="stylesheet" th:href="@{/css/usuarios/asesor/poliza/listaPolizas.css}">
+    </th:block>
 </head>
+
 <body>
-<div th:replace="~{fragmentos/alertas :: alertas(${alertaRespuesta})}"></div>
+<th:block layout:fragment="contenidoVista">
 
-<div class="container mt-5">
-
-    <h1>Gestión de polizas</h1>
-
-    <a th:href="@{/asesor/cargar-pdf-poliza}"
-       class="btn btn-success">
-        Generar poliza IA
-    </a>
-
-    <!-- Información de paginación -->
-    <div class="alert alert-info">
-        Mostrando
-        <strong th:text="${polizas.size()}"></strong> de
-        <strong th:text="${totalRegistros}"></strong> polizas
+    <!-- Encabezado -->
+    <div class="page-header">
+        <div class="page-header-left">
+            <h1 class="page-title">Gestión de Pólizas</h1>
+            <p class="page-subtitle">
+                Mostrando <strong th:text="${polizas.size()}">0</strong>
+                de <strong th:text="${totalRegistros}">0</strong> pólizas registradas
+            </p>
+        </div>
+        <div class="header-actions">
+            <a th:href="@{/asesor/poliza/registro-poliza}" class="btn-nuevo-poliza">
+                <i class="fa fa-plus-circle"></i>
+                Nueva Póliza
+            </a>
+            <a th:href="@{/asesor/poliza/cargar-pdf-poliza}" class="btn-ia">
+                <i class="fa fa-robot"></i>
+                Generar con IA
+            </a>
+        </div>
     </div>
 
+    <!-- Tabla -->
+    <div class="table-card">
+        <table class="polizas-table">
+            <thead>
+            <tr>
+                <th>Código</th>
+                <th>Vigencia</th>
+                <th>Prima Neta</th>
+                <th>Prima Total</th>
+                <th>Estado</th>
+                <th>Estado Pago</th>
+                <th>Placa</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
 
-    <!-- Tabla de clientes -->
-    <table class="table table-striped table-hover">
-        <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Código</th>
-            <th>Fecha Inicio</th>
-            <th>Fecha Fin</th>
-            <th>Prima Neta</th>
-            <th>Prima Total</th>
-            <th>Estado</th>
-            <th>Estado Pago</th>
-            <th>Placa</th>
-            <th>Descripción</th>
-            <th>Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Si no hay clientes -->
-        <tr th:if="${polizas.isEmpty()}">
-            <td colspan="7" class="text-center">
-                No se encontraron polizas
-            </td>
-        </tr>
+            <!-- Sin pólizas -->
+            <tr th:if="${polizas.isEmpty()}" class="empty-row">
+                <td colspan="8">
+                    <div class="empty-state">
+                        <i class="fa fa-file-alt"></i>
+                        <span>No se encontraron pólizas</span>
+                    </div>
+                </td>
+            </tr>
 
-        <!-- Iteración sobre clientes -->
-        <tr th:each="poliza : ${polizas}">
-            <td th:text="${poliza.idPoliza}"></td>
-            <td th:text="${poliza.codigoPoliza}"></td>
-            <td th:text="${poliza.fechaInicio}"></td>
-            <td th:text="${poliza.fechaFin}"></td>
-            <td th:text="${poliza.primaNeta}"></td>
-            <td th:text="${poliza.primaTotal}"></td>
-            <td th:text="${poliza.estado}"></td>
-            <td th:text="${poliza.estadoPago}"></td>
-            <td th:text="${poliza.placa}"></td>
-            <td th:text="${poliza.descripcion}"></td>
+            <!-- Iteración -->
+            <tr th:each="poliza : ${polizas}" class="poliza-row">
 
-            <td>
-                <a th:href="@{/asesor/actualizacion-poliza/{idPoliza}(idPoliza=${poliza.idPoliza})}"
-                   class="btn btn-sm btn-warning">Actualizar poliza</a>
-                <a th:href="@{/asesor/ver-archivo/{nombre}(nombre=${poliza.numeroPdf})}"
-                   target="_blank"
-                   class="btn btn-sm btn-warning">Ver PDF</a>
+                <td>
+                    <span class="badge-codigo" th:text="${poliza.codigoPoliza}"></span>
+                </td>
 
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                <td class="td-vigencia">
+                    <div class="vigencia-info">
+                        <span class="vigencia-fecha">
+                            <i class="fa fa-calendar-alt"></i>
+                            <span th:text="${poliza.fechaInicio}"></span>
+                        </span>
+                        <span class="vigencia-sep">→</span>
+                        <span class="vigencia-fecha" th:text="${poliza.fechaFin}"></span>
+                    </div>
+                </td>
 
+                <td class="td-monto">
+                    <span th:text="${'$' + #numbers.formatDecimal(poliza.primaNeta, 1, 'COMMA', 0, 'POINT')}"></span>
+                </td>
+
+                <td class="td-monto td-monto-total">
+                    <span th:text="${'$' + #numbers.formatDecimal(poliza.primaTotal, 1, 'COMMA', 0, 'POINT')}"></span>
+                </td>
+
+                <td>
+                    <span class="badge-estado"
+                          th:classappend="${poliza.estado.name() == 'ACTIVA'} ? ' badge-activa' :
+                                         (${poliza.estado.name() == 'VENCIDA'} ? ' badge-vencida' :
+                                         (${poliza.estado.name() == 'CANCELADA'} ? ' badge-cancelada' : ' badge-otro'))"
+                          th:text="${poliza.estado}">
+                    </span>
+                </td>
+
+                <td>
+                    <span class="badge-pago"
+                          th:classappend="${poliza.estadoPago.name() == 'PAGADO'} ? ' pago-ok' :
+                                         (${poliza.estadoPago.name() == 'PENDIENTE'} ? ' pago-pendiente' : ' pago-vencido')"
+                          th:text="${poliza.estadoPago}">
+                    </span>
+                </td>
+
+                <td>
+                    <span class="badge-placa" th:text="${poliza.placa}"></span>
+                </td>
+
+                <td class="td-acciones">
+                    <a th:href="@{/asesor/poliza/actualizacion-poliza/{id}(id=${poliza.idPoliza})}"
+                       class="btn-accion btn-editar" title="Actualizar póliza">
+                        <i class="fa fa-edit"></i>
+                        <span>Editar</span>
+                    </a>
+                    <a th:href="@{/asesor/poliza/ver-archivo/{nombre}(nombre=${poliza.numeroPdf})}"
+                       target="_blank"
+                       class="btn-accion btn-pdf" title="Ver PDF">
+                        <i class="fa fa-file-pdf"></i>
+                        <span>PDF</span>
+                    </a>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
     <!-- Paginación -->
-    <nav th:if="${totalPaginas > 1}">
-        <ul class="pagination justify-content-center">
-            <!-- Botón anterior -->
-            <li class="page-item"
-                th:classappend="${paginaActual == 0} ? 'disabled'">
-                <a class="page-link"
-                   th:href="@{/asesor/ver-polizas(pagina=${paginaActual - 1}, cantidad=${catidadPagina} )}">
-                    Anterior
-                </a>
-            </li>
+    <nav class="pagination-wrapper" th:if="${totalPaginas > 1}">
 
-            <!-- Números de página -->
-            <li class="page-item"
-                th:each="i : ${#numbers.sequence(0, totalPaginas - 1)}"
-                th:classappend="${i == paginaActual} ? 'active'">
-                <a class="page-link"
-                   th:href="@{/asesor/ver-polizas(pagina=${i}, cantidad=${catidadPagina} )}"
-                   th:text="${i + 1}"></a>
-            </li>
+        <a class="page-btn"
+           th:classappend="${paginaActual == 0} ? ' disabled'"
+           th:href="@{/asesor/poliza/ver-polizas(pagina=${paginaActual - 1}, cantidad=${catidadPagina})}">
+            <i class="fa fa-chevron-left"></i>
+        </a>
 
-            <!-- Botón siguiente -->
-            <li class="page-item"
-                th:classappend="${paginaActual == totalPaginas - 1} ? 'disabled'">
-                <a class="page-link"
-                   th:href="@{/asesor/ver-polizas(pagina=${paginaActual + 1}, cantidad=${catidadPagina} )}">
-                    Siguiente
-                </a>
-            </li>
-        </ul>
+        <a class="page-btn page-num"
+           th:each="i : ${#numbers.sequence(0, totalPaginas - 1)}"
+           th:classappend="${i == paginaActual} ? ' active'"
+           th:href="@{/asesor/poliza/ver-polizas(pagina=${i}, cantidad=${catidadPagina})}"
+           th:text="${i + 1}">
+        </a>
+
+        <a class="page-btn"
+           th:classappend="${paginaActual == totalPaginas - 1} ? ' disabled'"
+           th:href="@{/asesor/poliza/ver-polizas(pagina=${paginaActual + 1}, cantidad=${catidadPagina})}">
+            <i class="fa fa-chevron-right"></i>
+        </a>
+
     </nav>
 
-</div>
+</th:block>
 </body>
 </html>

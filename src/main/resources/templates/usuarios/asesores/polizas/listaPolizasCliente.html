@@ -1,55 +1,133 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{plantillas/asesor}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Lista de Pólizas</title>
+    <title>Historial de Pólizas</title>
+    <th:block layout:fragment="cssVista">
+        <link rel="stylesheet" th:href="@{/css/usuarios/asesor/poliza/listaPolizasCliente.css}">
+    </th:block>
 </head>
+
 <body>
+<th:block layout:fragment="contenidoVista">
 
-<h2>Lista de Pólizas</h2>
+    <!-- Encabezado -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Historial de Pólizas</h1>
+            <p class="page-subtitle">
+                <span th:if="${!#lists.isEmpty(polizas)}">
+                    <strong th:text="${#lists.size(polizas)}">0</strong> pólizas registradas
+                </span>
+                <span th:if="${#lists.isEmpty(polizas)}">Sin pólizas registradas</span>
+            </p>
+        </div>
+    </div>
 
-<div th:if="${#lists.isEmpty(polizas)}">
-    <p>No hay pólizas registradas.</p>
-</div>
+    <!-- Empty state -->
+    <div class="empty-card" th:if="${#lists.isEmpty(polizas)}">
+        <div class="empty-state">
+            <i class="fa fa-file-alt"></i>
+            <span>Este cliente no tiene pólizas registradas</span>
+        </div>
+    </div>
 
-<table border="1" th:if="${!#lists.isEmpty(polizas)}">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Código</th>
-        <th>Fecha Inicio</th>
-        <th>Fecha Fin</th>
-        <th>Prima Neta</th>
-        <th>Prima Total</th>
-        <th>Estado</th>
-        <th>Estado Pago</th>
-        <th>Placa</th>
-        <th>Descripción</th>
-        <th>Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="poliza : ${polizas}">
-        <td th:text="${poliza.idPoliza}"></td>
-        <td th:text="${poliza.codigoPoliza}"></td>
-        <td th:text="${poliza.fechaInicio}"></td>
-        <td th:text="${poliza.fechaFin}"></td>
-        <td th:text="${poliza.primaNeta}"></td>
-        <td th:text="${poliza.primaTotal}"></td>
-        <td th:text="${poliza.estado}"></td>
-        <td th:text="${poliza.estadoPago}"></td>
-        <td th:text="${poliza.placa}"></td>
-        <td th:text="${poliza.descripcion}"></td>
-        <td>
-            <a th:href="@{/asesor/actualizacion-poliza/{idPoliza}(idPoliza=${poliza.idPoliza})}"
-               class="btn btn-sm btn-warning">Actualizar poliza</a>
-            <a th:href="@{/asesor/ver-archivo/{nombre}(nombre=${poliza.numeroPdf})}"
-               target="_blank"
-               class="btn btn-sm btn-warning">Ver PDF</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+    <!-- Tabla -->
+    <div class="table-card" th:if="${!#lists.isEmpty(polizas)}">
+        <table class="polizas-table">
+            <thead>
+            <tr>
+                <th>Código</th>
+                <th>Vigencia</th>
+                <th>Prima Neta</th>
+                <th>Prima Total</th>
+                <th>Estado</th>
+                <th>Estado Pago</th>
+                <th>Placa</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="poliza : ${polizas}" class="poliza-row">
 
+                <!-- Código -->
+                <td>
+                    <span class="badge-codigo" th:text="${poliza.codigoPoliza}"></span>
+                </td>
+
+                <!-- Vigencia -->
+                <td class="td-vigencia">
+                    <div class="vigencia-info">
+                        <span class="vigencia-fecha">
+                            <i class="fa fa-calendar-alt"></i>
+                            <span th:text="${poliza.fechaInicio}"></span>
+                        </span>
+                        <span class="vigencia-sep">→</span>
+                        <span class="vigencia-fecha">
+                            <span th:text="${poliza.fechaFin}"></span>
+                        </span>
+                    </div>
+                </td>
+
+                <!-- Prima Neta -->
+                <td class="td-monto">
+                    <span th:text="${'$' + #numbers.formatDecimal(poliza.primaNeta, 1, 'COMMA', 0, 'POINT')}"></span>
+                </td>
+
+                <!-- Prima Total -->
+                <td class="td-monto td-monto-total">
+                    <span th:text="${'$' + #numbers.formatDecimal(poliza.primaTotal, 1, 'COMMA', 0, 'POINT')}"></span>
+                </td>
+
+                <!-- Estado póliza -->
+                <td>
+                    <span class="badge-estado"
+                          th:classappend="${poliza.estado.name() == 'ACTIVA'} ? ' badge-activa' :
+                                         (${poliza.estado.name() == 'VENCIDA'} ? ' badge-vencida' :
+                                         (${poliza.estado.name() == 'CANCELADA'} ? ' badge-cancelada' : ' badge-otro'))"
+                          th:text="${poliza.estado}">
+                    </span>
+                </td>
+
+                <!-- Estado pago -->
+                <td>
+                    <span class="badge-pago"
+                          th:classappend="${poliza.estadoPago.name() == 'PAGADO'} ? ' pago-ok' :
+                                         (${poliza.estadoPago.name() == 'PENDIENTE'} ? ' pago-pendiente' : ' pago-vencido')"
+                          th:text="${poliza.estadoPago}">
+                    </span>
+                </td>
+
+                <!-- Placa -->
+                <td>
+                    <span class="badge-placa" th:text="${poliza.placa}"></span>
+                </td>
+
+                <!-- Acciones -->
+                <td class="td-acciones">
+                    <a th:href="@{/asesor/poliza/actualizacion-poliza/{id}(id=${poliza.idPoliza})}"
+                       class="btn-accion btn-editar"
+                       title="Actualizar póliza">
+                        <i class="fa fa-edit"></i>
+                        <span>Editar</span>
+                    </a>
+                    <a th:href="@{/asesor/poliza/ver-archivo/{nombre}(nombre=${poliza.numeroPdf})}"
+                       target="_blank"
+                       class="btn-accion btn-pdf"
+                       title="Ver PDF">
+                        <i class="fa fa-file-pdf"></i>
+                        <span>PDF</span>
+                    </a>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</th:block>
 </body>
 </html>

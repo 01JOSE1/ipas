@@ -1,13 +1,384 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{plantillas/base}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Inicio</title>
 </head>
-<body>
-<div th:replace="~{fragmentos/alertas :: alertas(${alertaRespuesta})}"></div>
 
-    <h1>BIENVENIDO A IPAS</h1>
+<!-- ═══════════════════════════════════════════ -->
+<!-- CSS PROPIO DE ESTA VISTA                    -->
+<!-- ═══════════════════════════════════════════ -->
+<th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/ipas.css}">
+</th:block>
 
-</body>
+<!-- ═══════════════════════════════════════════ -->
+<!-- CONTENIDO PRINCIPAL                         -->
+<!-- ═══════════════════════════════════════════ -->
+<th:block layout:fragment="contenido">
+
+    <!-- ──────────────────────────────────────────
+         NAVBAR
+    ────────────────────────────────────────── -->
+    <nav class="lp-navbar">
+        <div class="container">
+            <a href="#" class="lp-logo">
+                <div class="lp-logo-box">IPAS</div>
+                <div class="lp-logo-text">
+                    IPAS
+                    <span>Intermediario de Pólizas</span>
+                </div>
+            </a>
+            <div class="lp-nav-actions">
+                <a th:href="@{/usuarios/login}" class="btn-nav-login">Iniciar sesión</a>
+                <a th:href="@{/usuarios/login}" class="btn-nav-register">Registrarse</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ──────────────────────────────────────────
+         HERO
+    ────────────────────────────────────────── -->
+    <section class="lp-hero" id="inicio">
+        <!-- Elementos decorativos -->
+        <div class="lp-hero-circle"></div>
+        <div class="lp-hero-accent"></div>
+
+        <div class="container">
+            <div class="lp-hero-content">
+
+                <div class="lp-hero-badge">
+                    <i class="fas fa-shield-halved"></i>
+                    Gestión automatizada de pólizas
+                </div>
+
+                <h1 class="lp-hero-title">
+                    Automatiza la gestión<br>
+                    de tus pólizas<br>
+                    de forma <span class="highlight">segura</span>
+                </h1>
+
+                <p class="lp-hero-subtitle">
+                    IPAS es la plataforma que automatiza tus procesos de intermediación.
+                    Extrae datos de pólizas, gestiona clientes y organiza todo en un solo lugar.
+                    Ahorra tiempo en tareas repetitivas y enfócate en crecer tu negocio.
+                </p>
+
+                <div class="lp-hero-actions">
+                    <a th:href="@{/usuarios/login}" class="btn-hero-primary">
+                        <i class="fas fa-arrow-right-to-bracket"></i>
+                        Iniciar sesión
+                    </a>
+                    <a href="#caracteristicas" class="btn-hero-secondary">
+                        <i class="fas fa-circle-info"></i>
+                        Conocer más
+                    </a>
+                </div>
+
+                <div class="lp-hero-stats">
+                    <div class="lp-stat-item">
+                        <span class="lp-stat-number">50%+</span>
+                        <span class="lp-stat-label">Reducción en tiempos</span>
+                    </div>
+                    <div class="lp-stat-item">
+                        <span class="lp-stat-number">100%</span>
+                        <span class="lp-stat-label">Automatizado</span>
+                    </div>
+                    <div class="lp-stat-item">
+                        <span class="lp-stat-number">24/7</span>
+                        <span class="lp-stat-label">Disponible</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="lp-scroll-indicator">
+            <span>Descubre más</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- ──────────────────────────────────────────
+         CARACTERÍSTICAS
+    ────────────────────────────────────────── -->
+    <section class="lp-features" id="caracteristicas">
+        <div class="container">
+
+            <div class="lp-section-header lp-reveal">
+                <span class="lp-section-tag">¿Qué ofrecemos?</span>
+                <h2 class="lp-section-title">Funciones diseñadas para<br>intermediarios modernos</h2>
+                <p class="lp-section-subtitle">
+                    Automatización inteligente, gestión completa y seguridad de datos.
+                    Todo lo que necesitas para optimizar tu operación de intermediación.
+                </p>
+            </div>
+
+            <div class="lp-features-grid">
+
+                <div class="lp-feature-card lp-reveal lp-reveal-delay-1">
+                    <div class="lp-feature-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <h3 class="lp-feature-title">Extracción Automática de Datos</h3>
+                    <p class="lp-feature-desc">
+                        Carga archivos PDF de pólizas y extrae automáticamente la información.
+                        Reduce horas de trabajo manual en minutos. La función más potente de IPAS.
+                    </p>
+                </div>
+
+                <div class="lp-feature-card lp-reveal lp-reveal-delay-2">
+                    <div class="lp-feature-icon">
+                        <i class="fas fa-file-shield"></i>
+                    </div>
+                    <h3 class="lp-feature-title">Gestión Integral de Pólizas</h3>
+                    <p class="lp-feature-desc">
+                        Crea, consulta, edita y administra pólizas de cualquier tipo de seguro.
+                        Acceso completo a información, estados de pago y vigencia.
+                    </p>
+                </div>
+
+                <div class="lp-feature-card lp-reveal lp-reveal-delay-3">
+                    <div class="lp-feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="lp-feature-title">Gestión de Clientes</h3>
+                    <p class="lp-feature-desc">
+                        Registro centralizado de todos tus asegurados. Historial completo,
+                        datos de contacto y pólizas vinculadas en un solo lugar.
+                    </p>
+                </div>
+
+                <div class="lp-feature-card lp-reveal lp-reveal-delay-1">
+                    <div class="lp-feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3 class="lp-feature-title">Control de Acceso por Roles</h3>
+                    <p class="lp-feature-desc">
+                        Administradores y Asesores. Control granular de permisos y acceso
+                        a información. Solo ven lo que necesitan según su rol.
+                    </p>
+                </div>
+
+                <div class="lp-feature-card lp-reveal lp-reveal-delay-2">
+                    <div class="lp-feature-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h3 class="lp-feature-title">Estadísticas y Reportes</h3>
+                    <p class="lp-feature-desc">
+                        Panel administrativo con métricas clave. Visualiza el rendimiento
+                        de tu cartera y toma decisiones basadas en datos reales.
+                    </p>
+                </div>
+
+                <div class="lp-feature-card lp-reveal lp-reveal-delay-3">
+                    <div class="lp-feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="lp-feature-title">Preparado para IA</h3>
+                    <p class="lp-feature-desc">
+                        Arquitectura moderna preparada para futuras automatizaciones
+                        inteligentes. Más funciones IA vienen próximamente.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ──────────────────────────────────────────
+         ESTADÍSTICAS
+    ────────────────────────────────────────── -->
+    <section class="lp-stats-section">
+        <div class="container">
+            <div class="lp-stats-grid">
+
+                <div class="lp-stat-card lp-reveal">
+                    <i class="fas fa-file-contract stat-icon"></i>
+                    <span class="stat-num" data-count="250">0</span>
+                    <span class="stat-desc">Pólizas procesadas</span>
+                </div>
+
+                <div class="lp-stat-card lp-reveal lp-reveal-delay-1">
+                    <i class="fas fa-hourglass-end stat-icon"></i>
+                    <span class="stat-num" data-count="60">0</span>
+                    <span class="stat-desc">% tiempo ahorrado</span>
+                </div>
+
+                <div class="lp-stat-card lp-reveal lp-reveal-delay-2">
+                    <i class="fas fa-users-gear stat-icon"></i>
+                    <span class="stat-num" data-count="15">0</span>
+                    <span class="stat-desc">Intermediarios activos</span>
+                </div>
+
+                <div class="lp-stat-card lp-reveal lp-reveal-delay-3">
+                    <i class="fas fa-check-circle stat-icon"></i>
+                    <span class="stat-num" data-count="98">0</span>
+                    <span class="stat-desc">% confiabilidad</span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ──────────────────────────────────────────
+         SOBRE NOSOTROS
+    ────────────────────────────────────────── -->
+    <section class="lp-about" id="nosotros">
+        <div class="container">
+
+            <!-- Visual / Tarjeta izquierda -->
+            <div class="lp-about-visual lp-reveal">
+                <div class="lp-about-card-main">
+                    <div class="lp-about-logo-display">IPAS</div>
+                    <p class="lp-about-slogan">Intermediario de Pólizas Ágil y Seguro</p>
+                    <div class="lp-about-divider"></div>
+                    <p class="lp-about-tagline">
+                        Una solución pensada por y para intermediarios de seguros,
+                        que convierte la complejidad en simplicidad y la incertidumbre
+                        en confianza.
+                    </p>
+                </div>
+                <!-- Badge flotante -->
+                <div class="lp-about-badge-float">
+                    <div class="badge-icon"><i class="fas fa-award"></i></div>
+                    <div class="badge-text">
+                        <strong>Sistema confiable</strong>
+                        <span>Diseñado para crecer contigo</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Texto derecho -->
+            <div class="lp-about-content">
+                <div class="lp-section-header lp-reveal">
+                    <span class="lp-section-tag">Sobre IPAS</span>
+                    <h2 class="lp-section-title">Tu aliado en la<br>gestión de seguros</h2>
+                    <p class="lp-section-subtitle"></p>
+                </div>
+
+                <p class="lp-about-desc lp-reveal lp-reveal-delay-1">
+                    IPAS nació para resolver un problema real: los intermediarios de seguros
+                    invierten horas copiando datos de pólizas PDF de forma manual. Nuestra plataforma
+                    automatiza ese proceso y centraliza la gestión completa de tu operación de intermediación.
+                </p>
+                <p class="lp-about-desc lp-reveal lp-reveal-delay-2">
+                    Trabajamos con cualquier tipo de seguro (auto, vida, responsabilidad civil, etc.)
+                    y estamos diseñados específicamente para el mercado colombiano. IPAS te permite
+                    operar con mayor rapidez, menos errores y mejor control de tus clientes y pólizas.
+                </p>
+
+                <div class="lp-about-values lp-reveal lp-reveal-delay-3">
+                    <div class="lp-value-item">
+                        <i class="fas fa-check-circle"></i> Automatización inteligente
+                    </div>
+                    <div class="lp-value-item">
+                        <i class="fas fa-check-circle"></i> Reducción de tiempos operativos
+                    </div>
+                    <div class="lp-value-item">
+                        <i class="fas fa-check-circle"></i> Seguridad y control de datos
+                    </div>
+                    <div class="lp-value-item">
+                        <i class="fas fa-check-circle"></i> Flexible para cualquier tipo de seguro
+                    </div>
+                    <div class="lp-value-item">
+                        <i class="fas fa-check-circle"></i> Diseño pensado para intermediarios
+                    </div>
+                    <div class="lp-value-item">
+                        <i class="fas fa-check-circle"></i> Preparado para evolucionar con IA
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ──────────────────────────────────────────
+         CTA FINAL
+    ────────────────────────────────────────── -->
+    <section class="lp-cta">
+        <div class="container">
+            <div class="lp-cta-box lp-reveal">
+                <h2 class="lp-cta-title">¿Listo para automatizar tu operación?</h2>
+                <p class="lp-cta-desc">
+                    Accede a IPAS y transforma la manera en que gestionas tus pólizas.
+                    Automatización, seguridad y control, diseñado para ti.
+                </p>
+                <div class="lp-cta-actions">
+                    <a th:href="@{/usuarios/login}" class="btn-cta-primary">
+                        <i class="fas fa-arrow-right-to-bracket"></i>
+                        Iniciar sesión
+                    </a>
+                    <a th:href="@{/usuarios/login}" class="btn-cta-outline">
+                        <i class="fas fa-user-plus"></i>
+                        Crear cuenta
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ──────────────────────────────────────────
+         FOOTER
+    ────────────────────────────────────────── -->
+    <footer class="lp-footer">
+        <div class="container">
+            <div class="lp-footer-top">
+
+                <div class="lp-footer-brand">
+                    <a href="#" class="lp-logo">
+                        <div class="lp-logo-box">IPAS</div>
+                        <div class="lp-logo-text">
+                            IPAS
+                            <span>Intermediario de Pólizas</span>
+                        </div>
+                    </a>
+                    <p>
+                        Plataforma de automatización integral para intermediarios de seguros.
+                        Extrae datos, gestiona pólizas y clientes, con seguridad y control.
+                    </p>
+                </div>
+
+                <div class="lp-footer-col">
+                    <h5>Plataforma</h5>
+                    <ul>
+                        <li><a href="#caracteristicas">Características</a></li>
+                        <li><a href="#nosotros">Sobre IPAS</a></li>
+                        <li><a th:href="@{/usuarios/login}">Iniciar sesión</a></li>
+                        <li><a th:href="@{/usuarios/login}">Registrarse</a></li>
+                    </ul>
+                </div>
+
+                <div class="lp-footer-col">
+                    <h5>Contacto</h5>
+                    <ul>
+                        <li><a href="#">soporte@ipas.com</a></li>
+                        <li><a href="#">Centro de ayuda</a></li>
+                        <li><a href="#">Política de privacidad</a></li>
+                        <li><a href="#">Términos de uso</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="lp-footer-bottom">
+                <span>&copy; 2025 IPAS — Intermediario de Pólizas Ágil y Seguro. Todos los derechos reservados.</span>
+                <span>Hecho con <i class="fas fa-heart" style="color:#DC3545; font-size:0.7rem;"></i> para intermediarios de seguros</span>
+            </div>
+        </div>
+    </footer>
+
+</th:block>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- JS PROPIO DE ESTA VISTA                     -->
+<!-- ═══════════════════════════════════════════ -->
+<th:block layout:fragment="js">
+    <script th:src="@{/js/ipas.js}"></script>
+</th:block>
+
 </html>

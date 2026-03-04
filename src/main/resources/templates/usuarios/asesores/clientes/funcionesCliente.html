@@ -1,51 +1,125 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{plantillas/asesor}">
+
 <head>
-    <meta charset="UTF-8">
     <title>Gestión de Cliente</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .dashboard-container { margin-top: 50px; max-width: 600px; }
-        .card-menu { padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
-    </style>
+    <th:block layout:fragment="cssVista">
+        <link rel="stylesheet" th:href="@{/css/usuarios/asesor/cliente/gestionCliente.css}">
+    </th:block>
 </head>
+
 <body>
+<th:block layout:fragment="contenidoVista">
 
-<div class="container dashboard-container">
-    <div class="card-menu bg-light">
-        <h3>Panel de Gestión</h3>
-        <p>Cliente ID: <strong th:text="${gestionClienteDTO.idCliente}">0</strong></p>
-        <p>Cliente NOMBRE: <strong th:text="${gestionClienteDTO.nombre}">0</strong></p>
-        <p>Cliente DOCUMENTO: <strong th:text="${gestionClienteDTO.numeroDocumento}">0</strong></p>
-        <hr>
+    <!-- Layout de dos columnas -->
+    <div class="gestion-layout">
 
-        <div class="d-grid gap-3">
-            <a th:href="@{/asesor/actualizacion-cliente(idCliente=${gestionClienteDTO.idCliente})}"
-               class="btn btn-warning">
-                Actualizar Datos Personales
-            </a>
+        <!-- ===== COLUMNA IZQUIERDA: info del cliente ===== -->
+        <div class="cliente-card">
 
-            <a th:href="@{/asesor/ver-polizas/{id}(id=${gestionClienteDTO.idCliente})}"
-               class="btn btn-info">
-                Ver Historial de Pólizas
-            </a>
+            <div class="cliente-card-header">
+                <div class="cliente-avatar-lg">
+                    <span th:text="${#strings.substring(gestionClienteDTO.nombre, 0, 1)}">A</span>
+                </div>
+                <div class="cliente-card-info">
+                    <h2 th:text="${gestionClienteDTO.nombre}">Nombre</h2>
+                    <span class="cliente-id-badge">
+                        ID #<span th:text="${gestionClienteDTO.idCliente}">0</span>
+                    </span>
+                </div>
+            </div>
 
-            <a th:href="@{/asesor/registro-poliza/{id}(id=${gestionClienteDTO.idCliente})}"
-               class="btn btn-success">
-                Crear Nueva Póliza
-            </a>
+            <div class="cliente-card-body">
 
-            <a th:href="@{/asesor/cargar-pdf-poliza}"
-               class="btn btn-success">
-                Generar poliza IA
-            </a>
+                <div class="dato-row">
+                    <span class="dato-label">
+                        <i class="fa fa-id-card"></i> Documento
+                    </span>
+                    <span class="dato-valor" th:text="${gestionClienteDTO.numeroDocumento}">—</span>
+                </div>
+
+                <!-- Agrega más datos del DTO si los tienes disponibles -->
+                <div class="dato-row" th:if="${gestionClienteDTO.correo != null}">
+                    <span class="dato-label">
+                        <i class="fa fa-envelope"></i> Correo
+                    </span>
+                    <span class="dato-valor" th:text="${gestionClienteDTO.correo}">—</span>
+                </div>
+
+                <div class="dato-row" th:if="${gestionClienteDTO.telefono != null}">
+                    <span class="dato-label">
+                        <i class="fa fa-phone"></i> Teléfono
+                    </span>
+                    <span class="dato-valor" th:text="${gestionClienteDTO.telefono}">—</span>
+                </div>
+
+            </div>
         </div>
 
-        <div class="mt-4">
-            <a href="@{/asesor/ver-clientes}" class="btn btn-link text-secondary">← Volver a la lista</a>
+        <!-- ===== COLUMNA DERECHA: acciones ===== -->
+        <div class="acciones-panel">
+
+            <h3 class="acciones-titulo">Panel de Acciones</h3>
+            <p class="acciones-subtitulo">Selecciona una acción para gestionar este cliente</p>
+
+            <div class="acciones-grid">
+
+                <a th:href="@{/asesor/cliente/actualizacion-cliente(idCliente=${gestionClienteDTO.idCliente})}"
+                   class="accion-card">
+                    <div class="accion-icon accion-icon-blue">
+                        <i class="fa fa-user-edit"></i>
+                    </div>
+                    <div class="accion-info">
+                        <span class="accion-titulo">Actualizar Datos</span>
+                        <span class="accion-desc">Modificar información personal del cliente</span>
+                    </div>
+                    <i class="fa fa-chevron-right accion-arrow"></i>
+                </a>
+
+                <a th:href="@{/asesor/poliza/ver-polizas/{id}(id=${gestionClienteDTO.idCliente})}"
+                   class="accion-card">
+                    <div class="accion-icon accion-icon-cyan">
+                        <i class="fa fa-file-alt"></i>
+                    </div>
+                    <div class="accion-info">
+                        <span class="accion-titulo">Historial de Pólizas</span>
+                        <span class="accion-desc">Ver todas las pólizas asociadas al cliente</span>
+                    </div>
+                    <i class="fa fa-chevron-right accion-arrow"></i>
+                </a>
+
+                <a th:href="@{/asesor/poliza/registro-poliza/{id}(id=${gestionClienteDTO.idCliente})}"
+                   class="accion-card">
+                    <div class="accion-icon accion-icon-green">
+                        <i class="fa fa-plus-circle"></i>
+                    </div>
+                    <div class="accion-info">
+                        <span class="accion-titulo">Crear Nueva Póliza</span>
+                        <span class="accion-desc">Registrar una nueva póliza para este cliente</span>
+                    </div>
+                    <i class="fa fa-chevron-right accion-arrow"></i>
+                </a>
+
+                <a th:href="@{/asesor/poliza/cargar-pdf-poliza}"
+                   class="accion-card">
+                    <div class="accion-icon accion-icon-purple">
+                        <i class="fa fa-robot"></i>
+                    </div>
+                    <div class="accion-info">
+                        <span class="accion-titulo">Generar Póliza con IA</span>
+                        <span class="accion-desc">Crear póliza automáticamente con inteligencia artificial</span>
+                    </div>
+                    <i class="fa fa-chevron-right accion-arrow"></i>
+                </a>
+
+            </div>
         </div>
+
     </div>
-</div>
 
+</th:block>
 </body>
 </html>

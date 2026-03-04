@@ -7,7 +7,7 @@
 <head>
     <title>Dashboard</title>
     <th:block layout:fragment="cssVista">
-        <link rel="stylesheet" th:href="@{/css/asesor/dashboardPrincipal.css}">
+        <link rel="stylesheet" th:href="@{/css/usuarios/asesor/dashboardPrincipal.css}">
     </th:block>
 </head>
 
@@ -17,7 +17,7 @@
     <!-- Bienvenida -->
     <div class="welcome-banner">
         <div class="welcome-text">
-            <h1>Bienvenido, <span th:text="${nombreAsesor}">Asesor</span> 👋</h1>
+            <h1>Bienvenido, <span th:text="${#authentication.principal.nombre}">Asesor</span> 👋</h1>
             <p>Aquí tienes un resumen de tu actividad del día.</p>
         </div>
         <div class="welcome-date" id="fechaHoy"></div>
@@ -73,13 +73,13 @@
         <h2 class="section-title">Accesos rápidos</h2>
         <div class="quick-grid">
 
-            <a th:href="@{/asesor/ver-clientes}" class="quick-card">
+            <a th:href="@{/asesor/cliente/ver-clientes}" class="quick-card">
                 <div class="quick-icon"><i class="fa fa-users"></i></div>
                 <span class="quick-label">Ver Clientes</span>
                 <i class="fa fa-arrow-right quick-arrow"></i>
             </a>
 
-            <a th:href="@{/asesor/ver-polizas}" class="quick-card">
+            <a th:href="@{/asesor/poliza/ver-polizas}" class="quick-card">
                 <div class="quick-icon"><i class="fa fa-file-contract"></i></div>
                 <span class="quick-label">Ver Pólizas</span>
                 <i class="fa fa-arrow-right quick-arrow"></i>
@@ -103,7 +103,7 @@
 </th:block>
 
 <th:block layout:fragment="jsVista">
-    <script th:src="@{/js/dashboardAsesor.js}"></script>
+    <script th:src="@{/js/usuarios/asesor/dashboardPrincipal.js}"></script>
 </th:block>
 
 </body>
