@@ -99,7 +99,7 @@ public class AsesorPolizaControlador {
         modelo.addAttribute("totalRegistros",  paginaPolizas.getTotalElements());
         modelo.addAttribute("catidadPagina", cantidad);
 
-        return "polizas/listaPolizas";
+        return "usuarios/asesores/polizas/listaPolizas";
     }
 
     @GetMapping("ver-polizas/{idCliente}")
@@ -109,7 +109,7 @@ public class AsesorPolizaControlador {
 
         modelo.addAttribute("polizas", polizas);
 
-        return "polizas/listaPolizasCliente";
+        return "usuarios/asesores/polizas/listaPolizasCliente";
     }
 
     public void alistarFormulario (Long idCliente, Model modelo, GestionPolizaDTO gestionPolizaDTO) {
@@ -131,7 +131,7 @@ public class AsesorPolizaControlador {
         if (idCliente != null) {
             modelo.addAttribute("idCliente", idCliente);
         }
-        return "polizas/subirPdf";
+        return "usuarios/asesores/polizas/subirPdf";
     }
 
 
@@ -176,7 +176,7 @@ public class AsesorPolizaControlador {
         } catch (IOException | ArchivoInvalidoExcepcion ex) {
             modelo.addAttribute("alertaRespuesta",
                     new AlertaRespuesta(TipoAlerta.ERROR, ex.getMessage()));
-            return "polizas/subirPdf";
+            return "usuarios/asesores/polizas/subirPdf";
         }
     }
 
@@ -189,7 +189,7 @@ public class AsesorPolizaControlador {
 
         alistarFormulario(gestionClienteDTO.getIdCliente(), modelo, gestionPolizaDTO);
 
-        return "polizas/registroFormulario";
+        return "usuarios/asesores/polizas/registroFormulario";
     }
 
     @GetMapping("registro-poliza/{idCliente}")
@@ -198,7 +198,7 @@ public class AsesorPolizaControlador {
 
         alistarFormulario(idCliente, modelo, gestionPolizaDTO);
 
-        return "polizas/registroFormulario";
+        return "usuarios/asesores/polizas/registroFormulario";
     }
 
     @PostMapping("registro-poliza/{idCliente}")
@@ -214,7 +214,7 @@ public class AsesorPolizaControlador {
         if (validacion.hasErrors()) {
             modelo.addAttribute("modo", "CREAR");
             alistarFormulario(idCliente, modelo, gestionPolizaDTO);
-            return "polizas/registroFormulario";
+            return "usuarios/asesores/polizas/registroFormulario";
         }
 
         try {
@@ -234,19 +234,19 @@ public class AsesorPolizaControlador {
             modelo.addAttribute("alertaRespuesta", alertaRespuesta);
             modelo.addAttribute("modo", "CREAR");
             alistarFormulario(gestionPolizaDTO.getIdCliente(), modelo, gestionPolizaDTO);
-            return "polizas/registroFormulario";
+            return "usuarios/asesores/polizas/registroFormulario";
         } catch (ConflictoExcepcion ex) {
             ex.getCampoErrorLista().forEach(error -> {
                 validacion.rejectValue(error.getCampo(), ex.getErrorCodigo(), error.getMensaje());
             });
             modelo.addAttribute("modo", "CREAR");
             alistarFormulario(gestionPolizaDTO.getIdCliente(), modelo, gestionPolizaDTO);
-            return "polizas/registroFormulario";
+            return "usuarios/asesores/polizas/registroFormulario";
         } catch (ArchivoInvalidoExcepcion ex) {
             validacion.rejectValue("archivoPoliza", ex.getErrorCodigo(), ex.getMessage());
             modelo.addAttribute("modo", "CREAR");
             alistarFormulario(gestionPolizaDTO.getIdCliente(), modelo, gestionPolizaDTO);
-            return "polizas/registroFormulario";
+            return "usuarios/asesores/polizas/registroFormulario";
         } catch (ValidacionDatosExcepcion ex) {
             ex.getCampoErrorLista().forEach(error -> {
                 validacion.rejectValue(error.getCampo(), ex.getErrorCodigo(), error.getMensaje());
@@ -254,7 +254,7 @@ public class AsesorPolizaControlador {
             modelo.addAttribute("modo", "CREAR");
             alistarFormulario(gestionPolizaDTO.getIdCliente(), modelo, gestionPolizaDTO);
 
-            return "polizas/registroFormulario";
+            return "usuarios/asesores/polizas/registroFormulario";
         }
 
         return "redirect:/asesor/ver-polizas/" + gestionPolizaDTO.getIdCliente();
@@ -265,7 +265,7 @@ public class AsesorPolizaControlador {
         GestionPolizaDTO gestionPolizaDTO = polizaServicio.obtenerPoliza(idPoliza);
         modelo.addAttribute("modo", "EDITAR");
         alistarFormulario(null, modelo, gestionPolizaDTO);
-        return "polizas/registroFormulario";
+        return "usuarios/asesores/polizas/registroFormulario";
     }
 
     @PostMapping("actualizacion-poliza/{idPoliza}")
@@ -281,7 +281,7 @@ public class AsesorPolizaControlador {
         if (validacion.hasErrors()) {
             modelo.addAttribute("modo", "EDITAR");
             alistarFormulario(null, modelo, gestionPolizaDTO);
-            return "polizas/registroFormulario";
+            return "usuarios/asesores/polizas/registroFormulario";
         }
 
         try {
@@ -301,19 +301,19 @@ public class AsesorPolizaControlador {
             modelo.addAttribute("alertaRespuesta", alertaRespuesta);
             modelo.addAttribute("modo", "CREAR");
             alistarFormulario(gestionPolizaDTO.getIdCliente(), modelo, gestionPolizaDTO);
-            return "polizas/registroFormulario";
+            return "usuarios/asesores/polizas/registroFormulario";
         } catch (ConflictoExcepcion ex) {
             ex.getCampoErrorLista().forEach(error -> {
                 validacion.rejectValue(error.getCampo(), ex.getErrorCodigo(), error.getMensaje());
             });
             modelo.addAttribute("modo", "CREAR");
             alistarFormulario(gestionPolizaDTO.getIdCliente(), modelo, gestionPolizaDTO);
-            return "polizas/registroFormulario";
+            return "usuarios/asesores/polizas/registroFormulario";
         } catch (ArchivoInvalidoExcepcion ex) {
             validacion.rejectValue("archivoPoliza", ex.getErrorCodigo(), ex.getMessage());
             modelo.addAttribute("modo", "CREAR");
             alistarFormulario(gestionPolizaDTO.getIdCliente(), modelo, gestionPolizaDTO);
-            return "polizas/registroFormulario";
+            return "usuarios/asesores/polizas/registroFormulario";
         } catch (ValidacionDatosExcepcion ex) {
             ex.getCampoErrorLista().forEach(error -> {
                 validacion.rejectValue(error.getCampo(), ex.getErrorCodigo(), error.getMensaje());
@@ -321,7 +321,7 @@ public class AsesorPolizaControlador {
             modelo.addAttribute("modo", "CREAR");
             alistarFormulario(gestionPolizaDTO.getIdCliente(), modelo, gestionPolizaDTO);
 
-            return "polizas/registroFormulario";
+            return "usuarios/asesores/polizas/registroFormulario";
         }
 
         return "redirect:/asesor/ver-polizas/" + gestionPolizaDTO.getIdCliente();

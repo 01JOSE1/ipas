@@ -59,7 +59,7 @@ public class AsesorClienteControlador {
         modelo.addAttribute("totalRegistros",  paginaClientes.getTotalElements());
         modelo.addAttribute("catidadPagina", cantidad);
 
-        return "clientes/listaClientes";
+        return "usuarios/asesores/clientes/listaClientes";
     }
 
     @GetMapping("/buscar-cliente")
@@ -73,7 +73,7 @@ public class AsesorClienteControlador {
     public String funcionesCliente( Model modelo, @PathVariable Long idCliente) {
         GestionClienteDTO gestionClienteDTO = clienteServicio.obtenerCliente(idCliente);
         modelo.addAttribute("gestionClienteDTO", gestionClienteDTO);
-        return "clientes/funcionesCliente";
+        return "usuarios/asesores/clientes/funcionesCliente";
     }
 
     @GetMapping("registro-cliente")
@@ -82,7 +82,7 @@ public class AsesorClienteControlador {
 
         modelo.addAttribute("gestionClienteDTO", gestionClienteDTO);
 
-        return "clientes/registroFormulario";
+        return "usuarios/asesores/clientes/registroFormulario";
 
     }
 
@@ -100,7 +100,7 @@ public class AsesorClienteControlador {
 
         if (validacion.hasErrors()) {
             modelo.addAttribute("modo", "CREAR");
-            return "clientes/registroFormulario";
+            return "usuarios/asesores/clientes/registroFormulario";
 
         }
 
@@ -141,13 +141,13 @@ public class AsesorClienteControlador {
             AlertaRespuesta alertaRespuesta = new AlertaRespuesta(TipoAlerta.ERROR, ex.getMessage());
             modelo.addAttribute("alertaRespuesta", alertaRespuesta);
             modelo.addAttribute("modo", "CREAR");
-            return "clientes/registroFormulario";
+            return "usuarios/asesores/clientes/registroFormulario";
         } catch (ConflictoExcepcion ex) {
             ex.getCampoErrorLista().forEach(error -> {
                 validacion.rejectValue(error.getCampo(), ex.getErrorCodigo(), error.getMensaje());
             });
             modelo.addAttribute("modo", "CREAR");
-            return "clientes/registroFormulario";
+            return "usuarios/asesores/clientes/registroFormulario";
         }
 
         return "redirect:/asesor/ver-clientes";
@@ -163,7 +163,7 @@ public class AsesorClienteControlador {
 
         modelo.addAttribute("gestionClienteDTO", gestionClienteDTO);
 
-        return "clientes/registroFormulario";
+        return "usuarios/asesores/clientes/registroFormulario";
 
     }
 
@@ -180,7 +180,7 @@ public class AsesorClienteControlador {
 
         if (validacion.hasErrors()) {
             modelo.addAttribute("modo", "EDITAR");
-            return "clientes/registroFormulario";
+            return "usuarios/asesores/clientes/registroFormulario";
         }
 
         try {
@@ -206,13 +206,13 @@ public class AsesorClienteControlador {
             );
             modelo.addAttribute("alertaRespuesta", alertaRespuesta);
             modelo.addAttribute("modo", "EDITAR");
-            return "clientes/registroFormulario";
+            return "usuarios/asesores/clientes/registroFormulario";
         } catch (ConflictoExcepcion ex) {
             ex.getCampoErrorLista().forEach(error -> {
                 validacion.rejectValue(error.getCampo(), ex.getErrorCodigo(), error.getMensaje());
             });
             modelo.addAttribute("modo", "EDITAR");
-            return "clientes/registroFormulario";
+            return "usuarios/asesores/clientes/registroFormulario";
         }
 
         return "redirect:/asesor/ver-clientes";

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{plantillas/asesor}">
+
+<head>
+    <title>Dashboard</title>
+    <th:block layout:fragment="cssVista">
+        <link rel="stylesheet" th:href="@{/css/asesor/dashboardPrincipal.css}">
+    </th:block>
+</head>
+
+<body>
+<th:block layout:fragment="contenidoVista">
+
+    <!-- Bienvenida -->
+    <div class="welcome-banner">
+        <div class="welcome-text">
+            <h1>Bienvenido, <span th:text="${nombreAsesor}">Asesor</span> 👋</h1>
+            <p>Aquí tienes un resumen de tu actividad del día.</p>
+        </div>
+        <div class="welcome-date" id="fechaHoy"></div>
+    </div>
+
+    <!-- Tarjetas resumen -->
+    <div class="cards-grid">
+
+        <div class="stat-card">
+            <div class="stat-icon stat-icon-blue">
+                <i class="fa fa-users"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-label">Total Clientes</span>
+                <span class="stat-value" th:text="${totalClientes}">0</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon stat-icon-green">
+                <i class="fa fa-file-contract"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-label">Pólizas Activas</span>
+                <span class="stat-value" th:text="${totalPolizas}">0</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon stat-icon-cyan">
+                <i class="fa fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-label">Al día</span>
+                <span class="stat-value" th:text="${polizasAlDia}">0</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon stat-icon-orange">
+                <i class="fa fa-exclamation-triangle"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-label">Por vencer</span>
+                <span class="stat-value" th:text="${polizasPorVencer}">0</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Accesos rápidos -->
+    <div class="quick-access-section">
+        <h2 class="section-title">Accesos rápidos</h2>
+        <div class="quick-grid">
+
+            <a th:href="@{/asesor/ver-clientes}" class="quick-card">
+                <div class="quick-icon"><i class="fa fa-users"></i></div>
+                <span class="quick-label">Ver Clientes</span>
+                <i class="fa fa-arrow-right quick-arrow"></i>
+            </a>
+
+            <a th:href="@{/asesor/ver-polizas}" class="quick-card">
+                <div class="quick-icon"><i class="fa fa-file-contract"></i></div>
+                <span class="quick-label">Ver Pólizas</span>
+                <i class="fa fa-arrow-right quick-arrow"></i>
+            </a>
+
+            <a th:href="@{/usuarios/perfil}" class="quick-card">
+                <div class="quick-icon"><i class="fa fa-user-circle"></i></div>
+                <span class="quick-label">Mi Perfil</span>
+                <i class="fa fa-arrow-right quick-arrow"></i>
+            </a>
+
+            <a href="#" class="quick-card">
+                <div class="quick-icon"><i class="fa fa-question-circle"></i></div>
+                <span class="quick-label">Ayuda</span>
+                <i class="fa fa-arrow-right quick-arrow"></i>
+            </a>
+
+        </div>
+    </div>
+
+</th:block>
+
+<th:block layout:fragment="jsVista">
+    <script th:src="@{/js/dashboardAsesor.js}"></script>
+</th:block>
+
+</body>
+</html>

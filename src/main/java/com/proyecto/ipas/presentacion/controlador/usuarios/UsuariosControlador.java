@@ -47,9 +47,6 @@ public class UsuariosControlador {
         return "redirect:/usuarios/login";
     }
 
-    /**
-     * GET /users/create - Formulario de creación
-     */
     @GetMapping("/login")
     public String verLoginRegistroFormulario(HttpServletRequest peticion, Model model, Authentication usuarioAutenticado) {
 
@@ -57,7 +54,6 @@ public class UsuariosControlador {
 
         if (sesion != null) {
             AlertaRespuesta alerta = (AlertaRespuesta) sesion.getAttribute("alertaRespuesta");
-
             if (alerta != null) {
                 model.addAttribute("alertaRespuesta", alerta);
                 sesion.removeAttribute("alertaRespuesta");
@@ -65,7 +61,6 @@ public class UsuariosControlador {
         }
 
         if (usuarioAutenticado != null && usuarioAutenticado.isAuthenticated()) {
-
             var rol = usuarioAutenticado.getAuthorities().stream()
                     .map(r -> r.getAuthority())
                     .toList();
@@ -76,20 +71,17 @@ public class UsuariosControlador {
                 return "redirect:/asesor/";
             }
         }
+
         model.addAttribute("registroDTO", new RegistroDTO());
-        return "usuarios/loginRegistroFormulario"; // Retorna users/create.html
+        return "usuarios/loginRegistroFormulario";
     }
 
-    /**
-     * POST /users/create - Procesar creación de usuario (form tradicional)
-     */
     @PostMapping("/registro")
     public String createUser(
             @Valid @ModelAttribute("registroDTO") RegistroDTO registroDTO,
-            BindingResult validacion, // Debe ir justo después del objeto con @Valid si no Spring lanza excepción, no vuelve a la vista y apaarece error de seguridad.
+            BindingResult validacion,
             Model modelo,
-            RedirectAttributes redirectAttributes
-    ) {
+            RedirectAttributes redirectAttributes) {
 
         if (validacion.hasErrors()) {
             return "usuarios/loginRegistroFormulario";
@@ -105,7 +97,6 @@ public class UsuariosControlador {
                     "Usuario " + respuestaDTO.nombre() + " Creado con exito",
                     "USUARIO_CREADO"
             );
-
             redirectAttributes.addFlashAttribute("alertaRespuesta", alertaRespuesta);
 
         } catch (ConflictoExcepcion ex) {
@@ -122,86 +113,31 @@ public class UsuariosControlador {
         return "redirect:/usuarios/login";
     }
 
-
+    /**
+     * Redirige al perfil del rol correspondiente.
+     * Cada controlador (asesor/admin) maneja su propia lógica de perfil.
+     */
     @GetMapping("/perfil")
-    public String perfil(Model modelo, Authentication usuarioAutenticado) {
+    public String perfil(Authentication usuarioAutenticado) {
+        var roles = usuarioAutenticado.getAuthorities().stream()
+                .map(r -> r.getAuthority())
+                .toList();
 
-        UsuarioSeguridad usuarioSesion = (UsuarioSeguridad) usuarioAutenticado.getPrincipal();
-
-        mantenerCorreoPerfil(usuarioSesion, modelo);
-
-        modelo.addAttribute("usuarioActualizarDTO", usuarioMapper.toUsuarioActualizarDTO(usuarioServicio.verDatosUsuario(usuarioSesion.getIdUsuario())));
-
-        return "usuarios/actualizar";
-    }
-
-    private void mantenerCorreoPerfil(@AuthenticationPrincipal UsuarioSeguridad usuarioSesion, Model modelo) {
-        modelo.addAttribute("correo", usuarioServicio.verDatosUsuario(usuarioSesion.getIdUsuario()).correo());
-    }
-
-    @PostMapping("/actualizar")
-    public String actualizarUsuario(@Valid @ModelAttribute("usuarioActualizarDTO") UsuarioActualizarDTO usuarioActualizarDTO, BindingResult validacion, Model modelo, Authentication usuarioAutenticado, RedirectAttributes redirectAttributes) {
-
-        UsuarioSeguridad usuarioSesion = (UsuarioSeguridad) usuarioAutenticado.getPrincipal();
-
-        if (validacion.hasErrors()) {
-            mantenerCorreoPerfil(usuarioSesion, modelo);
-            return "usuarios/actualizar";
+        if (roles.contains("ROLE_ADMINISTRADOR")) {
+            return "redirect:/administrador/perfil";
         }
-
-        try {
-
-            usuarioServicio.actualizarUsuario(usuarioSesion.getIdUsuario(), usuarioActualizarDTO);
-
-            AlertaRespuesta alertaRespuesta = new AlertaRespuesta(
-                    HttpStatus.OK.value(),
-                    TipoAlerta.EXITO,
-                    "Recurso fue actualizado con exito",
-                    "Datos actualizados con exito",
-                    "USUARIO_ACTUALIZADO"
-            );
-
-            redirectAttributes.addFlashAttribute("alertaRespuesta", alertaRespuesta);
-
-        } catch (NegocioExcepcion ex) {
-
-            AlertaRespuesta alertaRespuesta = new AlertaRespuesta(
-                    HttpStatus.BAD_REQUEST.value(),
-                    TipoAlerta.ERROR,
-                    "Error al actualizar",
-                    ex.getMessage(),
-                    "ERROR_ACTUALIZACION"
-            );
-            redirectAttributes.addFlashAttribute("alertaRespuesta", alertaRespuesta);
-            return "redirect:/usuarios/perfil";
-        } catch (ConflictoExcepcion ex) {
-            ex.getCampoErrorLista().forEach(error -> {
-                validacion.rejectValue(error.getCampo(), ex.getErrorCodigo(), error.getMensaje());
-            });
-
-            mantenerCorreoPerfil(usuarioSesion, modelo);
-            return "usuarios/actualizar";
-        }
-
-        return "redirect:/usuarios/perfil";
+        return "redirect:/asesor/perfil";
     }
-
-
 
     @RequestMapping("/error-403")
     public String mostrarError403(HttpServletRequest peticion, Model modelo) {
-        // Recuperamos el objeto 'AlertaRespuesta' que guardamos en el Handler
         Object error = peticion.getAttribute("error");
 
         if (error == null) {
-            // Por si alguien entra a la URL directamente sin pasar por el error
             return "redirect:/";
         }
 
-        // Lo pasamos al modelo de Spring MVC para que Thymeleaf lo vea
         modelo.addAttribute("error", error);
-
-        // Retornamos la ruta lógica de la vista (sin .html)
         return "excepciones/error";
     }
 }
