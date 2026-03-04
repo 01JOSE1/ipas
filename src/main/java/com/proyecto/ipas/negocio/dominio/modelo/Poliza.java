@@ -39,14 +39,13 @@ public class Poliza {
         this.aseguradora = aseguradora;
     }
 
-    public static Poliza registrar(String codigoPoliza, LocalDate fechaInicio, LocalDate fechaFin, BigDecimal primaNeta, BigDecimal primaTotal, EstadoPoliza estado, EstadoPagoPoliza estadoPago, String placa, Ramo ramo, Aseguradora aseguradora) {
+    public static Poliza registrar(String codigoPoliza, LocalDate fechaInicio, LocalDate fechaFin, BigDecimal primaNeta, BigDecimal primaTotal, EstadoPagoPoliza estadoPago, String placa, Ramo ramo, Aseguradora aseguradora) {
 
         validarCodigoPoliza(codigoPoliza);
         validarFechas(fechaInicio, fechaFin);
         validarPrimas(primaNeta, primaTotal);
 
-        Poliza poliza = new Poliza(codigoPoliza, fechaInicio, fechaFin, primaNeta, primaTotal, validarEstado(estado), validarEstadoPago(estadoPago), ramo, aseguradora);
-
+        Poliza poliza = new Poliza(codigoPoliza, fechaInicio, fechaFin, primaNeta, primaTotal, EstadoPoliza.ACTIVA, validarEstadoPago(estadoPago), ramo, aseguradora);
         poliza.placa = placa;
         validarRamo(ramo, poliza.placa);
 
@@ -72,7 +71,7 @@ public class Poliza {
 
         validarMotivoCancelacion(motivo);
 
-        if (this.estado != EstadoPoliza.VIGENTE) {
+        if (this.fechaFin.isBefore(LocalDate.now())) {
             throw new NegocioExcepcion("La póliza no puede ser cancelada");
         }
 
@@ -111,12 +110,6 @@ public class Poliza {
         }
     }
 
-    private static EstadoPoliza validarEstado(EstadoPoliza estado) {
-        if (estado == null) {
-            return EstadoPoliza.VIGENTE;
-        }
-        return estado;
-    }
 
     private static EstadoPagoPoliza validarEstadoPago(EstadoPagoPoliza estadoPago) {
         if (estadoPago == null) {

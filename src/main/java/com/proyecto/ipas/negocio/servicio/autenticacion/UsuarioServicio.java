@@ -56,7 +56,7 @@ public class UsuarioServicio {
         ArrayList<ConflictoExcepcion.ErrorCampo> errores = new ArrayList<>();
 
         if (usuarioRepositorio.existsByCorreo(registroDTO.getCorreo())) {
-            errores.add(new ConflictoExcepcion.ErrorCampo("correo", registroDTO.getCorreo()));
+            errores.add(new ConflictoExcepcion.ErrorCampo("correo", "El correo ya existe"));
         }
 
         if (errores.size()>0){

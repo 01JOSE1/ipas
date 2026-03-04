@@ -11,10 +11,7 @@ import com.proyecto.ipas.negocio.dominio.enums.TipoDocumentoCliente;
 import com.proyecto.ipas.negocio.dominio.enums.TipoRamo;
 import com.proyecto.ipas.negocio.dominio.modelo.Poliza;
 import com.proyecto.ipas.negocio.dominio.modelo.Ramo;
-import com.proyecto.ipas.presentacion.excepcion.ArchivoInvalidoExcepcion;
-import com.proyecto.ipas.presentacion.excepcion.ConflictoExcepcion;
-import com.proyecto.ipas.presentacion.excepcion.NegocioExcepcion;
-import com.proyecto.ipas.presentacion.excepcion.RecursoNOEncontradoException;
+import com.proyecto.ipas.presentacion.excepcion.*;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.GestionClienteDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.RespuestaClienteDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.ia.PeticionIaDTO;
@@ -212,7 +209,6 @@ public class PolizaServicio {
             if (datosExtraidos.getGestionClienteDTO().getTelefono() != null && datosExtraidos.getGestionClienteDTO().getTelefono().length() == 7) {
                 datosExtraidos.getGestionClienteDTO().setTelefono("601" + datosExtraidos.getGestionClienteDTO().getTelefono());
             }
-            datosExtraidos.setEstado(EstadoPoliza.VIGENTE);
             datosExtraidos.setEstadoPago(EstadoPagoPoliza.PENDIENTE);
 
 
@@ -253,16 +249,17 @@ public class PolizaServicio {
 
         ArrayList<ConflictoExcepcion.ErrorCampo> errores = new ArrayList<>();
 
-        System.out.println("id de usuario actual = " + idUsuario);
-
 
         if (polizaRepositorio.existsByCodigoPoliza(gestionPolizaDTO.getCodigoPoliza())) {
             errores.add(new ConflictoExcepcion.ErrorCampo("codigoPoliza", "El codigo de poliza ya existe"));
         }
 
-        if ((gestionPolizaDTO.getPlaca() != null && !gestionPolizaDTO.getPlaca().isBlank()) && polizaRepositorio.existsByPlacaAndCliente_IdClienteNotAndEstado(gestionPolizaDTO.getPlaca(), gestionPolizaDTO.getIdCliente(), EstadoPoliza.VIGENTE)) {
-            System.out.println("SE ENCONTRO UNA COINCIDENCIA EN LA PLACA  " + gestionPolizaDTO.getPlaca());
+        if ((gestionPolizaDTO.getPlaca() != null && !gestionPolizaDTO.getPlaca().isBlank()) && polizaRepositorio.existePlacaActivaEnOtroCliente(gestionPolizaDTO.getPlaca(), gestionPolizaDTO.getIdCliente(), EstadoPoliza.ACTIVA)) {
             errores.add(new ConflictoExcepcion.ErrorCampo("placa", "La placa se encuentra activa en otro cliente"));
+        }
+
+        if (gestionPolizaDTO.getNumeroPdf() == null && (gestionPolizaDTO.getArchivoPoliza() == null || gestionPolizaDTO.getArchivoPoliza().isEmpty())) {
+            errores.add(new ConflictoExcepcion.ErrorCampo("archivoPoliza", "Debes agregar un documento pdf"));
         }
 
         if (errores.size() > 0) {
@@ -288,12 +285,18 @@ public class PolizaServicio {
 
             registro.debug("Almacenando archivo pdf para la poliza : {}", polizaEntidad.getCodigoPoliza());
 
+            /**
+             * Si el usuario luego de completar el flujo de IA y llegar a crar la poliza ya el gestionPolizaDTO trae el numeroPdf por lo tanto no necesito asignarlo de nuevo.
+             * Si el usuario completo la informacion manualmente de la poliza y envia el archivo en ese caso si se necesita de establecer un nombre para luego almacenarlo.
+             * Si el usuario no envio el archivo el numeroPdf estara vacio y arrojara respectiva excepcion
+             */
             if (gestionPolizaDTO.getArchivoPoliza() != null && !gestionPolizaDTO.getArchivoPoliza().isEmpty()) {
                 String nombreArchivo = archivoAlmacenamientoServicio.generarNombreArchivo(gestionPolizaDTO.getCodigoPoliza(), gestionPolizaDTO.getArchivoPoliza().getOriginalFilename());
                 polizaEntidad.setNumeroPdf(nombreArchivo);
             } else {
                 polizaEntidad.setNumeroPdf(gestionPolizaDTO.getNumeroPdf());
             }
+
 
             PolizaEntidad polizaGuardada = polizaRepositorio.save(polizaEntidad);
             registro.debug("Poliza guardada: {}", polizaGuardada.getIdPoliza());
@@ -371,20 +374,23 @@ public class PolizaServicio {
         }
 
         try {
-            polizaMapper.toPoliza(polizaEntidad);
-
             gestionPolizaDTO.actualizarPoliza(polizaEntidad);
 
-            jdbcTemplate.update("SET @usuario_actual = ?", idUsuarioActual);
+            polizaMapper.toPoliza(polizaEntidad);
+
+//            jdbcTemplate.update("SET @usuario_actual = ?", idUsuarioActual);
 
             polizaRepositorio.saveAndFlush(polizaEntidad);
             registro.info("Poliza actualizada exitosamente con ID: {}", polizaEntidad.getCodigoPoliza());
 
-            archivoAlmacenamientoServicio.almacenar(
-                    gestionPolizaDTO.getArchivoPoliza(),
-                    archivoAlmacenamientoServicio.getRutaLocal(),
-                    polizaEntidad.getNumeroPdf()
-            );
+            if (gestionPolizaDTO.getArchivoPoliza() != null && !gestionPolizaDTO.getArchivoPoliza().isEmpty() && polizaEntidad.getNumeroPdf() != null) {
+                archivoAlmacenamientoServicio.almacenar(
+                        gestionPolizaDTO.getArchivoPoliza(),
+                        archivoAlmacenamientoServicio.getRutaLocal(),
+                        polizaEntidad.getNumeroPdf()
+                );
+            }
+
             registro.debug("Archivo pdf actualizado con exito : {}", polizaEntidad.getNumeroPdf());
         } catch (DataIntegrityViolationException ex) {
             registro.error("Error de integridad al actualizar poliza: {}", ex.getMessage());

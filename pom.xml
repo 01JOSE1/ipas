@@ -134,6 +134,19 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
+
+
+        <!--  Para manejar los layouts  -->
+        <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
+        </dependency>
+
+       <!--  La utilizo para exponer el Authentication y asi acceder desde las vistas a datos del usuario  -->
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity6</artifactId>
+        </dependency>
     </dependencies>
 
 

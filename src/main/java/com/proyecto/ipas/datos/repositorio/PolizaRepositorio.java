@@ -27,7 +27,28 @@ public interface PolizaRepositorio extends JpaRepository<PolizaEntidad, Long> {
      * Con el guion bajo nos permite entrar al objeto
      * Con el guion bajo evitamos ambiguedades.
      */
-    boolean existsByPlacaAndCliente_IdClienteNotAndEstado(String placa, Long idCliente, EstadoPoliza estadoVigente);
+//    boolean existsByPlacaAndCliente_IdClienteNotAndEstado(String placa, Long idCliente, EstadoPoliza estadoVigente);
+
+
+    /**
+     * Verifica si existe una póliza ACTIVA y vigente asociada a la misma placa pero perteneciente a un cliente diferente.
+     *
+     * Esta validación se utiliza para evitar que una misma placa esté asegurada simultáneamente por más de un cliente dentro del sistema.
+     *
+     * Se considera vigente cuando:
+     * - El estado administrativo es ACTIVA
+     * - La fecha de vencimiento es mayor o igual a la fecha actual
+     */
+    @Query("""
+    SELECT COUNT(p) > 0
+    FROM PolizaEntidad p
+    WHERE p.placa = :placa
+    AND p.cliente.idCliente <> :clienteId
+    AND p.estado = :estado
+    AND p.fechaFin >= CURRENT_DATE
+    """)
+    boolean existePlacaActivaEnOtroCliente(@Param("placa") String placa, @Param("clienteId") Long clienteId, @Param("estado") EstadoPoliza estado);
+
 
     boolean existsByNumeroPdf(String numeroPdf);
 

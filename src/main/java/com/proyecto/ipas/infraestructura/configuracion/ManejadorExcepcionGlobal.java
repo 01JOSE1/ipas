@@ -269,7 +269,7 @@ public class ManejadorExcepcionGlobal {
         redirectAttributes.addFlashAttribute("alertaRespuesta", alertaRespuesta);
 
 
-        return "redirect:/asesor/registro-poliza";
+        return "redirect:/asesor/poliza/registro-poliza";
     }
 
 

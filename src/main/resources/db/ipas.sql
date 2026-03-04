@@ -335,44 +335,76 @@ DELIMITER ;
 
 
 DELIMITER //
--- Cada vez que se actualiza un registro en la tabla Polizas este trigger se activa.
-CREATE TRIGGER auditoria_polizas
-AFTER UPDATE ON Polizas
+
+CREATE DEFINER=`root`@`localhost` TRIGGER auditoria_polizas
+AFTER UPDATE ON polizas
 FOR EACH ROW
 BEGIN
-	-- crea una variable interna (cambios) donde se ira guardando una cadena con los detalles de los cambios.
     DECLARE cambios TEXT DEFAULT '';
 
-    -- Verificamos campo por campo y construimos la cadena solo con los cambios
-    IF OLD.fecha_inicio <> NEW.fecha_inicio THEN
-        SET cambios = CONCAT(cambios, 'Fecha de inicio: ', OLD.fecha_inicio, ' -> ', NEW.fecha_inicio, '; ');
+    IF NOT (OLD.fecha_inicio <=> NEW.fecha_inicio) THEN
+        SET cambios = CONCAT(cambios,
+            'Fecha de inicio: ',
+            IFNULL(OLD.fecha_inicio,'NULL'),
+            ' -> ',
+            IFNULL(NEW.fecha_inicio,'NULL'),
+            '; ');
     END IF;
 
-    IF OLD.fecha_vencimiento <> NEW.fecha_vencimiento THEN
-        SET cambios = CONCAT(cambios, 'Fecha de vencimiento: ', OLD.fecha_vencimiento, ' -> ', NEW.fecha_vencimiento, '; ');
+    IF NOT (OLD.fecha_vencimiento <=> NEW.fecha_vencimiento) THEN
+        SET cambios = CONCAT(cambios,
+            'Fecha de vencimiento: ',
+            IFNULL(OLD.fecha_vencimiento,'NULL'),
+            ' -> ',
+            IFNULL(NEW.fecha_vencimiento,'NULL'),
+            '; ');
     END IF;
 
-    IF OLD.prima_neta <> NEW.prima_neta THEN
-        SET cambios = CONCAT(cambios, 'Prima neta: ', OLD.prima_neta, ' -> ', NEW.prima_neta, '; ');
+    IF NOT (OLD.prima_neta <=> NEW.prima_neta) THEN
+        SET cambios = CONCAT(cambios,
+            'Prima neta: ',
+            IFNULL(OLD.prima_neta,'NULL'),
+            ' -> ',
+            IFNULL(NEW.prima_neta,'NULL'),
+            '; ');
     END IF;
 
-    IF OLD.prima_total <> NEW.prima_total THEN
-        SET cambios = CONCAT(cambios, 'Prima total: ', OLD.prima_total, ' -> ', NEW.prima_total, '; ');
+    IF NOT (OLD.prima_total <=> NEW.prima_total) THEN
+        SET cambios = CONCAT(cambios,
+            'Prima total: ',
+            IFNULL(OLD.prima_total,'NULL'),
+            ' -> ',
+            IFNULL(NEW.prima_total,'NULL'),
+            '; ');
     END IF;
 
-    IF OLD.estado <> NEW.estado THEN
-        SET cambios = CONCAT(cambios, 'Estado: ', OLD.estado, ' -> ', NEW.estado, '; ');
+    IF NOT (OLD.estado <=> NEW.estado) THEN
+        SET cambios = CONCAT(cambios,
+            'Estado: ',
+            IFNULL(OLD.estado,'NULL'),
+            ' -> ',
+            IFNULL(NEW.estado,'NULL'),
+            '; ');
     END IF;
 
-    IF OLD.numero_pdf <> NEW.numero_pdf THEN
-        SET cambios = CONCAT(cambios, 'Numero del PDF: ', OLD.numero_pdf, ' -> ', NEW.numero_pdf, '; ');
+    IF NOT (OLD.numero_pdf <=> NEW.numero_pdf) THEN
+        SET cambios = CONCAT(cambios,
+            'Numero del PDF: ',
+            IFNULL(OLD.numero_pdf,'NULL'),
+            ' -> ',
+            IFNULL(NEW.numero_pdf,'NULL'),
+            '; ');
     END IF;
 
-    IF OLD.placa <> NEW.placa THEN
-        SET cambios = CONCAT(cambios, 'Placa: ', OLD.placa, ' -> ', NEW.placa, '; ');
+    IF NOT (OLD.placa <=> NEW.placa) THEN
+        SET cambios = CONCAT(cambios,
+            'Placa: ',
+            IFNULL(OLD.placa,'NULL'),
+            ' -> ',
+            IFNULL(NEW.placa,'NULL'),
+            '; ');
     END IF;
 
-    -- Insertamos en la tabla de auditoria solo si hay cambios
     IF cambios <> '' THEN
         INSERT INTO Auditorias(
             tabla_afectada,
@@ -384,15 +416,14 @@ BEGIN
         )
         VALUES (
             'Polizas',
-            OLD.numero_poliza,
+            OLD.id_poliza,
             'UPDATE',
             NOW(),
             cambios,
-            
-            -- Este dato se envia desde la aplicacion
             @usuario_actual
         );
     END IF;
+
 END;
 //
 DELIMITER ;

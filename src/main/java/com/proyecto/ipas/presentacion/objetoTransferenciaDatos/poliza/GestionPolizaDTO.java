@@ -56,6 +56,7 @@ public class GestionPolizaDTO {
     @Positive
     @NotNull(message = "Debes agregar un cliente valido", groups = EnCreacion.class)
     private Long idCliente;
+
     private String nombreCliente;
     // Objeto para el proceso de la ia
     private GestionClienteDTO gestionClienteDTO;
