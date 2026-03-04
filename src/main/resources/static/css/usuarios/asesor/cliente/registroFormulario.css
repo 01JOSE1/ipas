@@ -1,0 +1,238 @@
+/* =============================================
+   FORMULARIO CLIENTE — CSS CORPORATIVO
+   ============================================= */
+
+/* ===== ENCABEZADO ===== */
+.page-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.header-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.icon-green { background: rgba(40, 167, 69, 0.12); color: var(--estado-exito); }
+.icon-blue  { background: rgba(15, 76, 156, 0.10); color: var(--color-primario); }
+
+.page-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--texto-principal);
+    margin: 0 0 4px 0;
+    text-align: left;
+    width: auto;
+    letter-spacing: -0.3px;
+}
+
+.page-subtitle {
+    font-size: 13.5px;
+    color: var(--texto-secundario);
+    margin: 0;
+}
+
+/* ===== CARD FORMULARIO ===== */
+.form-card {
+    background: var(--fondo-card);
+    border-radius: 16px;
+    border: 1px solid #e8edf3;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    overflow: hidden;
+}
+
+/* ===== SECCIONES ===== */
+.form-section {
+    padding: 28px 32px;
+    border-bottom: 1px solid #f0f3f7;
+}
+
+.form-section:last-of-type {
+    border-bottom: none;
+}
+
+.section-label {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--color-primario);
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-align: left;
+    width: auto;
+}
+
+.section-label i {
+    font-size: 13px;
+}
+
+/* ===== GRID DE CAMPOS ===== */
+.fields-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px 24px;
+}
+
+/* ===== CAMPO INDIVIDUAL ===== */
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.field-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--texto-principal);
+}
+
+.required {
+    color: var(--estado-error);
+    font-size: 13px;
+}
+
+.field-group input,
+.field-group select {
+    height: 44px;
+    padding: 0 14px;
+    border: 1.5px solid #d1d9e0;
+    border-radius: 10px;
+    background: var(--fondo-input);
+    color: var(--texto-principal);
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+    appearance: auto;
+}
+
+.field-group input::placeholder {
+    color: #b0bec5;
+    font-size: 13.5px;
+}
+
+.field-group input:focus,
+.field-group select:focus {
+    border-color: var(--color-primario);
+    box-shadow: 0 0 0 3px rgba(15, 76, 156, 0.12);
+    outline: none;
+}
+
+.field-group input[type="date"] {
+    padding: 0 14px;
+    cursor: pointer;
+}
+
+/* ===== ERROR DE CAMPO ===== */
+.field-error {
+    font-size: 12px;
+    color: var(--estado-error);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.field-error::before {
+    content: "\f071";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 11px;
+}
+
+/* Input con error */
+.field-group:has(.field-error) input,
+.field-group:has(.field-error) select {
+    border-color: var(--estado-error);
+    background: rgba(220, 53, 69, 0.02);
+}
+
+/* ===== BOTONES ===== */
+.form-actions {
+    padding: 24px 32px;
+    background: #fafbfc;
+    border-top: 1px solid #f0f3f7;
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    align-items: center;
+}
+
+.btn-cancelar {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 11px 20px;
+    border: 1.5px solid #d1d9e0;
+    border-radius: 10px;
+    background: var(--fondo-card);
+    color: var(--texto-secundario);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-cancelar:hover {
+    border-color: var(--color-primario);
+    color: var(--color-primario);
+    background: rgba(15,76,156,0.05);
+}
+
+.btn-cancelar i { font-size: 13px; }
+
+.btn-submit {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 28px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14.5px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    color: #fff;
+    transition: filter 0.2s, transform 0.15s;
+}
+
+.btn-submit:hover {
+    filter: brightness(0.92);
+    transform: translateY(-1px);
+}
+
+.btn-submit-green { background: var(--estado-exito); }
+.btn-submit-blue  { background: var(--color-primario); }
+
+.btn-submit i {
+    font-size: 14px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 700px) {
+    .fields-grid {
+        grid-template-columns: 1fr;
+    }
+    .form-section {
+        padding: 20px 18px;
+    }
+    .form-actions {
+        padding: 18px;
+        justify-content: stretch;
+    }
+    .btn-submit {
+        width: 100%;
+        justify-content: center;
+    }
+}

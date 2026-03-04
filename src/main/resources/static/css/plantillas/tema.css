@@ -1,0 +1,60 @@
+:root {
+
+    /* ============================= */
+    /* 🎨 COLORES PRINCIPALES */
+    /* ============================= */
+
+    --color-primario: #0F4C9C;
+    --color-primario-claro: #2F6FD6;
+    --color-primario-oscuro: #0B3A75;
+
+    --color-secundario: #1E1E1E;
+    --color-acento: #00B4D8;
+
+    /* ============================= */
+    /* 🧱 FONDOS */
+    /* ============================= */
+
+    --fondo-general: #F4F6F9;
+    --fondo-navbar: var(--color-primario);
+    --fondo-sidebar: var(--color-primario-oscuro);
+    --fondo-card: #FFFFFF;
+    --fondo-modal: #FFFFFF;
+    --fondo-input: #FFFFFF;
+    --fondo-hover: rgba(0, 0, 0, 0.04);
+
+    /* ============================= */
+    /* 📝 TEXTOS */
+    /* ============================= */
+
+    --texto-principal: #1E1E1E;
+    --texto-secundario: #6C757D;
+    --texto-blanco: #FFFFFF;
+    --texto-desactivado: #A0A0A0;
+
+    /* ============================= */
+    /* 🚦 ESTADOS DEL SISTEMA */
+    /* ============================= */
+
+    --estado-exito: #28A745;
+    --estado-advertencia: #FFC107;
+    --estado-error: #DC3545;
+    --estado-info: #17A2B8;
+
+    /* ============================= */
+    /* 🎛 BOTONES */
+    /* ============================= */
+
+    --boton-primario-fondo: var(--color-primario);
+    --boton-primario-hover: var(--color-primario-oscuro);
+    --boton-primario-texto: #FFFFFF;
+
+    --boton-secundario-fondo: #6C757D;
+    --boton-secundario-hover: #545B62;
+    --boton-secundario-texto: #FFFFFF;
+
+    --boton-exito-fondo: var(--estado-exito);
+    --boton-error-fondo: var(--estado-error);
+
+
+}

@@ -1,0 +1,354 @@
+/* =============================================
+   VER PÓLIZAS — CSS CORPORATIVO
+   ============================================= */
+
+/* ===== ENCABEZADO ===== */
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 16px;
+}
+
+.page-header-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.page-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--texto-principal);
+    margin: 0 0 4px 0;
+    text-align: left;
+    width: auto;
+    letter-spacing: -0.3px;
+}
+
+.page-subtitle {
+    font-size: 13.5px;
+    color: var(--texto-secundario);
+    margin: 0;
+}
+
+.page-subtitle strong {
+    color: var(--color-primario);
+    font-weight: 600;
+}
+
+/* ===== ACCIONES HEADER ===== */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.btn-nuevo-poliza {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--estado-exito);
+    color: #fff;
+    font-size: 13.5px;
+    font-weight: 600;
+    border-radius: 10px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: filter 0.2s, transform 0.15s;
+}
+
+.btn-nuevo-poliza:hover {
+    filter: brightness(0.92);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.btn-nuevo-poliza i {
+    font-size: 14px;
+}
+
+.btn-ia {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #6f42c1, #8a5cf7);
+    color: #fff;
+    font-size: 13.5px;
+    font-weight: 600;
+    border-radius: 10px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: filter 0.2s, transform 0.15s;
+    box-shadow: 0 3px 12px rgba(111, 66, 193, 0.25);
+}
+
+.btn-ia:hover {
+    filter: brightness(0.92);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.btn-ia i {
+    font-size: 14px;
+}
+
+/* ===== TABLA CARD ===== */
+.table-card {
+    background: var(--fondo-card);
+    border-radius: 14px;
+    border: 1px solid #e8edf3;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+/* ===== TABLA ===== */
+.polizas-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+}
+
+.polizas-table thead tr {
+    background: var(--color-primario);
+}
+
+.polizas-table thead th {
+    padding: 13px 16px;
+    color: rgba(255,255,255,0.9);
+    font-weight: 600;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    text-align: left;
+    white-space: nowrap;
+    border: none;
+}
+
+.polizas-table tbody tr {
+    border-bottom: 1px solid #f0f3f7;
+    transition: background 0.15s;
+}
+
+.polizas-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.polizas-table tbody tr:hover {
+    background: rgba(15, 76, 156, 0.025);
+}
+
+.polizas-table td {
+    padding: 13px 16px;
+    color: var(--texto-principal);
+    vertical-align: middle;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-row td {
+    padding: 56px 0 !important;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: var(--texto-desactivado);
+}
+
+.empty-state i {
+    font-size: 44px;
+    opacity: 0.3;
+}
+
+.empty-state span {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* ===== BADGE CÓDIGO ===== */
+.badge-codigo {
+    display: inline-block;
+    background: rgba(15, 76, 156, 0.08);
+    color: var(--color-primario);
+    font-weight: 700;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-family: monospace;
+    letter-spacing: 0.5px;
+}
+
+/* ===== VIGENCIA ===== */
+.td-vigencia { min-width: 190px; }
+
+.vigencia-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.vigencia-fecha {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+}
+
+.vigencia-fecha i {
+    font-size: 11px;
+    color: var(--texto-secundario);
+}
+
+.vigencia-sep {
+    color: var(--texto-desactivado);
+    font-size: 12px;
+}
+
+/* ===== MONTOS ===== */
+.td-monto {
+    font-size: 13.5px;
+    color: var(--texto-secundario);
+    white-space: nowrap;
+}
+
+.td-monto-total {
+    font-weight: 700;
+    color: var(--texto-principal);
+}
+
+/* ===== BADGE ESTADO PÓLIZA ===== */
+.badge-estado {
+    display: inline-block;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.badge-activa    { background: rgba(40,167,69,0.12);   color: var(--estado-exito); }
+.badge-vencida   { background: rgba(255,193,7,0.15);   color: #856404; }
+.badge-cancelada { background: rgba(220,53,69,0.10);   color: var(--estado-error); }
+.badge-otro      { background: rgba(108,117,125,0.10); color: var(--texto-secundario); }
+
+/* ===== BADGE ESTADO PAGO ===== */
+.badge-pago {
+    display: inline-block;
+    font-size: 11.5px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.pago-ok        { background: rgba(0,180,216,0.10);  color: var(--color-acento); }
+.pago-pendiente { background: rgba(255,193,7,0.15);  color: #856404; }
+.pago-vencido   { background: rgba(220,53,69,0.10);  color: var(--estado-error); }
+
+/* ===== BADGE PLACA ===== */
+.badge-placa {
+    display: inline-block;
+    background: #f4f6f9;
+    color: var(--texto-principal);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    font-family: monospace;
+    letter-spacing: 1px;
+}
+
+/* ===== BOTONES ACCIÓN ===== */
+.td-acciones { white-space: nowrap; }
+
+.btn-accion {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 7px;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+    margin-right: 6px;
+}
+
+.btn-accion:last-child { margin-right: 0; }
+
+.btn-accion:hover { transform: translateY(-1px); }
+
+.btn-editar { background: rgba(15,76,156,0.08); color: var(--color-primario); }
+.btn-editar:hover { background: var(--color-primario); color: #fff; }
+
+.btn-pdf { background: rgba(220,53,69,0.08); color: var(--estado-error); }
+.btn-pdf:hover { background: var(--estado-error); color: #fff; }
+
+.btn-accion i { font-size: 12px; }
+
+/* ===== PAGINACIÓN ===== */
+.pagination-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: var(--fondo-card);
+    color: var(--texto-principal);
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.page-btn:hover:not(.disabled):not(.active) {
+    background: rgba(15,76,156,0.06);
+    border-color: var(--color-primario);
+    color: var(--color-primario);
+}
+
+.page-btn.active {
+    background: var(--color-primario);
+    border-color: var(--color-primario);
+    color: #fff;
+    font-weight: 700;
+    pointer-events: none;
+}
+
+.page-btn.disabled {
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+.page-num {
+    width: auto;
+    padding: 0 10px;
+    min-width: 36px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1100px) {
+    .page-header { flex-direction: column; align-items: flex-start; }
+}
+
+@media (max-width: 800px) {
+    .table-card { overflow-x: auto; }
+    .polizas-table { min-width: 720px; }
+}

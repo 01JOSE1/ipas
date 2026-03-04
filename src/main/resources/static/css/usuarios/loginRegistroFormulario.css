@@ -1,0 +1,375 @@
+/* =============================================
+   LOGIN / REGISTRO — CSS FINAL v3
+   ============================================= */
+
+* {
+    font-family: "Roboto", sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #C3D2E6;
+}
+
+/* ===== VOLVER ===== */
+.icono-volver {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-left: 6px;
+}
+
+.botonvolver {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--texto-blanco);
+    padding: 12px 20px;
+    text-decoration: none;
+    background: var(--color-primario);
+    filter: brightness(0.95);
+    border-radius: 0 18px 18px 0;
+    cursor: pointer;
+}
+
+/* ===== ZOOM WRAPPER ===== */
+.zoom-wrapper {
+    position: relative;
+    transform: scale(0.85);
+    transform-origin: center;
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.container {
+    background-color: var(--fondo-card);
+    height: 620px;
+    width: 1020px;
+    box-shadow: 0px 24px 70px rgba(0, 0, 0, 0.25);
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ===== FORMULARIOS ===== */
+form {
+    position: absolute;
+    background-color: var(--fondo-card);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 510px;
+    height: 100%;
+    transition: all 0.8s ease;
+    left: 0;
+    padding: 0;
+}
+
+#form-login {
+    position: absolute; /* igual que el form general */
+    left: 0;
+    z-index: 10;
+    border-radius: 80px;
+}
+
+#form-register {
+    position: absolute;
+    left: 0;
+    z-index: 5;
+    border-radius: 80px;
+}
+
+/* ===== TÍTULOS FORMULARIO ===== */
+h1 {
+    font-size: 38px;
+    width: 85%;
+    color: var(--texto-principal);
+    border: none;
+    text-align: center;
+    margin: 0 0 8px 0;
+    padding: 0;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.aux {
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--texto-secundario);
+    margin: 0 0 22px 0;
+}
+
+/* ===== INPUTS ===== */
+input:not([type="checkbox"]) {
+    display: block;
+    width: 76%;
+    height: 52px;
+    padding: 0 52px 0 18px;
+    margin-bottom: 16px;
+    border-radius: 14px;
+    background-color: var(--fondo-input);
+    /* Borde bien visible */
+    border: 2.5px solid #b0bec5;
+    font-size: 16px;
+    color: var(--texto-principal);
+    transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+input:not([type="checkbox"])::placeholder {
+    color: #90a4ae;
+    font-size: 15px;
+}
+
+input:not([type="checkbox"]):focus {
+    border-color: var(--color-primario);
+    box-shadow: 0 0 0 4px rgba(15, 76, 156, 0.14);
+    outline: none;
+}
+
+/* ===== WRAPPER CONTRASEÑA ===== */
+/* ===== WRAPPER CONTRASEÑA =====
+   Mismo ancho que los inputs normales (76%).
+   El botón 🗝️ flota visualmente DENTRO del input.
+================================================== */
+.password-wrapper {
+    position: relative;
+    width: 76%;       /* idéntico al width de input normal */
+    margin-bottom: 16px;
+}
+
+.password-wrapper input:not([type="checkbox"]) {
+    width: 100%;
+    margin-bottom: 0;
+    padding-right: 52px;  /* espacio reservado para el ícono */
+}
+
+/* ===== BOTÓN OJO dentro del input ===== */
+.btn-toggle-pass {
+    /* 1. reset TOTAL primero */
+    all: unset;
+    /* 2. reaplica lo necesario */
+    box-sizing: border-box;
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    opacity: 0.65;
+    transition: opacity 0.2s;
+    color: var(--color-primario);
+}
+
+.btn-toggle-pass:hover {
+    opacity: 1;
+}
+
+/* ===== BOTÓN SUBMIT ===== */
+button[type="submit"] {
+    background-color: var(--boton-primario-fondo);
+    width: 54%;
+    height: 54px;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--texto-blanco);
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    margin-top: 12px;
+    letter-spacing: 0.4px;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+button[type="submit"]:hover {
+    background-color: var(--boton-primario-hover);
+    transform: translateY(-1px);
+}
+
+
+/* ===== PANEL ANIMADO CENTRAL ===== */
+.Mensaje {
+    position: absolute;
+    height: 620px;
+    width: 510px;
+    border-radius: 30% 50px 50px 20%;
+    background: linear-gradient(
+        135deg,
+        var(--color-primario),
+        var(--color-primario-claro)
+    );
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    filter: brightness(0.95);
+    z-index: 100;
+    overflow: hidden;
+    transition: all 0.8s ease;
+    left: 510px;
+}
+
+#text-sesion {
+    position: absolute;
+    width: 960px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s ease;
+    left: 0;
+}
+
+.texto1 {
+    padding-left: 20px;
+    padding-right: 70px;
+}
+
+/* Título grande del panel azul */
+.titulo-sesion {
+    text-align: center;
+    font-size: 46px;
+    font-weight: 800;
+    padding: 0;
+    margin: 0 0 14px 0;
+    color: var(--texto-blanco);
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+}
+
+/* Descripción panel azul */
+.aviso {
+    font-weight: 500;
+    font-size: 17px;
+    text-align: center;
+    color: var(--texto-blanco);
+    padding: 0 16px 18px 16px;
+    line-height: 1.6;
+    opacity: 0.93;
+    margin: 0;
+}
+
+/* Botón del panel animado */
+.mover {
+    all: unset;
+    display: block;
+    margin: 0 auto;
+    width: 220px;
+    height: 52px;
+    border: 2.5px solid var(--texto-blanco);
+    color: var(--texto-blanco);
+    background-color: transparent;
+    font-weight: 700;
+    font-size: 18px;
+    border-radius: 14px;
+    cursor: pointer;
+    text-align: center;
+    line-height: 52px;
+    letter-spacing: 0.3px;
+    transition: background-color 0.2s;
+    box-sizing: border-box;
+}
+
+.mover:hover {
+    background-color: rgba(255, 255, 255, 0.18);
+}
+
+/* ===== INFORMACION (bloque inputs registro) ===== */
+.informacion {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+}
+
+/* ===== ENLACE OLVIDÉ CONTRASEÑA ===== */
+.olvidaste {
+    display: inline-block;
+    color: var(--color-primario);
+    text-decoration: none;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 6px 0 14px 0;
+}
+
+a:not(.botonvolver):hover {
+    color: var(--color-primario-oscuro);
+}
+
+/* ===== TÉRMINOS Y CONDICIONES ===== */
+.terminos {
+    font-size: 15px;
+    width: 76%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 8px;
+}
+
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-primario);
+    cursor: pointer;
+}
+
+/* ===== IMAGEN PERFIL ===== */
+.img-iniciosesion {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 14px;
+}
+
+.img-iniciosesion img {
+    width: 130px;
+    height: 130px;
+    border-radius: 100%;
+    object-fit: contain;
+    background-color: var(--color-primario-oscuro);
+}
+
+/* ===== MENSAJES DE ERROR ===== */
+.error {
+    color: var(--estado-error);
+    font-size: 13px;
+    margin: -12px 0 12px 0;
+    width: 76%;
+    text-align: left;
+}
+
+.input-error::placeholder {
+    color: var(--estado-error);
+}
+
+label.error::before {
+    content: "\f071";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: var(--estado-error);
+    margin-right: 5px;
+}
+
+/* ===== ÍCONO FA dentro del botón toggle ===== */
+.btn-toggle-pass i {
+    font-size: 18px;
+    color: var(--color-primario);
+    pointer-events: none;
+}

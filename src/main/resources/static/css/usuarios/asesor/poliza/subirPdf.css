@@ -1,0 +1,263 @@
+/* =============================================
+   CARGA PDF PÓLIZA IA — CSS CORPORATIVO
+   ============================================= */
+
+/* ===== ENCABEZADO ===== */
+.page-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 28px;
+    max-width: 620px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.icon-purple {
+    background: rgba(111, 66, 193, 0.12);
+    color: #6f42c1;
+}
+
+.page-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--texto-principal);
+    margin: 0 0 4px 0;
+    text-align: left;
+    width: auto;
+    letter-spacing: -0.3px;
+}
+
+.page-subtitle {
+    font-size: 13.5px;
+    color: var(--texto-secundario);
+    margin: 0;
+}
+
+/* ===== CARD ===== */
+.upload-card {
+    background: var(--fondo-card);
+    border-radius: 16px;
+    border: 1px solid #e8edf3;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    padding: 36px;
+    max-width: 620px;
+    margin: 0 auto;
+}
+
+/* ===== INPUT OCULTO ===== */
+#archivo {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ===== DROP ZONE ===== */
+.drop-zone {
+    border: 2px dashed #d1d9e0;
+    border-radius: 14px;
+    padding: 48px 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    background: #fafbfc;
+    margin-bottom: 20px;
+}
+
+.drop-zone:hover,
+.drop-zone.dragover {
+    border-color: #6f42c1;
+    background: rgba(111, 66, 193, 0.04);
+}
+
+.drop-zone.dragover .drop-icon {
+    transform: scale(1.1);
+}
+
+.drop-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: rgba(111, 66, 193, 0.10);
+    color: #6f42c1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin: 0 auto 16px auto;
+    transition: transform 0.2s;
+}
+
+.drop-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--texto-principal);
+    margin: 0 0 6px 0;
+}
+
+.drop-hint {
+    font-size: 13px;
+    color: var(--texto-secundario);
+    margin: 0;
+}
+
+/* ===== FILE INFO ===== */
+.file-info {
+    display: none;
+    margin-bottom: 24px;
+}
+
+.file-info.visible {
+    display: block;
+}
+
+.file-info-inner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: rgba(111, 66, 193, 0.05);
+    border: 1.5px solid rgba(111, 66, 193, 0.20);
+    border-radius: 12px;
+}
+
+.file-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: rgba(220, 53, 69, 0.10);
+    color: var(--estado-error);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.file-datos {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+    min-width: 0;
+}
+
+.file-nombre {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--texto-principal);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-size {
+    font-size: 12px;
+    color: var(--texto-secundario);
+}
+
+.file-remove {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(0,0,0,0.05);
+    color: var(--texto-secundario);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+    transition: background 0.15s, color 0.15s;
+}
+
+.file-remove:hover {
+    background: rgba(220,53,69,0.10);
+    color: var(--estado-error);
+}
+
+/* ===== BOTONES ===== */
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.btn-cancelar {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 11px 20px;
+    border: 1.5px solid #d1d9e0;
+    border-radius: 10px;
+    background: var(--fondo-card);
+    color: var(--texto-secundario);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+
+.btn-cancelar:hover {
+    border-color: var(--color-primario);
+    color: var(--color-primario);
+    background: rgba(15,76,156,0.04);
+}
+
+.btn-cancelar i { font-size: 13px; }
+
+.btn-procesar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 24px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #6f42c1, #8a5cf7);
+    color: #fff;
+    font-size: 14.5px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: filter 0.2s, transform 0.15s;
+    box-shadow: 0 3px 12px rgba(111,66,193,0.25);
+}
+
+.btn-procesar:hover:not(:disabled) {
+    filter: brightness(0.92);
+    transform: translateY(-1px);
+}
+
+.btn-procesar:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-procesar i { font-size: 14px; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+    .upload-card { padding: 24px 18px; }
+    .drop-zone { padding: 36px 20px; }
+    .form-actions { flex-direction: column-reverse; }
+    .btn-cancelar,
+    .btn-procesar { width: 100%; justify-content: center; }
+}
