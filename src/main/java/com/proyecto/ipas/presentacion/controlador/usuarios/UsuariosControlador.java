@@ -1,7 +1,6 @@
-package com.proyecto.ipas.presentacion.controlador;
+package com.proyecto.ipas.presentacion.controlador.usuarios;
 
 import com.proyecto.ipas.datos.mapeador.UsuarioMapper;
-import com.proyecto.ipas.infraestructura.seguridad.UsuarioSeguridad;
 import com.proyecto.ipas.infraestructura.utilidades.TipoAlerta;
 import com.proyecto.ipas.negocio.servicio.autenticacion.UsuarioServicio;
 import com.proyecto.ipas.presentacion.excepcion.ConflictoExcepcion;
@@ -9,14 +8,12 @@ import com.proyecto.ipas.presentacion.excepcion.NegocioExcepcion;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.RegistroDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.RespuestaDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.mensajeFrontend.AlertaRespuesta;
-import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.usuario.UsuarioActualizarDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -128,6 +125,7 @@ public class UsuariosControlador {
         }
         return "redirect:/asesor/perfil";
     }
+
 
     @RequestMapping("/error-403")
     public String mostrarError403(HttpServletRequest peticion, Model modelo) {

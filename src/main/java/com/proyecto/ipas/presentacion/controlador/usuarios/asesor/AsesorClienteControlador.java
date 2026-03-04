@@ -1,4 +1,4 @@
-package com.proyecto.ipas.presentacion.controlador.asesor;
+package com.proyecto.ipas.presentacion.controlador.usuarios.asesor;
 
 import com.proyecto.ipas.infraestructura.seguridad.UsuarioSeguridad;
 import com.proyecto.ipas.infraestructura.utilidades.EnActualizacion;
@@ -31,7 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Controller
-@RequestMapping("/asesor")
+@RequestMapping("/asesor/cliente")
 public class AsesorClienteControlador {
 
     @Autowired
@@ -124,7 +124,7 @@ public class AsesorClienteControlador {
                                 "Cliente creado. Ahora completa el registro de la póliza.",
                                 "CLIENTE_CREADO"));
 
-                return "redirect:/asesor/registro-poliza";
+                return "redirect:/asesor/poliza/registro-poliza";
             }
 
             AlertaRespuesta alertaRespuesta = new AlertaRespuesta(
@@ -150,7 +150,7 @@ public class AsesorClienteControlador {
             return "usuarios/asesores/clientes/registroFormulario";
         }
 
-        return "redirect:/asesor/ver-clientes";
+        return "redirect:/asesor/cliente/ver-clientes";
     }
 
 
@@ -215,7 +215,7 @@ public class AsesorClienteControlador {
             return "usuarios/asesores/clientes/registroFormulario";
         }
 
-        return "redirect:/asesor/ver-clientes";
+        return "redirect:/asesor/cliente/ver-clientes";
 
     }
 }

@@ -1,4 +1,4 @@
-package com.proyecto.ipas.presentacion.controlador;
+package com.proyecto.ipas.presentacion.controlador.usuarios.administrador;
 
 import com.proyecto.ipas.datos.mapeador.UsuarioMapper;
 import com.proyecto.ipas.infraestructura.seguridad.UsuarioSeguridad;
@@ -43,11 +43,6 @@ public class AdministradorControlador {
             }
         }
 
-        UsuarioSeguridad usuarioSesion = (UsuarioSeguridad) usuarioAutenticado.getPrincipal();
-        cargarDatosLayout(usuarioSesion, model);
-
-        model.addAttribute("activePage", "dashboard");
-        model.addAttribute("pageTitle", "Dashboard");
 
         return "usuarios/administradores/inicio";
     }
@@ -60,16 +55,13 @@ public class AdministradorControlador {
 
         UsuarioSeguridad usuarioSesion = (UsuarioSeguridad) usuarioAutenticado.getPrincipal();
 
-        cargarDatosLayout(usuarioSesion, model);
         cargarCorreoPerfil(usuarioSesion, model);
 
-        model.addAttribute("activePage", "perfil");
-        model.addAttribute("pageTitle", "Mi Perfil");
         model.addAttribute("usuarioActualizarDTO",
                 usuarioMapper.toUsuarioActualizarDTO(
                         usuarioServicio.verDatosUsuario(usuarioSesion.getIdUsuario())));
 
-        return "usuarios/perfilAdmin";
+        return "usuarios/administradores/perfilAdmin";
     }
 
     /* -------------------------------------------------------
@@ -86,11 +78,8 @@ public class AdministradorControlador {
         UsuarioSeguridad usuarioSesion = (UsuarioSeguridad) usuarioAutenticado.getPrincipal();
 
         if (validacion.hasErrors()) {
-            cargarDatosLayout(usuarioSesion, model);
             cargarCorreoPerfil(usuarioSesion, model);
-            model.addAttribute("activePage", "perfil");
-            model.addAttribute("pageTitle", "Mi Perfil");
-            return "usuarios/perfilAdmin";
+            return "usuarios/administradores/perfilAdmin";
         }
 
         try {
@@ -116,26 +105,13 @@ public class AdministradorControlador {
         } catch (ConflictoExcepcion ex) {
             ex.getCampoErrorLista().forEach(error ->
                     validacion.rejectValue(error.getCampo(), ex.getErrorCodigo(), error.getMensaje()));
-
-            cargarDatosLayout(usuarioSesion, model);
             cargarCorreoPerfil(usuarioSesion, model);
-            model.addAttribute("activePage", "perfil");
-            model.addAttribute("pageTitle", "Mi Perfil");
-            return "usuarios/perfilAdmin";
+            return "usuarios/administradores/perfilAdmin";
         }
 
         return "redirect:/administrador/perfil";
     }
 
-    /* -------------------------------------------------------
-       UTILIDADES PRIVADAS
-    ------------------------------------------------------- */
-    private void cargarDatosLayout(UsuarioSeguridad usuarioSesion, Model model) {
-        var datos = usuarioServicio.verDatosUsuario(usuarioSesion.getIdUsuario());
-        model.addAttribute("nombreAdmin", datos.nombre() + " " + datos.apellido());
-        model.addAttribute("correoAdmin", datos.correo());
-        model.addAttribute("rolUsuario", "Administrador");
-    }
 
     private void cargarCorreoPerfil(UsuarioSeguridad usuarioSesion, Model model) {
         model.addAttribute("correo", usuarioServicio.verDatosUsuario(usuarioSesion.getIdUsuario()).correo());

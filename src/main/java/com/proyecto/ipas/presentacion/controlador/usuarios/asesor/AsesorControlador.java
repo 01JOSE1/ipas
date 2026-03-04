@@ -1,4 +1,4 @@
-package com.proyecto.ipas.presentacion.controlador.asesor;
+package com.proyecto.ipas.presentacion.controlador.usuarios.asesor;
 
 import com.proyecto.ipas.datos.mapeador.UsuarioMapper;
 import com.proyecto.ipas.infraestructura.seguridad.UsuarioSeguridad;
