@@ -151,6 +151,40 @@
     font-size: 12px;
 }
 
+/* ===== VIGENCIA — ESTADO FECHA FIN ===== */
+.fecha-vigente {
+    color: var(--estado-exito);
+    font-weight: 600;
+}
+
+.fecha-vencida {
+    color: var(--estado-error);
+    font-weight: 600;
+}
+
+/* ===== BADGE VIGENCIA ===== */
+.badge-vigencia {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.03em;
+}
+
+.vigencia-ok {
+    background: rgba(40, 167, 69, 0.10);
+    color: var(--estado-exito);
+}
+
+.vigencia-expirada {
+    background: rgba(220, 53, 69, 0.10);
+    color: var(--estado-error);
+}
+
+
 /* ===== MONTOS ===== */
 .td-monto {
     font-size: 13.5px;
@@ -256,6 +290,37 @@
 }
 
 .btn-accion i {
+    font-size: 12px;
+}
+
+/* ===== BOTÓN CANCELAR PÓLIZA ===== */
+.btn-cancelar {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 7px;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    background: rgba(220, 53, 69, 0.08);
+    color: var(--estado-error);
+    transition: filter 0.2s, transform 0.15s, background 0.2s, color 0.2s;
+    margin-right: 0;
+    white-space: nowrap;
+    font-family: inherit;
+}
+
+.btn-cancelar:hover {
+    background: var(--estado-error);
+    color: #fff;
+    filter: brightness(0.92);
+    transform: translateY(-1px);
+}
+
+.btn-cancelar i {
     font-size: 12px;
 }
 

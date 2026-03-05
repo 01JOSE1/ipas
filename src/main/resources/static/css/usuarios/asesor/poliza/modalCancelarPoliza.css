@@ -1,0 +1,113 @@
+/* ===== MODAL CORPORATIVO ===== */
+#modalCancelarPoliza .modal-content {
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(15, 76, 156, 0.13);
+    overflow: hidden;
+}
+
+#modalCancelarPoliza .modal-header {
+    background: var(--color-primario);
+    padding: 18px 24px;
+    border-bottom: none;
+}
+
+#modalCancelarPoliza .modal-title {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+}
+
+#modalCancelarPoliza .btn-close {
+    filter: invert(1) brightness(2);
+    opacity: 0.8;
+}
+
+#modalCancelarPoliza .btn-close:hover {
+    opacity: 1;
+}
+
+#modalCancelarPoliza .modal-body {
+    background: var(--fondo-card);
+    padding: 24px;
+}
+
+#modalCancelarPoliza .form-label {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--texto-secundario);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+}
+
+#modalCancelarPoliza .form-control {
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13.5px;
+    color: var(--texto-principal);
+    background: var(--fondo-input);
+    padding: 9px 13px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#modalCancelarPoliza .form-control:focus {
+    border-color: var(--color-primario-claro);
+    box-shadow: 0 0 0 3px rgba(15, 76, 156, 0.10);
+    outline: none;
+}
+
+#modalCancelarPoliza .form-control[readonly] {
+    background: var(--fondo-general);
+    color: var(--texto-secundario);
+    font-weight: 600;
+    font-family: monospace;
+    letter-spacing: 0.5px;
+}
+
+#modalCancelarPoliza .text-danger {
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+#modalCancelarPoliza .modal-footer {
+    background: var(--fondo-general);
+    border-top: 1px solid #e8edf3;
+    padding: 14px 24px;
+    gap: 8px;
+}
+
+/* Botón cerrar del footer */
+#modalCancelarPoliza .modal-footer .btn-secondary {
+    background: transparent;
+    border: 1.5px solid #d1d9e6;
+    color: var(--texto-secundario);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 16px;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+}
+
+#modalCancelarPoliza .modal-footer .btn-secondary:hover {
+    background: #e8edf3;
+    color: var(--texto-principal);
+}
+
+/* Botón confirmar cancelación */
+#modalCancelarPoliza .modal-footer .btn-danger {
+    background: var(--estado-error);
+    border: none;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 7px 18px;
+    border-radius: 8px;
+    transition: filter 0.2s, transform 0.15s;
+}
+
+#modalCancelarPoliza .modal-footer .btn-danger:hover {
+    filter: brightness(0.88);
+    transform: translateY(-1px);
+}
