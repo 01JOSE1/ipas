@@ -8,6 +8,7 @@
     <title>Historial de Pólizas</title>
     <th:block layout:fragment="cssVista">
         <link rel="stylesheet" th:href="@{/css/usuarios/asesor/poliza/listaPolizasCliente.css}">
+        <link rel="stylesheet" th:href="@{/css/usuarios/asesor/poliza/modalCancelarPoliza.css}">
     </th:block>
 </head>
 
@@ -61,14 +62,28 @@
                 <!-- Vigencia -->
                 <td class="td-vigencia">
                     <div class="vigencia-info">
-                        <span class="vigencia-fecha">
-                            <i class="fa fa-calendar-alt"></i>
-                            <span th:text="${poliza.fechaInicio}"></span>
-                        </span>
+        <span class="vigencia-fecha">
+            <i class="fa fa-calendar"></i>
+            <span th:text="${poliza.fechaInicio}"></span>
+        </span>
                         <span class="vigencia-sep">→</span>
-                        <span class="vigencia-fecha">
-                            <span th:text="${poliza.fechaFin}"></span>
-                        </span>
+
+                        <!-- Fecha fin con clase dinámica según vencida -->
+                        <span class="vigencia-fecha"
+                              th:classappend="${poliza.vencida} ? 'fecha-vigente' : 'fecha-vencida'">
+            <i class="fa fa-calendar"></i>
+            <span th:text="${poliza.fechaFin}"></span>
+        </span>
+                    </div>
+
+                    <!-- Badge de estado de vigencia -->
+                    <div class="mt-1">
+        <span th:if="${poliza.vencida}"  class="badge-vigencia vigencia-ok">
+            <i class="fa fa-circle-check"></i> Vigente
+        </span>
+                        <span th:unless="${poliza.vencida}" class="badge-vigencia vigencia-expirada">
+            <i class="fa fa-circle-xmark"></i> Vencida
+        </span>
                     </div>
                 </td>
 
@@ -121,13 +136,29 @@
                         <i class="fa fa-file-pdf"></i>
                         <span>PDF</span>
                     </a>
+                    <button class="btn-accion btn-cancelar"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalCancelarPoliza"
+                            th:data-idpoliza="${poliza.idPoliza}"
+                            th:data-codigo-poliza="${poliza.codigoPoliza}">
+                        <i class="fa fa-ban"></i>
+                        <span>Cancelar</span>
+                    </button>
                 </td>
 
             </tr>
             </tbody>
         </table>
     </div>
+    <div th:replace="~{fragmentos/modalCancelarPoliza :: modalCancelarPoliza}"></div>
+</th:block>
 
+
+<th:block layout:fragment="jsVista">
+    <script th:inline="javascript">
+        window.abrirModalCancelar = [[${abrirModalCancelar} ?: false]];
+    </script>
+    <script th:src="@{/js/usuarios/asesor/poliza/modalCancelarPoliza.js}"></script>
 </th:block>
 </body>
 </html>

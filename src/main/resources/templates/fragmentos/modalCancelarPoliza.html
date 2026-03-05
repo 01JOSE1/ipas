@@ -1,0 +1,72 @@
+<div th:fragment="modalCancelarPoliza">
+
+    <div class="modal fade" id="modalCancelarPoliza" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <form th:action="@{/asesor/poliza/cancelar}" method="post"
+                      th:object="${cancelarPolizaDTO}">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cancelar póliza</h5>
+                        <button type="button" class="btn-close"
+                                data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <!-- ID visible — agregar th:value -->
+                        <div class="mb-3">
+                            <label class="form-label">Codigo de la póliza</label>
+
+                            <input type="text"
+                                   id="polizaIdVisible"
+                                   class="form-control"
+                                   th:value="*{codigoPoliza}"
+                                   readonly>
+
+                            <input type="hidden"
+                                   id="codigoPolizaInput"
+                                   th:field="*{codigoPoliza}">
+                        </div>
+
+                        <!-- ID que se envía al DTO para hacer la operacion -->
+                        <input type="hidden" id="polizaIdInput" th:field="*{idPoliza}">
+
+                        <div class="mb-3">
+                            <label class="form-label">Motivo de cancelación</label>
+                            <textarea class="form-control"
+                                      th:field="*{motivo}"
+                                      rows="3"
+                                      required>
+                            </textarea>
+
+                            <div class="text-danger"
+                                 th:if="${#fields.hasErrors('motivo')}"
+                                 th:errors="*{motivo}">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                            Cerrar
+                        </button>
+
+                        <button class="btn btn-danger"
+                                type="submit">
+                            Cancelar póliza
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</div>
