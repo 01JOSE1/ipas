@@ -13,8 +13,10 @@ import com.proyecto.ipas.presentacion.excepcion.NegocioExcepcion;
 import com.proyecto.ipas.presentacion.excepcion.ValidacionDatosExcepcion;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.GestionClienteDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.mensajeFrontend.AlertaRespuesta;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.poliza.CancelarPolizaDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.poliza.GestionPolizaDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.poliza.RespuestaPolizaDTO;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.groups.Default;
@@ -98,6 +100,9 @@ public class AsesorPolizaControlador {
         modelo.addAttribute("totalPaginas", paginaPolizas.getTotalPages());
         modelo.addAttribute("totalRegistros",  paginaPolizas.getTotalElements());
         modelo.addAttribute("catidadPagina", cantidad);
+        if (!modelo.containsAttribute("cancelarPolizaDTO")) {
+            modelo.addAttribute("cancelarPolizaDTO", new CancelarPolizaDTO());
+        }
 
         return "usuarios/asesores/polizas/listaPolizas";
     }
@@ -108,6 +113,10 @@ public class AsesorPolizaControlador {
         List<RespuestaPolizaDTO> polizas = polizaServicio.obtenerPolizasCliente(idCliente);
 
         modelo.addAttribute("polizas", polizas);
+
+        if (!modelo.containsAttribute("cancelarPolizaDTO")) {
+            modelo.addAttribute("cancelarPolizaDTO", new CancelarPolizaDTO());
+        }
 
         return "usuarios/asesores/polizas/listaPolizasCliente";
     }
@@ -330,5 +339,56 @@ public class AsesorPolizaControlador {
 
         return "redirect:/asesor/poliza/ver-polizas/" + gestionPolizaDTO.getIdCliente();
     }
+
+    @PostMapping("cancelar")
+    public String cancelarPoliza(@Valid @ModelAttribute("cancelarPolizaDTO") CancelarPolizaDTO cancelarPolizaDTO,
+                                 BindingResult validacion,
+                                 RedirectAttributes redirectAttributes,
+                                 HttpServletRequest request,
+                                 Authentication usuarioAutenticado) {
+
+        UsuarioSeguridad usuarioSesion = (UsuarioSeguridad) usuarioAutenticado.getPrincipal();
+        System.out.println("HOLAAAAAAAAAAAAAAAAAAAA1");
+
+        if (validacion.hasErrors()) {
+            System.out.println("HOLAAAAAAAAAAAAAAAAAAAA2");
+
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.cancelarPolizaDTO", validacion);
+
+            System.out.println(cancelarPolizaDTO.toString());
+            redirectAttributes.addFlashAttribute("cancelarPolizaDTO", cancelarPolizaDTO);
+            redirectAttributes.addFlashAttribute("abrirModalCancelar", true);
+
+            return "redirect:" + request.getHeader("Referer");
+        }
+
+        try {
+            System.out.println("HOLAAAAAAAAAAAAAAAAAAAA3");
+            polizaServicio.cancelarPoliza(cancelarPolizaDTO, usuarioSesion.getIdUsuario());
+
+            AlertaRespuesta alertaRespuesta = new AlertaRespuesta(
+                    HttpStatus.OK.value(),
+                    TipoAlerta.EXITO,
+                    "Cambio de estado de poliza a CANCELADA",
+                    "Poliza CANCELADA con exito",
+                    "POLIZA_CANCELADA"
+            );
+
+            redirectAttributes.addFlashAttribute("alertaRespuesta", alertaRespuesta);
+
+        } catch (NegocioExcepcion ex) {
+            System.out.println("HOLAAAAAAAAAAAAAAAAAAAA4");
+            System.out.println(cancelarPolizaDTO.toString());
+            redirectAttributes.addFlashAttribute("cancelarPolizaDTO", cancelarPolizaDTO);
+            redirectAttributes.addFlashAttribute("abrirModalCancelar", true);
+
+            AlertaRespuesta alertaRespuesta = new AlertaRespuesta(TipoAlerta.ERROR, ex.getMessage());
+            redirectAttributes.addFlashAttribute("alertaRespuesta", alertaRespuesta);
+            return "redirect:" + request.getHeader("Referer");
+        }
+
+        return "redirect:" + request.getHeader("Referer");
+    }
+
 
 }
