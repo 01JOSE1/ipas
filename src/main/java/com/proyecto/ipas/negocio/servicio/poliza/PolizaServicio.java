@@ -15,6 +15,7 @@ import com.proyecto.ipas.presentacion.excepcion.*;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.GestionClienteDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.RespuestaClienteDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.ia.PeticionIaDTO;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.poliza.CancelarPolizaDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.poliza.GestionPolizaDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.poliza.RespuestaPolizaDTO;
 import org.slf4j.Logger;
@@ -378,7 +379,7 @@ public class PolizaServicio {
 
             polizaMapper.toPoliza(polizaEntidad);
 
-//            jdbcTemplate.update("SET @usuario_actual = ?", idUsuarioActual);
+            jdbcTemplate.update("SET @usuario_actual = ?", idUsuarioActual);
 
             polizaRepositorio.saveAndFlush(polizaEntidad);
             registro.info("Poliza actualizada exitosamente con ID: {}", polizaEntidad.getCodigoPoliza());
@@ -396,6 +397,31 @@ public class PolizaServicio {
             registro.error("Error de integridad al actualizar poliza: {}", ex.getMessage());
             throw new NegocioExcepcion("No se pudo actualizar la poliza. Intenta nuevamente", "ACTUALIZACION_POLIZA_FALLIDA");
         }
+    }
+
+
+    @Transactional
+    public void cancelarPoliza(CancelarPolizaDTO cancelarPolizaDTO, Long idUsuarioActual) {
+
+        registro.error("Cancelando poliza: {}", cancelarPolizaDTO.getIdPoliza());
+
+        PolizaEntidad polizaEntidad = polizaRepositorio.findById(cancelarPolizaDTO.getIdPoliza()).orElseThrow(() -> new RecursoNOEncontradoException("poliza", "id", cancelarPolizaDTO.getIdPoliza()));
+
+        Poliza poliza = polizaMapper.toPoliza(polizaEntidad);
+
+        poliza.cancelarPoliza(cancelarPolizaDTO.getMotivo());
+
+        jdbcTemplate.update("SET @usuario_actual = ?", idUsuarioActual);
+
+        // Sincronizamos los cambios del dominio sobre la entidad que Hibernate ya está trackeando — NO se crea objeto nuevo
+        polizaMapper.sincronizar(poliza, polizaEntidad);
+
+
+        // Es opcional — Hibernate detecta los cambios automáticamente al cerrar la transacción (dirty checking)
+        polizaRepositorio.save(polizaEntidad);
+
+        registro.error("Poliza cancelada con exito: {}", polizaEntidad.getIdPoliza());
+
     }
 
 }

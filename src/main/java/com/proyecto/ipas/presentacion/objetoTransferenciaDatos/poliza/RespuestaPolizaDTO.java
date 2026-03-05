@@ -22,6 +22,8 @@ public record RespuestaPolizaDTO(
 
         EstadoPoliza estado,
 
+        boolean vencida,
+
         EstadoPagoPoliza estadoPago,
 
         String placa,
@@ -41,6 +43,7 @@ public record RespuestaPolizaDTO(
                 entidad.getPrimaNeta(),
                 entidad.getPrimaTotal(),
                 entidad.getEstado(),
+                entidad.getFechaFin().isAfter(LocalDate.now()),
                 entidad.getEstadoPago(),
                 entidad.getPlaca(),
                 entidad.getDescripcion(),

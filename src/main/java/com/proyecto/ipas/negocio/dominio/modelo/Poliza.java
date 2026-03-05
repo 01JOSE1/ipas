@@ -69,14 +69,25 @@ public class Poliza {
 
     public void cancelarPoliza(String motivo) {
 
-        validarMotivoCancelacion(motivo);
-
-        if (this.fechaFin.isBefore(LocalDate.now())) {
-            throw new NegocioExcepcion("La póliza no puede ser cancelada");
+        if (esVencida(fechaFin)) {
+            throw new NegocioExcepcion("La póliza se encuentra VENCIDA");
         }
+        if (getEstado() == EstadoPoliza.CANCELADA) {
+            throw new NegocioExcepcion("La poliza ya esta CANCELADA");
+        }
+
+        validarMotivoCancelacion(motivo);
 
         agregarMotivoCancelacion(motivo);
         this.estado = EstadoPoliza.CANCELADA;
+    }
+
+
+    private static boolean esVencida(LocalDate fechaFin) {
+        if (fechaFin.isBefore(LocalDate.now())) {
+            return true;
+        }
+        return false;
     }
     
 
@@ -85,6 +96,7 @@ public class Poliza {
             throw new IllegalArgumentException("ID de poliza debe ser positivo");
         }
     }
+
 
     public static void validarCodigoPoliza(String codigoPoliza) {
         // Usamos \w para letras, números y guiones bajos.
@@ -128,7 +140,7 @@ public class Poliza {
     }
 
     private void validarMotivoCancelacion(String motivo) {
-        if (motivo == null || motivo.isBlank()) {
+        if (motivo == null || motivo.isBlank() || motivo.length() < 4) {
             throw new NegocioExcepcion("Debes agregar un motivo de cancelación");
         }
     }
@@ -137,7 +149,7 @@ public class Poliza {
         if (this.descripcion == null) {
             this.descripcion = "";
         }
-        this.descripcion += "\nMOTIVO CANCELACIÓN: " + motivo;
+        this.descripcion += "\n CANCELADA EL DIA "+LocalDate.now()+" POR EL MOTIVO: " + motivo;
     }
 
     public boolean esRamoAutomovil () {

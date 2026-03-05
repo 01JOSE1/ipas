@@ -64,4 +64,20 @@ public interface PolizaMapper {
     RespuestaPolizaDTO toRespuestaPoliza(PolizaEntidad polizaEntidad);
 
 
+    /**
+     * Sincroniza el estado del objeto de dominio hacia la entidad de persistencia
+     * existente, sin crear una nueva instancia.
+     *
+     * Al usar @MappingTarget, MapStruct modifica el objeto 'entidad' en lugar de
+     * instanciar uno nuevo, preservando el tracking de Hibernate dentro
+     * de la transacción activa (dirty checking).
+     *
+     * @BeanMapping con IGNORE evita que campos nulos del dominio sobreescriban
+     * datos válidos en la entidad — solo se actualizan los campos con valor.
+     *
+     * Uso recomendado: llamar después de ejecutar cualquier lógica de negocio
+     * sobre el objeto de dominio, antes del flush de la transacción.
+     */
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void sincronizar(Poliza poliza, @MappingTarget PolizaEntidad entidad);
 }
