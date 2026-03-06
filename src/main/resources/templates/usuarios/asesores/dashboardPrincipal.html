@@ -26,43 +26,69 @@
     <!-- Tarjetas resumen -->
     <div class="cards-grid">
 
+        <!--
+            Variable: polizasCreadasMes
+            Tipo: Integer / Long
+            Descripción: Cantidad de pólizas creadas por el asesor en el último mes calendario
+            Ejemplo controller: model.addAttribute("polizasCreadasMes", polizaService.contarPolizasCreadasEnMesPorAsesor(asesorId));
+        -->
         <div class="stat-card">
             <div class="stat-icon stat-icon-blue">
+                <i class="fa fa-file-medical"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-label">Pólizas creadas este mes</span>
+                <span class="stat-value" th:text="${polizasCreadasMes}">0</span>
+            </div>
+        </div>
+
+        <!--
+            Variable: gestionesMes
+            Tipo: Integer / Long
+            Descripción: Total de gestiones (interacciones/registros) realizadas por el asesor
+                         sobre clientes y pólizas en el mes actual
+            Ejemplo controller: model.addAttribute("gestionesMes", gestionService.contarGestionesEnMesPorAsesor(asesorId));
+        -->
+        <div class="stat-card">
+            <div class="stat-icon stat-icon-green">
+                <i class="fa fa-tasks"></i>
+            </div>
+            <div class="stat-info">
+                <span class="stat-label">Gestiones este mes</span>
+                <span class="stat-value" th:text="${gestionesMes}">0</span>
+            </div>
+        </div>
+
+        <!--
+            Variable: clientesGestionados
+            Tipo: Integer / Long
+            Descripción: Cantidad total (histórica) de clientes únicos gestionados por el asesor
+            Ejemplo controller: model.addAttribute("clientesGestionados", clienteService.contarClientesGestionadosPorAsesor(asesorId));
+        -->
+        <div class="stat-card">
+            <div class="stat-icon stat-icon-cyan">
                 <i class="fa fa-users"></i>
             </div>
             <div class="stat-info">
-                <span class="stat-label">Total Clientes</span>
-                <span class="stat-value" th:text="${totalClientes}">0</span>
+                <span class="stat-label">Clientes gestionados</span>
+                <span class="stat-value" th:text="${clientesGestionados}">0</span>
             </div>
         </div>
 
-        <div class="stat-card">
-            <div class="stat-icon stat-icon-green">
-                <i class="fa fa-file-contract"></i>
-            </div>
-            <div class="stat-info">
-                <span class="stat-label">Pólizas Activas</span>
-                <span class="stat-value" th:text="${totalPolizas}">0</span>
-            </div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-icon stat-icon-cyan">
-                <i class="fa fa-check-circle"></i>
-            </div>
-            <div class="stat-info">
-                <span class="stat-label">Al día</span>
-                <span class="stat-value" th:text="${polizasAlDia}">0</span>
-            </div>
-        </div>
-
+        <!--
+            Variable: polizasProximasVencer
+            Tipo: Integer / Long
+            Descripción: Pólizas asignadas al asesor con fecha de vencimiento
+                         en los próximos 8 días (inclusive hoy)
+            Ejemplo controller: model.addAttribute("polizasProximasVencer", polizaService.contarPolizasProximasVencer(asesorId, 8));
+        -->
         <div class="stat-card">
             <div class="stat-icon stat-icon-orange">
                 <i class="fa fa-exclamation-triangle"></i>
             </div>
             <div class="stat-info">
-                <span class="stat-label">Por vencer</span>
-                <span class="stat-value" th:text="${polizasPorVencer}">0</span>
+                <span class="stat-label">Pólizas por vencer (≤8 días)</span>
+                <span class="stat-value" th:text="${polizasProximasVencer}">0</span>
             </div>
         </div>
 
