@@ -334,6 +334,34 @@ END;
 DELIMITER ;
 
 
+-- Para saber cuando fue creada la poliza
+DELIMITER //
+
+CREATE TRIGGER tr_auditoria_poliza_insert
+AFTER INSERT ON Polizas
+FOR EACH ROW
+BEGIN
+    INSERT INTO Auditorias (
+        tabla_afectada,
+        id_registro,
+        accion,
+        fecha_accion,
+        detalles,
+        usuario_id
+    )
+    VALUES (
+        'Polizas',
+        NEW.codigo_poliza,
+        'INSERT',
+        NOW(),
+        CONCAT('Se creó la póliza número: ', NEW.codigo_poliza),
+        NEW.usuario_id
+    );
+END //
+
+DELIMITER ;
+
+
 DELIMITER //
 
 CREATE DEFINER=`root`@`localhost` TRIGGER auditoria_polizas

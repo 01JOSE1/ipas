@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,5 +82,30 @@ public interface PolizaRepositorio extends JpaRepository<PolizaEntidad, Long> {
         WHERE p.idPoliza = :idPoliza
     """)
     Optional<GestionPolizaDTO> buscarDatosPoliza(@Param("idPoliza") Long idPoliza);
+
+
+    /**
+     * Polizas proximas a vencer.
+     * polizas que le queden 8 o menos dias para vencer
+     */
+    @Query("""
+            SELECT COUNT(p) 
+            FROM PolizaEntidad p 
+            WHERE p.fechaFin BETWEEN CURRENT_DATE AND :fechaLimite
+        """)
+    long countPolizasPorVencer(@Param("fechaLimite") LocalDate fechaLimite);
+
+
+    /**
+     * Cantidad de polizas que ha creado en el ultimo mes
+     */
+    @Query("""
+            SELECT COUNT(p)
+            FROM PolizaEntidad p
+            WHERE p.usuario.idUsuario = :idUsuario
+            AND MONTH(p.fechaInicio) = MONTH(CURRENT_DATE)
+            AND YEAR(p.fechaInicio) = YEAR(CURRENT_DATE)
+        """)
+    Long contarPolizasEsteMes(@Param("idUsuario") Long idUsuario);
 
 }

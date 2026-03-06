@@ -37,4 +37,31 @@ public interface ClienteRepositorio extends JpaRepository<ClienteEntidad, Long> 
            OR c.numeroDocumento LIKE CONCAT('%', :termino, '%')
     """)
     List<BusquedaClienteDTO> buscarClientes(@Param("termino") String termino);
+
+
+    /**
+     * Cantidad de clientes que ha gestionado en total
+     */
+    @Query("""
+            SELECT COUNT(c)
+            FROM ClienteEntidad c
+            WHERE c.usuario.idUsuario = :idUsuario
+        """)
+    Long contarClientesPorUsuario(@Param("idUsuario") Long idUsuario);
+
+
+    /**
+     * Cantidad de gestiones que el usuario ha realizado en clientes y polizas en el mes
+     */
+    @Query(value = """
+            SELECT COUNT(*)
+            FROM Auditorias
+            WHERE usuario_id = :idUsuario
+            AND accion = 'UPDATE'
+            AND tabla_afectada IN ('Clientes','Polizas')
+            AND MONTH(fecha_accion) = MONTH(CURRENT_DATE())
+            AND YEAR(fecha_accion) = YEAR(CURRENT_DATE())
+        """, nativeQuery = true)
+    Long contarGestionesMes(@Param("idUsuario") Long idUsuario);
+
 }
