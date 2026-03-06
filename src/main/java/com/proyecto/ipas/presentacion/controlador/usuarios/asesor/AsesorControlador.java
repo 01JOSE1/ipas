@@ -3,6 +3,7 @@ package com.proyecto.ipas.presentacion.controlador.usuarios.asesor;
 import com.proyecto.ipas.datos.mapeador.UsuarioMapper;
 import com.proyecto.ipas.infraestructura.seguridad.UsuarioSeguridad;
 import com.proyecto.ipas.infraestructura.utilidades.TipoAlerta;
+import com.proyecto.ipas.negocio.servicio.asesor.AsesorServicio;
 import com.proyecto.ipas.negocio.servicio.autenticacion.UsuarioServicio;
 import com.proyecto.ipas.presentacion.excepcion.ConflictoExcepcion;
 import com.proyecto.ipas.presentacion.excepcion.NegocioExcepcion;
@@ -20,6 +21,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("/asesor")
 public class AsesorControlador {
@@ -30,26 +33,28 @@ public class AsesorControlador {
     @Autowired
     private UsuarioMapper usuarioMapper;
 
+    @Autowired
+    private AsesorServicio asesorServicio;
+
     /* -------------------------------------------------------
        DASHBOARD
     ------------------------------------------------------- */
     @GetMapping("/")
-    public String dashboard(HttpSession sesion, Model model) {
+    public String dashboard(HttpSession sesion, Model modelo, Authentication usuarioAutenticado) {
+
+        UsuarioSeguridad usuarioSesion = (UsuarioSeguridad) usuarioAutenticado.getPrincipal();
 
         if (sesion != null) {
             AlertaRespuesta alerta = (AlertaRespuesta) sesion.getAttribute("alertaRespuesta");
             if (alerta != null) {
-                model.addAttribute("alertaRespuesta", alerta);
+                modelo.addAttribute("alertaRespuesta", alerta);
                 sesion.removeAttribute("alertaRespuesta");
             }
         }
 
+        Map<String, Long> datosDashboardAsesor = asesorServicio.obtenerDatosParaDashboard(usuarioSesion.getIdUsuario());
 
-        // Contadores (ajusta según tu lógica de negocio)
-        model.addAttribute("totalClientes", 0);
-        model.addAttribute("totalPolizas", 0);
-        model.addAttribute("polizasAlDia", 0);
-        model.addAttribute("polizasPorVencer", 0);
+        datosDashboardAsesor.forEach(modelo::addAttribute);
 
         return "usuarios/asesores/dashboardPrincipal";
     }
