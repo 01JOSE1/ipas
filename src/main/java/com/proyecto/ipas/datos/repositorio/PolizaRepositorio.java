@@ -3,9 +3,9 @@ package com.proyecto.ipas.datos.repositorio;
 
 import com.proyecto.ipas.datos.entidad.PolizaEntidad;
 import com.proyecto.ipas.negocio.dominio.enums.EstadoPoliza;
-import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.BusquedaClienteDTO;
-import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.GestionClienteDTO;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.usuario.asesor.AsesorRankingDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.poliza.GestionPolizaDTO;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -148,4 +148,55 @@ public interface PolizaRepositorio extends JpaRepository<PolizaEntidad, Long> {
         """, nativeQuery = true)
     Long contarPolizasCanceladasMes();
 
+
+    /**
+     * pólizas activas por el nombre del usuario (asesor)
+     */
+    @Query("""
+            SELECT new com.proyecto.ipas.presentacion.objetoTransferenciaDatos.usuario.asesor.AsesorRankingDTO(
+                p.usuario.nombre, COUNT(p), 0.0)
+            FROM PolizaEntidad p
+            WHERE p.estado = 'ACTIVA'
+            GROUP BY p.usuario.id, p.usuario.nombre
+            ORDER BY COUNT(p) DESC
+        """)
+    List<AsesorRankingDTO> encontrarTopAsesores(Pageable pageable);
+
+
+    /**
+     * Distribución de pólizas por estado (ACTIVA, VENCIDA, CANCELADA, etc.)
+     * Retorna: List<Object[]> donde [0]=estado (String), [1]=cantidad (Long)
+     */
+    @Query("""
+        SELECT p.estado, COUNT(p)
+        FROM PolizaEntidad p
+        GROUP BY p.estado
+    """)
+    List<Object[]> contarPolizasPorEstado();
+
+    /**
+     * Top 5 ramos con más pólizas registradas
+     * Retorna: List<Object[]> donde [0]=nombreRamo (String), [1]=cantidad (Long)
+     */
+    @Query("""
+        SELECT r.nombre, COUNT(p)
+        FROM PolizaEntidad p
+        JOIN p.ramo r
+        GROUP BY r.nombre
+        ORDER BY COUNT(p) DESC
+    """)
+    List<Object[]> contarPolizasPorRamo();
+
+    /**
+     * Top 5 aseguradoras con más pólizas registradas
+     * Retorna: List<Object[]> donde [0]=nombreAseguradora (String), [1]=cantidad (Long)
+     */
+    @Query("""
+        SELECT a.nombre, COUNT(p)
+        FROM PolizaEntidad p
+        JOIN p.aseguradora a
+        GROUP BY a.nombre
+        ORDER BY COUNT(p) DESC
+    """)
+    List<Object[]> contarPolizasPorAseguradora();
 }

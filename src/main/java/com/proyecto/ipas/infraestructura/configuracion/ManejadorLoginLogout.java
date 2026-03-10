@@ -80,6 +80,7 @@ public class ManejadorLoginLogout {
             TipoAlerta tipoAlerta = TipoAlerta.ERROR;
 
             if (excepcion instanceof DisabledException) {
+                tipoAlerta = TipoAlerta.ADVERTENCIA;
                 message = "Tu cuenta está inactiva y pendiente de confirmación por el administrador";
                 errorCode = "CUENTA_INACTIVA";
                 status = HttpServletResponse.SC_FORBIDDEN;

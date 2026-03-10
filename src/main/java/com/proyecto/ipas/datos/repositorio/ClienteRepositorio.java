@@ -96,4 +96,41 @@ public interface ClienteRepositorio extends JpaRepository<ClienteEntidad, Long> 
     Long contarClientesCreadosMes();
 
 
+    /**
+     * Top ciudades con más clientes registrados
+     * Retorna: List<Object[]> donde [0]=ciudad (String), [1]=cantidad (Long)
+     */
+    @Query("""
+        SELECT c.ciudad, COUNT(c)
+        FROM ClienteEntidad c
+        WHERE c.ciudad IS NOT NULL
+        GROUP BY c.ciudad
+        ORDER BY COUNT(c) DESC
+    """)
+    List<Object[]> contarClientesPorCiudad();
+
+    /**
+     * Distribución de clientes por estado civil
+     * Retorna: List<Object[]> donde [0]=estadoCivil (String), [1]=cantidad (Long)
+     */
+    @Query("""
+        SELECT c.estadoCivil, COUNT(c)
+        FROM ClienteEntidad c
+        WHERE c.estadoCivil IS NOT NULL
+        GROUP BY c.estadoCivil
+    """)
+    List<Object[]> contarClientesPorEstadoCivil();
+
+    /**
+     * Distribución de clientes por tipo de documento
+     * Retorna: List<Object[]> donde [0]=tipoDocumento (String), [1]=cantidad (Long)
+     */
+    @Query("""
+        SELECT c.tipoDocumento, COUNT(c)
+        FROM ClienteEntidad c
+        GROUP BY c.tipoDocumento
+    """)
+    List<Object[]> contarClientesPorTipoDocumento();
+
+
 }

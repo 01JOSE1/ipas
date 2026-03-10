@@ -5,6 +5,7 @@ import com.proyecto.ipas.negocio.dominio.enums.TipoDocumentoUsuario;
 import com.proyecto.ipas.presentacion.excepcion.NegocioExcepcion;
 import com.proyecto.ipas.presentacion.excepcion.PermisoInsuficienteExcepcion;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Usuario {
@@ -253,12 +254,9 @@ public class Usuario {
     }
 
     private static void validarEstado(EstadoUsuario estado) {
-        if (estado == EstadoUsuario.INACTIVO) {
+        if (!Arrays.asList(EstadoUsuario.values()).contains(estado)) {
             throw new NegocioExcepcion("Estado del usuario INVALIDO. Contacta un administrador!");
-        } else if (estado == EstadoUsuario.SUSPENDIDO) {
-            throw new NegocioExcepcion("Estado del usuario SUSPENDIDO. Contacta un administrador!");
         }
-
     }
 
 
