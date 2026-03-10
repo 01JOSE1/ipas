@@ -3,6 +3,7 @@ package com.proyecto.ipas.presentacion.controlador.usuarios.administrador;
 import com.proyecto.ipas.datos.mapeador.UsuarioMapper;
 import com.proyecto.ipas.infraestructura.seguridad.UsuarioSeguridad;
 import com.proyecto.ipas.infraestructura.utilidades.TipoAlerta;
+import com.proyecto.ipas.negocio.servicio.administrador.AdministradorServicio;
 import com.proyecto.ipas.negocio.servicio.autenticacion.UsuarioServicio;
 import com.proyecto.ipas.presentacion.excepcion.ConflictoExcepcion;
 import com.proyecto.ipas.presentacion.excepcion.NegocioExcepcion;
@@ -19,6 +20,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Map;
+
 @Controller
 @RequestMapping("/administrador")
 public class AdministradorControlador {
@@ -29,20 +32,26 @@ public class AdministradorControlador {
     @Autowired
     private UsuarioMapper usuarioMapper;
 
+    @Autowired
+    private AdministradorServicio administradorServicio;
+
     /* -------------------------------------------------------
        DASHBOARD
     ------------------------------------------------------- */
     @GetMapping("/")
-    public String dashboard(HttpSession sesion, Model model, Authentication usuarioAutenticado) {
+    public String dashboard(HttpSession sesion, Model modelo) {
 
         if (sesion != null) {
             AlertaRespuesta alerta = (AlertaRespuesta) sesion.getAttribute("alertaRespuesta");
             if (alerta != null) {
-                model.addAttribute("alertaRespuesta", alerta);
+                modelo.addAttribute("alertaRespuesta", alerta);
                 sesion.removeAttribute("alertaRespuesta");
             }
         }
 
+        Map<String, Long> datosDashboardAsesor = administradorServicio.obtenerDatosDashboard();
+
+        datosDashboardAsesor.forEach(modelo::addAttribute);
 
         return "usuarios/administradores/inicio";
     }

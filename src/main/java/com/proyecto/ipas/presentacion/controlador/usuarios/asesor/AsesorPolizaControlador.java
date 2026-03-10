@@ -348,10 +348,8 @@ public class AsesorPolizaControlador {
                                  Authentication usuarioAutenticado) {
 
         UsuarioSeguridad usuarioSesion = (UsuarioSeguridad) usuarioAutenticado.getPrincipal();
-        System.out.println("HOLAAAAAAAAAAAAAAAAAAAA1");
 
         if (validacion.hasErrors()) {
-            System.out.println("HOLAAAAAAAAAAAAAAAAAAAA2");
 
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.cancelarPolizaDTO", validacion);
 
@@ -363,7 +361,6 @@ public class AsesorPolizaControlador {
         }
 
         try {
-            System.out.println("HOLAAAAAAAAAAAAAAAAAAAA3");
             polizaServicio.cancelarPoliza(cancelarPolizaDTO, usuarioSesion.getIdUsuario());
 
             AlertaRespuesta alertaRespuesta = new AlertaRespuesta(
@@ -377,8 +374,6 @@ public class AsesorPolizaControlador {
             redirectAttributes.addFlashAttribute("alertaRespuesta", alertaRespuesta);
 
         } catch (NegocioExcepcion ex) {
-            System.out.println("HOLAAAAAAAAAAAAAAAAAAAA4");
-            System.out.println(cancelarPolizaDTO.toString());
             redirectAttributes.addFlashAttribute("cancelarPolizaDTO", cancelarPolizaDTO);
             redirectAttributes.addFlashAttribute("abrirModalCancelar", true);
 
