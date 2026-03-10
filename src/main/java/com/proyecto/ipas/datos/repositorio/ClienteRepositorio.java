@@ -51,17 +51,49 @@ public interface ClienteRepositorio extends JpaRepository<ClienteEntidad, Long> 
 
 
     /**
-     * Cantidad de gestiones que el usuario ha realizado en clientes y polizas en el mes
+     * Clientes que tienen al menos una poliza activa
+     */
+    @Query("""
+            SELECT COUNT(c) 
+            FROM ClienteEntidad c 
+            WHERE EXISTS (
+                SELECT 1 
+                FROM PolizaEntidad p 
+                WHERE p.cliente.idCliente = c.idCliente 
+                AND p.estado = 'ACTIVA'
+            )
+        """)
+    Long contarClientesConPolizaActiva();
+
+
+    /**
+     * Clientes que no tienen ninguna poliza activa
+     */
+    @Query("""
+            SELECT COUNT(c) 
+            FROM ClienteEntidad c 
+            WHERE NOT EXISTS (
+                SELECT 1 
+                FROM PolizaEntidad p 
+                WHERE p.cliente.idCliente = c.idCliente 
+                AND p.estado = 'ACTIVA'
+            )
+        """)
+    Long contarClientesSinPolizasActivas();
+
+
+    /**
+     * Cantidad de clientes creados este mes
      */
     @Query(value = """
             SELECT COUNT(*)
             FROM Auditorias
-            WHERE usuario_id = :idUsuario
-            AND accion = 'UPDATE'
-            AND tabla_afectada IN ('Clientes','Polizas')
+            WHERE accion = 'INSERT'
+            AND tabla_afectada = 'Clientes'
             AND MONTH(fecha_accion) = MONTH(CURRENT_DATE())
             AND YEAR(fecha_accion) = YEAR(CURRENT_DATE())
         """, nativeQuery = true)
-    Long contarGestionesMes(@Param("idUsuario") Long idUsuario);
+    Long contarClientesCreadosMes();
+
 
 }

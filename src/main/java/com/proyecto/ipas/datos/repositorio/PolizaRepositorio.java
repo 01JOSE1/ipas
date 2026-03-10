@@ -108,4 +108,44 @@ public interface PolizaRepositorio extends JpaRepository<PolizaEntidad, Long> {
         """)
     Long contarPolizasEsteMes(@Param("idUsuario") Long idUsuario);
 
+
+    /**
+     * Cantidad de polizas Activas
+     */
+    @Query("""
+            SELECT COUNT(p)
+            FROM PolizaEntidad p
+            WHERE p.estado = 'ACTIVA'
+        """)
+    Long contarPolizasActivas();
+
+
+    /**
+     * Cantidad de polizas vencidas en este mes hasta el dia de hoy
+     */
+    @Query("""
+            SELECT COUNT(p)
+            FROM PolizaEntidad p
+            WHERE p.fechaFin <= CURRENT_DATE
+            AND MONTH(p.fechaFin) = MONTH(CURRENT_DATE)
+            AND YEAR(p.fechaFin) = YEAR(CURRENT_DATE)
+        """)
+    Long contarPolizasVencidasMes();
+
+
+    /**
+     * Cantidad de polizas canceladas en este mes hasta el dia de hoy
+     */
+    @Query(value = """
+            SELECT COUNT(*)
+            FROM Auditorias
+            WHERE accion = 'UPDATE'
+            AND tabla_afectada = 'Polizas'
+            AND fecha_accion <= CURRENT_DATE
+            AND MONTH(fecha_accion) = MONTH(CURRENT_DATE())
+            AND YEAR(fecha_accion) = YEAR(CURRENT_DATE())
+            AND detalles LIKE '%Estado: VENCIDA -> CANCELADA;%'
+        """, nativeQuery = true)
+    Long contarPolizasCanceladasMes();
+
 }

@@ -71,12 +71,12 @@ public class Usuario {
     /**
      * Fucnionalidad que tiene permitida solo el administrador para acticar los usuarios del sistema
      */
-    public void activar(Usuario usuarioObjetivo) {
+    public void activar(Usuario usuarioAccion) {
         if (this.estado == EstadoUsuario.ACTIVO) {
             throw new NegocioExcepcion("El usuario ya se encuentra ACTIVADO");
         }
 
-        if (!usuarioObjetivo.rol.esAdministrador()) {
+        if (!usuarioAccion.rol.esAdministrador()) {
             throw new PermisoInsuficienteExcepcion("Accion no permitida");
         }
 
@@ -86,11 +86,11 @@ public class Usuario {
     /**
      * Fucnionalidad que tiene permitida solo el administrador para desacticar los usuarios del sistema
      */
-    public void desactivar(Usuario usuarioObjetivo) {
+    public void desactivar(Usuario usuarioAccion) {
         if (this.estado == EstadoUsuario.INACTIVO) {
             throw new NegocioExcepcion("El usuario ya se encuentra INACTIVO");
         }
-        if (!usuarioObjetivo.rol.esAdministrador()) {
+        if (!usuarioAccion.rol.esAdministrador()) {
             throw new PermisoInsuficienteExcepcion("Accion no permitida");
         }
         this.estado = EstadoUsuario.INACTIVO;
@@ -99,11 +99,11 @@ public class Usuario {
     /**
      * Fucnionalidad que tiene permitida solo el administrador para suspender los usuarios del sistema
      */
-    public void suspender(Usuario usuarioObjetivo) {
+    public void suspender(Usuario usuarioAccion) {
         if (this.estado == EstadoUsuario.SUSPENDIDO) {
             throw new NegocioExcepcion("El usuario ya se encuentra SUSPENDIDO", "USUARIO_SUSPENDIDO");
         }
-        if (!usuarioObjetivo.rol.esAdministrador()) {
+        if (!usuarioAccion.rol.esAdministrador()) {
             throw new PermisoInsuficienteExcepcion("Accion no permitida");
         }
         this.estado = EstadoUsuario.SUSPENDIDO;
@@ -115,6 +115,10 @@ public class Usuario {
      * Solo administradores pueden hacer esto
      */
     public void cambiarRol(Rol nuevoRol, Usuario administrador) {
+        if (!esActivo()) {
+            throw new NegocioExcepcion("El usuario debe encontrarse ACTIVO");
+        }
+
         if (!administrador.esAdministrador()) {
             throw new PermisoInsuficienteExcepcion("Solo administradores pueden cambiar roles");
         }
@@ -131,7 +135,7 @@ public class Usuario {
     /**
      * Verifica si el usuario esta activo
      */
-    public boolean esAactivo() {
+    public boolean esActivo() {
         return this.estado == EstadoUsuario.ACTIVO;
     }
 

@@ -61,4 +61,11 @@ public interface UsuarioMapper {
      */
     UsuarioActualizarDTO toUsuarioActualizarDTO(VerDatosUsuarioPerfilDTO verDatosUsuarioPerfilDTO);
 
+
+    /**
+     * Sincroniza el estado del objeto de dominio hacia la entidad de persistencia
+     */
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void sincronizar (Usuario usuario, @MappingTarget UsuarioEntidad usuarioEntidad);
+
 }
