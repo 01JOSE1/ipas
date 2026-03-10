@@ -36,7 +36,7 @@ public class AsesorServicio {
         Map<String, Long> datosDashboardAsesor = new LinkedHashMap<>();
 
         datosDashboardAsesor.put("polizasCreadasMes", polizaRepositorio.contarPolizasEsteMes(idUsuario));
-        datosDashboardAsesor.put("gestionesMes", clienteRepositorio.contarGestionesMes(idUsuario));
+        datosDashboardAsesor.put("gestionesMes", usuarioRepositorio.contarGestionesMes(idUsuario));
         datosDashboardAsesor.put("clientesGestionados", clienteRepositorio.contarClientesPorUsuario(idUsuario));
 
         LocalDate limite = LocalDate.now().plusDays(8);
