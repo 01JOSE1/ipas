@@ -19,6 +19,17 @@ public class PdfPolizaServicio {
         this.almacenamientoServicio = almacenamientoServicio;
     }
 
+    /**
+     * Prepara un archivo PDF de póliza para procesamiento por IA.
+     * Valida que el PDF sea válido y legible, extrae el texto de la primera página,
+     * limpia y normaliza el texto eliminando artefactos, caracteres especiales y decimales innecesarios.
+     * El texto resultante es optimizado para procesamiento de lenguaje natural.
+     *
+     * @param archivo archivo MultipartFile del PDF a procesar
+     * @return String con el texto del PDF limpiado y normalizado para procesamiento por IA
+     * @throws IOException si hay error al leer el archivo PDF
+     * @throws ArchivoInvalidoExcepcion si el PDF está protegido, no contiene texto extraíble o no es un PDF válido
+     */
     public String prepararParaIa(MultipartFile archivo) throws IOException {
 
         try (PDDocument documento = validarArchivo(archivo)) {

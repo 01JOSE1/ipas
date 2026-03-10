@@ -21,11 +21,32 @@ public class Rol {
 
 
     //    FACTORY METHODS
+    /**
+     * Factory method que crea un nuevo rol en el sistema.
+     * 
+     * El nombre del rol se valida y normaliza a mayúsculas. Este método es utilizado
+     * cuando se registra un nuevo rol desde la capa de aplicación.
+     * 
+     * @param nombreRol el nombre del rol (2-15 caracteres, solo letras y espacios)
+     * @return una nueva instancia de Rol con ID null (a ser asignado por base de datos)
+     * @throws IllegalArgumentException si el nombre del rol incumple las restricciones de validación
+     */
     public static Rol crearNuevoRol(String nombreRol) {
         validarNombreRol(nombreRol);
         return new Rol(null, nombreRol.trim().toUpperCase());
     }
 
+    /**
+     * Factory method que reconstruye un rol desde los datos persistidos en base de datos.
+     * 
+     * Este método es utilizado por la capa de infraestructura para instanciar objetos Rol
+     * desde registros existentes. Valida que el ID sea válido y que el nombre cumpla las restricciones.
+     * 
+     * @param idRole el identificador único del rol en base de datos
+     * @param nombreRol el nombre del rol
+     * @return una instancia de Rol reconstruida con los parámetros proporcionados
+     * @throws IllegalArgumentException si el ID es nulo o no positivo, o si el nombre es inválido
+     */
     public static Rol reconstruir(Long idRole, String nombreRol) {
         validarIdRole(idRole);
         validarNombreRol(nombreRol);
@@ -34,10 +55,20 @@ public class Rol {
 
 
     //    METODOS DE NEGOCIO
+    /**
+     * Consulta que verifica si el rol es ADMINISTRADOR.
+     * 
+     * @return {@code true} si el nombre del rol es "ADMINISTRADOR", {@code false} en caso contrario
+     */
     public boolean esAdministrador() {
         return "ADMINISTRADOR".equalsIgnoreCase(this.nombreRol);
     }
 
+    /**
+     * Consulta que verifica si el rol es ASESOR.
+     * 
+     * @return {@code true} si el nombre del rol es "ASESOR", {@code false} en caso contrario
+     */
     public boolean esAsesor() {
         return "ASESOR".equalsIgnoreCase(this.nombreRol);
     }

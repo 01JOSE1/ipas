@@ -20,6 +20,12 @@ public class AseguradoraServicio {
         this.aseguradoraRepositorio = aseguradoraRepositorio;
     }
 
+    /**
+     * Obtiene la lista completa de aseguradoras disponibles en el sistema,
+     * formateada para ser utilizada en elementos select o listas desplegables.
+     *
+     * @return lista de ListarParaSelectAseguradoraDTO con el ID y nombre de cada aseguradora
+     */
     @Transactional(readOnly = true)
     public List<ListarParaSelectAseguradoraDTO> obtenerAseguradorasParaSelect() {
         registro.debug("Mostrando las aseguradoras");

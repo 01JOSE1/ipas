@@ -32,6 +32,18 @@ public class AdministradorServicio {
         this.clienteRepositorio = clienteRepositorio;
     }
 
+    /**
+     * Obtiene los datos estadísticos para el dashboard del administrador.
+     * Incluye información sobre usuarios activos, pólizas, clientes y actividad reciente.
+     *
+     * @return un mapa con las claves:
+     *         - "usuariosActivos": cantidad de usuarios con estado activo
+     *         - "totalPolizasActivas": cantidad total de pólizas activas
+     *         - "totalClientes": cantidad total de clientes registrados
+     *         - "actualizacionesHoy": cantidad de actualizaciones en el día actual
+     *         - "actualizacionesMes": cantidad de actualizaciones en el mes actual
+     *         - "asesoresConActividad": cantidad de asesores con actividad en los últimos 7 días
+     */
     public Map<String, Long> obtenerDatosDashboard() {
 
         registro.info("Obteniendo datos estadisticos para el dashboard del administrador");
@@ -50,6 +62,14 @@ public class AdministradorServicio {
         return datosDashboard;
     }
 
+    /**
+     * Obtiene el ranking de los 5 mejores asesores ordenados por cantidad de pólizas.
+     * Calcula el porcentaje de cada asesor en relación al que tiene más pólizas.
+     *
+     * @return lista de AsesorRankingDTO con la información del asesor y su porcentaje
+     *         ordenada de mayor a menor cantidad de pólizas. La lista estará vacía
+     *         si no hay asesores registrados.
+     */
     public List<AsesorRankingDTO> obtenerRankingAsesores() {
 
         List<AsesorRankingDTO> lista = polizaRepositorio.encontrarTopAsesores(PageRequest.of(0, 5));
@@ -67,6 +87,11 @@ public class AdministradorServicio {
         return lista;
     }
 
+    /**
+     * Obtiene la lista de actividades recientes de los usuarios del sistema.
+     *
+     * @return lista de ActividadRecienteDTO con la información más reciente de las acciones realizadas por los usuarios
+     */
     public List<ActividadRecienteDTO> obtenerActividadReciente() {
         return usuarioRepositorio.encontrarUltimaActividad();
     }

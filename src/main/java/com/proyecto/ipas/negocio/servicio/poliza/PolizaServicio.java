@@ -70,6 +70,13 @@ public class PolizaServicio {
         this.iaServicio = iaServicio;
     }
 
+    /**
+     * Obtiene una página de pólizas del sistema.
+     *
+     * @param pagina número de la página (0-basado)
+     * @param cantidad cantidad de registros por página
+     * @return Page con las pólizas paginadas convertidas a RespuestaPolizaDTO
+     */
     @Transactional(readOnly = true)
     public Page<RespuestaPolizaDTO> obtenerPolizasPaginados(int pagina, int cantidad) {
         Pageable pageable = PageRequest.of(pagina, cantidad);
@@ -78,12 +85,26 @@ public class PolizaServicio {
     }
 
 
+    /**
+     * Obtiene todas las pólizas asociadas a un cliente específico.
+     *
+     * @param idCliente ID del cliente
+     * @return lista de RespuestaPolizaDTO con todas las pólizas del cliente
+     */
+
     @Transactional(readOnly = true)
     public List<RespuestaPolizaDTO> obtenerPolizasCliente(Long idCliente) {
         registro.debug("Mostrando los registros de polizas del cliente: " + idCliente);
         return polizaRepositorio.findAllByCliente_IdCliente(idCliente).stream().map(RespuestaPolizaDTO::new).collect(Collectors.toList());
     }
 
+    /**
+     * Obtiene un archivo PDF de póliza almacenado en la ruta local.
+     *
+     * @param nombreArchivo nombre del archivo PDF a cargar
+     * @return Resource con el archivo PDF solicitado
+     * @throws RecursoNOEncontradoException si el archivo no existe en la base de datos
+     */
     @Transactional(readOnly = true)
     public Resource obtenerArchivo (String nombreArchivo) {
         if (!polizaRepositorio.existsByNumeroPdf(nombreArchivo)) {
@@ -92,11 +113,29 @@ public class PolizaServicio {
         return archivoAlmacenamientoServicio.cargarRecurso(nombreArchivo, archivoAlmacenamientoServicio.getRutaLocal());
     }
 
+    /**
+     * Obtiene un archivo PDF temporal (en proceso de carga).
+     *
+     * @param nombreArchivo nombre del archivo PDF temporal a cargar
+     * @return Resource con el archivo temporal solicitado
+     */
     @Transactional(readOnly = true)
     public Resource obtenerArchivoTemporal (String nombreArchivo) {
         return archivoAlmacenamientoServicio.cargarRecurso(nombreArchivo, archivoAlmacenamientoServicio.getRutaTemporal());
     }
 
+    /**
+     * Procesa un PDF de póliza utilizando IA para extraer datos automáticamente.
+     * El método valida y enriquece los datos extraídos (aseguradora y cliente)
+     * e intenta agrupar con clientes existentes si es posible.
+     * Almacena el archivo en una ruta temporal durante el proceso.
+     *
+     * @param archivo archivo MultipartFile del PDF de la póliza a procesar
+     * @param idCliente ID del cliente asociado a la póliza (puede ser null para detección automática)
+     * @return GestionPolizaDTO con los datos extraídos y enriquecidos del PDF
+     * @throws IOException si hay error al procesar el archivo
+     * @throws ArchivoInvalidoExcepcion si el formato del archivo no es válido
+     */
     @Transactional
     public GestionPolizaDTO procesarDatosPdfConIa(MultipartFile archivo, Long idCliente) throws IOException {
 
@@ -244,6 +283,19 @@ public class PolizaServicio {
 
 
 
+    /**
+     * Registra una nueva póliza en el sistema validando datos únicos.
+     * Valida que el código de póliza no esté duplicado y que la placa (si existe)
+     * no sea usada en otra póliza activa. Requiere un archivo PDF.
+     * El archivo se almacena en la ruta permanente tras ser guardada lafóliza.
+     *
+     * @param gestionPolizaDTO objeto DTO con los datos de la póliza a registrar
+     * @param idUsuario ID del usuario asesor que registra la póliza
+     * @return RespuestaPolizaDTO con los datos de la póliza creada
+     * @throws ConflictoExcepcion si el código de póliza existe o la placa está activa en otro cliente
+     * @throws RecursoNOEncontradoException si alguno de los IDs (cliente, ramo, aseguradora) no existe
+     * @throws NegocioExcepcion si ocurre un error de integridad de datos durante la creación
+     */
     @Transactional
     public RespuestaPolizaDTO registrarPoliza(GestionPolizaDTO gestionPolizaDTO, Long idUsuario) {
         registro.debug("Registrando poliza con codigo: {}", gestionPolizaDTO.getCodigoPoliza());
@@ -325,6 +377,13 @@ public class PolizaServicio {
         }
     }
 
+    /**
+     * Obtiene los datos de una póliza específica para ser editados.
+     *
+     * @param idPoliza ID de la póliza que se desea consultar
+     * @return GestionPolizaDTO con la información de la póliza y su cliente
+     * @throws RecursoNOEncontradoException si el ID de la póliza no existe en la base de datos
+     */
     @Transactional(readOnly = true)
     public GestionPolizaDTO obtenerPoliza(Long idPoliza) {
         registro.debug("Obtener poliza con ID: {}", idPoliza);
@@ -334,6 +393,18 @@ public class PolizaServicio {
         return gestionPolizaDTO;
     }
 
+    /**
+     * Actualiza los datos de una póliza existente validando el código único.
+     * Permite actualizar el cliente, ramo, aseguradora y archivo PDF asociados.
+     * Establece una variable de sesión para que los triggers de BD registren quién hizo el cambio.
+     *
+     * @param idPoliza ID de la póliza a actualizar
+     * @param gestionPolizaDTO objeto DTO con los nuevos datos de la póliza
+     * @param idUsuarioActual ID del usuario autenticado que realiza la actualización
+     * @throws RecursoNOEncontradoException si el ID de la póliza o sus referencias no existen
+     * @throws ConflictoExcepcion si el código de póliza ya existe para otra póliza
+     * @throws NegocioExcepcion si ocurre un error de integridad de datos durante la actualización
+     */
     @Transactional
     public void actualizarPoliza(Long idPoliza, GestionPolizaDTO gestionPolizaDTO, Long idUsuarioActual) {
         registro.debug("Actualizando poliza con numero de documento: {}", gestionPolizaDTO.getCodigoPoliza());
@@ -400,6 +471,15 @@ public class PolizaServicio {
     }
 
 
+    /**
+     * Cancela una póliza existente registrando el motivo de la cancelación.
+     * El cambio de estado es registrado indicando quién realizó la acción.
+     * Utiliza un trigger de base de datos para auditar los cambios.
+     *
+     * @param cancelarPolizaDTO objeto DTO que contiene el ID de la póliza y el motivo de cancelación
+     * @param idUsuarioActual ID del usuario autenticado que realiza la cancelación
+     * @throws RecursoNOEncontradoException si el ID de la póliza no existe en la base de datos
+     */
     @Transactional
     public void cancelarPoliza(CancelarPolizaDTO cancelarPolizaDTO, Long idUsuarioActual) {
 

@@ -24,6 +24,11 @@ public class RolServicio {
         this.rolRepositorio = rolRepositorio;
     }
 
+    /**
+     * Obtiene la lista completa de todos los roles disponibles en el sistema.
+     *
+     * @return lista de RespuestaRolDTO con la información de todos los roles registrados
+     */
     @Transactional(readOnly = true)
     public List<RespuestaRolDTO> obtenerRoles() {
         registro.debug("Mostrando los registros de roles");

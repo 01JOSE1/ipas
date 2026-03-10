@@ -56,6 +56,13 @@ public class ClienteServicio {
     }
 
 
+    /**
+     * Obtiene una página de clientes ordenados según la configuración de paginación.
+     *
+     * @param pagina número de la página (0-basado)
+     * @param cantidad cantidad de registros por página
+     * @return Page con los clientes paginados convertidos a RespuestaClienteDTO
+     */
     @Transactional(readOnly = true)
     public Page<RespuestaClienteDTO> obtenerClientesPaginados(int pagina, int cantidad) {
         Pageable pageable = PageRequest.of(pagina, cantidad);
@@ -63,12 +70,31 @@ public class ClienteServicio {
         return clienteRepositorio.findAll(pageable).map(RespuestaClienteDTO::new);
     }
 
+    /**
+     * Busca clientes por un término específico (nombre, documento, teléfono o correo).
+     * Utiliza una búsqueda flexible que coincide parcialmente con los datos del cliente.
+     *
+     * @param termino término de búsqueda que se compara contra los datos del cliente
+     * @return lista de BusquedaClienteDTO con los clientes que coinciden con el término
+     */
     @Transactional(readOnly = true)
     public List<BusquedaClienteDTO> buscarClientes(String termino) {
         return clienteRepositorio.buscarClientes(termino);
     }
 
 
+    /**
+     * Registra un nuevo cliente en el sistema validando datos únicos.
+     * Valida que el número de documento, correo y teléfono no estén duplicados.
+     * El cliente es asignado al usuario especificado.
+     *
+     * @param idUsuario ID del usuario asesor que registra al cliente
+     * @param gestionClienteDTO objeto DTO con los datos del cliente a registrar
+     * @return objeto RespuestaClienteDTO con los datos del cliente creado
+     * @throws ConflictoExcepcion si el número de documento, correo o teléfono ya existen
+     * @throws RecursoNOEncontradoException si el ID del usuario no existe
+     * @throws NegocioExcepcion si ocurre un error de integridad de datos durante la creación
+     */
     @Transactional
     public RespuestaClienteDTO registrarCliente(Long idUsuario, GestionClienteDTO gestionClienteDTO){
 
@@ -109,7 +135,7 @@ public class ClienteServicio {
             clienteEntidad.setUsuario(usuarioEntidad);
 
             ClienteEntidad clienteGuardado = clienteRepositorio.save(clienteEntidad);
-
+    
             registro.debug("Cliente guardado: {}", clienteEntidad.getIdCliente());
 
             return clienteMapper.toRespuestaCliente(clienteGuardado);
@@ -121,6 +147,13 @@ public class ClienteServicio {
         }
     }
 
+    /**
+     * Obtiene los datos de un cliente específico para ser editados.
+     *
+     * @param idCliente ID del cliente que se desea consultar
+     * @return objeto GestionClienteDTO con la información del cliente
+     * @throws RecursoNOEncontradoException si el ID del cliente no existe en la base de datos
+     */
     @Transactional(readOnly = true)
     public GestionClienteDTO obtenerCliente(Long idCliente) {
         registro.debug("Obtener cliente con ID: {}", idCliente);
@@ -131,6 +164,19 @@ public class ClienteServicio {
     }
 
 
+    /**
+     * Actualiza los datos de un cliente existente validando datos únicos.
+     * Valida que el número de documento, correo y teléfono no estén duplicados en otros clientes.
+     * Establece una variable de sesión en la base de datos para que los triggers puedan identificar
+     * quién realizó la actualización.
+     *
+     * @param idCliente ID del cliente a actualizar
+     * @param gestionClienteDTO objeto DTO con los nuevos datos del cliente
+     * @param idUsuarioActual ID del usuario autenticado que realiza la actualización
+     * @throws RecursoNOEncontradoException si el ID del cliente no existe
+     * @throws ConflictoExcepcion si el número de documento, correo o teléfono ya existen para otro cliente
+     * @throws NegocioExcepcion si ocurre un error de integridad de datos durante la actualización
+     */
     @Transactional
     public void actualizarCliente(Long idCliente, GestionClienteDTO gestionClienteDTO, Long idUsuarioActual) {
 

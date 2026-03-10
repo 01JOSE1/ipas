@@ -18,11 +18,39 @@ public class Aseguradora {
         validarInvariantes();
     }
 
+    /**
+     * Factory method que registra una nueva aseguradora en el sistema.
+     * 
+     * Se valida que la aseguradora tenga todos los datos requeridos: nombre, número de documento,
+     * teléfono de contacto y credenciales de acceso. Los datos se validan al momento de creación
+     * mediante los invariantes del dominio.
+     * 
+     * @param nombre el nombre o razón social de la aseguradora
+     * @param numeroDocumento el número de identificación tributaria (NIT u equivalente)
+     * @param telefono el número de teléfono de contacto de la aseguradora
+     * @param clave la credencial de acceso del sistema para la aseguradora
+     * @return una nueva instancia de Aseguradora con ID null (a ser asignado por base de datos)
+     * @throws IllegalArgumentException si alguno de los parámetros obligatorios es nulo o vacío
+     */
     public static Aseguradora registrar (String nombre, String numeroDocumento, String telefono, String clave) {
 
         return new Aseguradora(nombre, numeroDocumento, telefono, clave);
     }
 
+    /**
+     * Factory method que reconstruye una aseguradora desde los datos persistidos en base de datos.
+     * 
+     * Este método es utilizado por la capa de infraestructura para instanciar objetos Aseguradora
+     * desde registros existentes. Valida que todos los datos obligatorios sean válidos.
+     * 
+     * @param idAseguradora el identificador único de la aseguradora en base de datos
+     * @param nombre el nombre de la aseguradora
+     * @param numeroDocumento el número de documento de la aseguradora
+     * @param telefono el teléfono de contacto
+     * @param clave la credencial de acceso del sistema
+     * @return una instancia de Aseguradora reconstruida con los parámetros proporcionados
+     * @throws IllegalArgumentException si any mandatory field is null or blank
+     */
     public static Aseguradora reconstruir (Long idAseguradora, String nombre, String numeroDocumento, String telefono, String clave) {
 
         Aseguradora aseguradora = new Aseguradora(nombre, numeroDocumento, telefono, clave);

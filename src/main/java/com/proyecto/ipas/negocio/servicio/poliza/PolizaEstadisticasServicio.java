@@ -22,6 +22,22 @@ public class PolizaEstadisticasServicio {
         this.polizaRepositorio = polizaRepositorio;
     }
 
+    /**
+     * Obtiene un conjunto completo de estadísticas sobre las pólizas del sistema.
+     * Incluye totales, conteos por estado y datos desagregados para gráficas de ramos y aseguradoras.
+     *
+     * @return un mapa con las siguientes claves:
+     *         - "totalPolizas": cantidad total de pólizas registradas
+     *         - "totalPolizasActivas": cantidad de pólizas con estado activo
+     *         - "polizasVencidasHastaHoyEsteMes": cantidad de pólizas vencidas en el mes actual
+     *         - "polizasCanceladasHastaHoyEsteMes": cantidad de pólizas canceladas en el mes actual
+     *         - "estadoLabels": etiquetas de estados de pólizas
+     *         - "estadoValores": cantidad de pólizas por estado
+     *         - "ramoLabels": nombres de los ramos de seguros
+     *         - "ramoValores": cantidad de pólizas por ramo
+     *         - "aseguradoraLabels": nombres de las aseguradoras
+     *         - "aseguradoraValores": cantidad de pólizas por aseguradora
+     */
     public Map<String, Object> obtenerEstadisticas() {
 
         registro.info("Obteniendo datos estadisticos de las polizas...");

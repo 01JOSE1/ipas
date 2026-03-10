@@ -17,6 +17,14 @@ public class   AutenticacionServicio implements UserDetailsService {
         this.usuarioRepositorio = usuarioRepositorio;
     }
 
+    /**
+     * Carga los detalles de seguridad de un usuario por su correo electrónico.
+     * Este método es utilizado por Spring Security para la autenticación.
+     *
+     * @param email correo electrónico del usuario a buscar
+     * @return objeto UsuarioSeguridad que implementa UserDetails con los datos del usuario
+     * @throws UsernameNotFoundException si no existe un usuario registrado con el email proporcionado
+     */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 

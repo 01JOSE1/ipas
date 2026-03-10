@@ -29,6 +29,18 @@ public class AsesorServicio {
         this.usuarioRepositorio = usuarioRepositorio;
     }
 
+    /**
+     * Obtiene los datos estadísticos del dashboard de un asesor específico.
+     * Incluye información sobre pólizas creadas, gestiones, clientes y pólizas próximas a vencer.
+     *
+     * @param idUsuario ID del asesor
+     * @return un mapa con las claves:
+     *         - "polizasCreadasMes": cantidad de pólizas creadas en el mes actual
+     *         - "gestionesMes": cantidad de gestiones realizadas en el mes actual
+     *         - "clientesGestionados": cantidad total de clientes asignados al asesor
+     *         - "polizasProximasVencer": cantidad de pólizas que vencerán en 8 días
+     * @throws RecursoNOEncontradoException si el ID del asesor no existe en la base de datos
+     */
     @Transactional(readOnly = true)
     public Map<String, Long> obtenerDatosParaDashboard(Long idUsuario) {
         usuarioRepositorio.findById(idUsuario).orElseThrow(() -> new RecursoNOEncontradoException("Usuario", "id", idUsuario));

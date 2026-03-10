@@ -39,6 +39,27 @@ public class Poliza {
         this.aseguradora = aseguradora;
     }
 
+    /**
+     * Factory method que registra una nueva póliza de seguro en el sistema.
+     * 
+     * Se valida que el código de póliza sea único, que las fechas sean válidas (mínimo 1 año de vigencia),
+     * que las primas sean coherentes (prima total > prima neta > 0), y que el ramo AUTOMOVIL tenga placa.
+     * La póliza se crea con estado ACTIVA. El estado de pago se establece por defecto a PENDIENTE si no se especifica.
+     * 
+     * @param codigoPoliza el código único de la póliza (letras, números y guiones, sin espacios)
+     * @param fechaInicio la fecha de inicio de vigencia de la póliza
+     * @param fechaFin la fecha de fin de vigencia (mínimo 1 año después de fechaInicio)
+     * @param primaNeta la prima neta sin comisiones (debe ser menor a primaTotal)
+     * @param primaTotal la prima total incluyendo comisiones
+     * @param estadoPago el estado de pago de la póliza {@link EstadoPagoPoliza} (PENDIENTE si es null)
+     * @param placa la placa del vehículo (obligatorio si es ramo AUTOMOVIL, opcional para otros)
+     * @param ramo el ramo de seguro {@link Ramo} de la póliza
+     * @param aseguradora la aseguradora responsable {@link Aseguradora}
+     * @return una nueva instancia de Poliza con estado ACTIVA
+     * @throws IllegalArgumentException si el código de póliza no cumple formato
+     * @throws ValidacionDatosExcepcion si fechas, primas, o ramo incumplen las reglas de negocio
+     * @throws NegocioExcepcion si el ramo AUTOMOVIL falta placa
+     */
     public static Poliza registrar(String codigoPoliza, LocalDate fechaInicio, LocalDate fechaFin, BigDecimal primaNeta, BigDecimal primaTotal, EstadoPagoPoliza estadoPago, String placa, Ramo ramo, Aseguradora aseguradora) {
 
         validarCodigoPoliza(codigoPoliza);
@@ -52,6 +73,28 @@ public class Poliza {
         return poliza;
     }
 
+    /**
+     * Factory method que reconstruye una póliza desde los datos persistidos en base de datos.
+     * 
+     * Este método es utilizado por la capa de infraestructura para instanciar objetos Poliza
+     * desde registros existentes. Valida que el ID sea válido y que todos los parámetros cumplan
+     * las reglas de negocio, incluyendo la validación especial para ramo AUTOMOVIL.
+     * 
+     * @param id el identificador único de la póliza en base de datos
+     * @param codigoPoliza el código de la póliza
+     * @param fechaInicio la fecha de inicio de vigencia
+     * @param fechaFin la fecha de fin de vigencia
+     * @param primaNeta la prima neta de la póliza
+     * @param primaTotal la prima total de la póliza
+     * @param estado el estado actual de la póliza {@link EstadoPoliza}
+     * @param estadoPago el estado de pago actual {@link EstadoPagoPoliza}
+     * @param placa la placa del vehículo (si aplica)
+     * @param ramo el ramo de seguro {@link Ramo}
+     * @param aseguradora la aseguradora responsable {@link Aseguradora}
+     * @return una instancia de Poliza reconstruida con todos los parámetros proporcionados
+     * @throws IllegalArgumentException si el ID es nulo o no positivo, o código de póliza inválido
+     * @throws ValidacionDatosExcepcion si fechas, primas, o ramo incumplen las reglas
+     */
     public static Poliza reconstruir(Long id, String codigoPoliza, LocalDate fechaInicio, LocalDate fechaFin, BigDecimal primaNeta, BigDecimal primaTotal, EstadoPoliza estado, EstadoPagoPoliza estadoPago, String placa, Ramo ramo, Aseguradora aseguradora) {
 
         validarIdPoliza(id);
@@ -67,6 +110,16 @@ public class Poliza {
     }
 
 
+    /**
+     * Comando que cancela la póliza de seguro.
+     * 
+     * Solo es posible cancelar pólizas que no estén vencidas y que no hayan sido canceladas previamente.
+     * Se registra un motivo de cancelación que se añade al historial de descripción de la póliza.
+     * Una vez cancelada, la póliza cambia a estado {@link EstadoPoliza#CANCELADA}.
+     * 
+     * @param motivo la razón de la cancelación (mínimo 4 caracteres, obligatorio)
+     * @throws NegocioExcepcion si la póliza ya está vencida, ya está cancelada, o el motivo es inválido
+     */
     public void cancelarPoliza(String motivo) {
 
         if (esVencida(fechaFin)) {
@@ -83,6 +136,14 @@ public class Poliza {
     }
 
 
+    /**
+     * Consulta que verifica si la póliza se encuentra vencida.
+     * 
+     * Una póliza está vencida si su fecha de fin es anterior a la fecha actual del sistema.
+     * 
+     * @param fechaFin la fecha de fin de vigencia de la póliza
+     * @return {@code true} si la póliza está vencida, {@code false} en caso contrario
+     */
     private static boolean esVencida(LocalDate fechaFin) {
         if (fechaFin.isBefore(LocalDate.now())) {
             return true;
@@ -130,7 +191,16 @@ public class Poliza {
         return estadoPago;
     }
 
-
+    /**
+     * Validación que verifica si el ramo es AUTOMOVIL y requiere placa obligatoria.
+     *
+     * Para ramos de tipo AUTOMOVIL, la placa del vehículo es un campo obligatorio.
+     * Los otros ramos de seguro no requieren placa.
+     *
+     * @param ramo el ramo de seguro a validar {@link Ramo}
+     * @param placa la placa del vehículo (requerida si ramo es AUTOMOVIL)
+     * @throws ValidacionDatosExcepcion si el ramo es AUTOMOVIL y la placa es nula o vacía
+     */
     private static void validarRamo (Ramo ramo, String placa) {
         if (ramo.esRamoAutomovil() && (placa == null || placa.isBlank())) {
             ArrayList<ValidacionDatosExcepcion.ErrorCampo> errores = new ArrayList<>();

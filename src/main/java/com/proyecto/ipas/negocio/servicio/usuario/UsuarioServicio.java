@@ -45,6 +45,14 @@ public class UsuarioServicio {
         this.rolMapper = rolMapper;
     }
 
+    /**
+     * Obtiene una página de usuarios excluyendo el usuario especificado.
+     *
+     * @param pagina número de la página (0-basado)
+     * @param cantidad cantidad de registros por página
+     * @param idUsuario ID del usuario a excluir de los resultados
+     * @return Page con los usuarios paginados convertidos a RespuestaUsuarioDTO
+     */
     @Transactional(readOnly = true)
     public Page<RespuestaUsuarioDTO> obtenerUsuariosPaginados(int pagina, int cantidad, Long idUsuario) {
         registro.debug("Mostrando los registros de usuarios");
@@ -54,6 +62,13 @@ public class UsuarioServicio {
 
     }
 
+    /**
+     * Cambia el estado de un usuario (activo, inactivo o suspendido).
+     * El cambio de estado es registrado indicando quién realizó la acción.
+     *
+     * @param cambiarEstadoUsuarioDTO objeto DTO que contiene el ID del usuario a cambiar, el ID del usuario que realiza la acción y el nuevo estado
+     * @throws RecursoNOEncontradoException si alguno de los IDs de usuarios no existe en la base de datos
+     */
     @Transactional
     public void cambiarEstadoUsuario(CambiarEstadoUsuarioDTO cambiarEstadoUsuarioDTO) {
         registro.debug("Cambiando estado de usuario id {} ", cambiarEstadoUsuarioDTO.getIdUsuarioCambio());
@@ -80,7 +95,7 @@ public class UsuarioServicio {
         }
 
         usuarioMapper.sincronizar(usuarioCambio, usuarioEntidadCambio);
-
+    
         usuarioRepositorio.save(usuarioEntidadCambio);
 
         registro.debug("Cambio de estado de usuario con exito: {}", usuarioEntidadCambio.getIdUsuario());
@@ -88,6 +103,15 @@ public class UsuarioServicio {
     }
 
 
+
+    /**
+     * Cambia el rol asignado a un usuario.
+     * El cambio es registrado indicando quién realizó la acción.
+     *
+     * @param cambiarRolUsuarioDTO objeto DTO que contiene el ID del usuario cuyo rol será modificado, el ID del usuario que realiza la acción y el ID del nuevo rol
+     * @return el nombre del nuevo rol asignado al usuario
+     * @throws RecursoNOEncontradoException si alguno de los IDs de usuarios o del rol no existe
+     */
     @Transactional
     public String cambiarRolUsuario (CambiarRolUsuarioDTO cambiarRolUsuarioDTO) {
         registro.debug("Cambiando rol de usuario id {} ", cambiarRolUsuarioDTO.getIdUsuarioCambio());

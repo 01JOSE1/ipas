@@ -48,6 +48,17 @@ public class UsuarioAutenticacionServicio {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Crea un nuevo usuario en el sistema con un rol predeterminado (ASESOR).
+     * Valida que el correo electrónico no esté duplicado antes de crear el usuario.
+     * La contraseña es codificada antes de ser almacenada en la base de datos.
+     *
+     * @param registroDTO objeto DTO con nombre, apellido, correo y contraseña del nuevo usuario
+     * @return objeto RespuestaDTO con los datos del usuario creado incluyendo su ID
+     * @throws ConflictoExcepcion si el correo electrónico ya existe en la base de datos
+     * @throws RecursoNOEncontradoException si no existe el rol predeterminado (ASESOR) en la base de datos
+     * @throws NegocioExcepcion si ocurre un error de integridad de datos durante la creación
+     */
     @Transactional
     public RespuestaDTO crearUsuario(RegistroDTO registroDTO){
 
@@ -88,15 +99,32 @@ public class UsuarioAutenticacionServicio {
     }
 
 
+    /**
+     * Obtiene los datos del perfil de un usuario por su ID.
+     *
+     * @param idUsuario ID del usuario cuyo perfil se desea consultar
+     * @return objeto VerDatosUsuarioPerfilDTO con la información del perfil del usuario
+     * @throws RecursoNOEncontradoException si el ID del usuario no existe en la base de datos
+     */
     public VerDatosUsuarioPerfilDTO verDatosUsuario(Long idUsuario){
         registro.debug("Leer datos del usuario con ID: {}", idUsuario);
-
+    
         UsuarioEntidad usuarioEntidad = usuarioRepositorio.findById(idUsuario).orElseThrow(() -> new RecursoNOEncontradoException("USUARIO", "ID", idUsuario));
 
         return usuarioMapper.toVerDatosUsuarioPerfilDTO(usuarioEntidad);
     }
 
 
+    /**
+     * Actualiza los datos del perfil de un usuario existente.
+     * Valida que el número de documento y teléfono no estén duplicados antes de actualizar.
+     *
+     * @param idUsuario ID del usuario a actualizar
+     * @param usuarioActualizarDTO objeto DTO con los nuevos datos del usuario
+     * @throws RecursoNOEncontradoException si el ID del usuario no existe en la base de datos
+     * @throws ConflictoExcepcion si el número de documento o teléfono ya existen para otro usuario
+     * @throws NegocioExcepcion si ocurre un error de integridad de datos durante la actualización
+     */
     @Transactional
     public void actualizarUsuario(Long idUsuario, UsuarioActualizarDTO usuarioActualizarDTO){
 

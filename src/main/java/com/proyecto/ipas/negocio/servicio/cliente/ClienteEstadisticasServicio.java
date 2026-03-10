@@ -21,6 +21,24 @@ public class ClienteEstadisticasServicio {
         this.clienteRepositorio = clienteRepositorio;
     }
 
+    /**
+     * Obtiene un conjunto completo de estadísticas sobre los clientes del sistema.
+     * Incluye totales, clientes nuevos, estado de pólizas y datos desagregados para gráficas.
+     *
+     * @return un mapa con las siguientes claves:
+     *         - "totalClientes": cantidad total de clientes registrados
+     *         - "clientesNuevosMes": cantidad de clientes creados en el mes actual
+     *         - "clientesActivos": cantidad de clientes con pólizas activas
+     *         - "clientesInactivos": cantidad de clientes sin pólizas activas
+     *         - "activosLabels": etiquetas para la gráfica de estado de pólizas
+     *         - "activosValores": valores numéricos para la gráfica de estado de pólizas
+     *         - "ciudadLabels": ciudades de los clientes
+     *         - "ciudadValores": cantidad de clientes por ciudad
+     *         - "estadoCivilLabels": estados civiles registrados
+     *         - "estadoCivilValores": cantidad de clientes por estado civil
+     *         - "tipoDocLabels": tipos de documentos registrados
+     *         - "tipoDocValores": cantidad de clientes por tipo de documento
+     */
     public Map<String, Object> obtenerEstadisticas() {
 
         registro.info("Obteniendo estadisticas de los clientes...");

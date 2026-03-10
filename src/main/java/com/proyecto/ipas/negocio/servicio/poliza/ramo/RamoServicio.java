@@ -20,6 +20,12 @@ public class RamoServicio {
         this.ramoRepositorio = ramoRepositorio;
     }
 
+    /**
+     * Obtiene la lista completa de ramos (tipos de seguros) disponibles en el sistema,
+     * formateada para ser utilizada en elementos select o listas desplegables.
+     *
+     * @return lista de ListarParaSelectRamoDTO con el ID y nombre de cada ramo
+     */
     @Transactional(readOnly = true)
     public List<ListarParaSelectRamoDTO> obtenerRamosParaSelect() {
         registro.debug("Mostrando los ramos de las polizas");
