@@ -23,6 +23,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+/**
+ * Controlador de gestión de usuarios para el administrador.
+ * 
+ * Implementa acciones CRUD para usuarios: listar, cambiar estado y rol.
+ * Solo accesible por usuarios con rol ADMINISTRADOR.
+ */
 @Controller
 @RequestMapping("/administrador/usuario")
 public class AdministradorUsuarioControlador {
@@ -33,7 +39,17 @@ public class AdministradorUsuarioControlador {
     @Autowired
     private RolServicio rolServicio;
 
-
+    /**
+     * Muestra una lista paginada de todos los usuarios del sistema (excepto el actual).
+     * 
+     * Incluye información completa del usuario y opciones para cambiar estado y rol.
+     * 
+     * @param pagina número de página (por defecto 0)
+     * @param cantidad cantidad de registros por página (por defecto 10)
+     * @param modelo el modelo MVC
+     * @param autenticacion el usuario autenticado
+     * @return vista con la lista de usuarios paginada
+     */
     @GetMapping("ver-usuarios")
     public String verUsuarios(
             @RequestParam(defaultValue = "0") int pagina,
@@ -61,6 +77,17 @@ public class AdministradorUsuarioControlador {
     }
 
 
+    /**
+     * Cambia el estado de un usuario (ACTIVO, SUSPENDIDO, INACTIVO).
+     * 
+     * Registra quién realizó el cambio y valida permisos administrativos.
+     * 
+     * @param cambiarEstadoUsuarioDTO datos del cambio de estado
+     * @param usuarioAutenticado el administrador realizando la acción
+     * @param redirectAttributes para pasar atributos en la redirección
+     * @param modelo el modelo MVC
+     * @return redirección a la lista de usuarios
+     */
     @PostMapping("cambiar-estado")
     public String cambiarEstado(@Valid @ModelAttribute("cambiarEstadoUsuarioDTO") CambiarEstadoUsuarioDTO cambiarEstadoUsuarioDTO,
                                 Authentication usuarioAutenticado,
@@ -94,6 +121,17 @@ public class AdministradorUsuarioControlador {
     }
 
 
+    /**
+     * Cambia el rol de un usuario (ADMINISTRADOR a ASESOR o viceversa).
+     * 
+     * Registra quién realizó el cambio y valida permisos administrativos.
+     * 
+     * @param cambiarRolUsuarioDTO datos del cambio de rol
+     * @param usuarioAutenticado el administrador realizando la acción
+     * @param redirectAttributes para pasar atributos en la redirección
+     * @param modelo el modelo MVC
+     * @return redirección a la lista de usuarios
+     */
     @PostMapping("cambiar-rol")
     public String cambiarRol(@Valid @ModelAttribute("cambiarRolUsuarioDTO")CambiarRolUsuarioDTO cambiarRolUsuarioDTO,
                              Authentication usuarioAutenticado,

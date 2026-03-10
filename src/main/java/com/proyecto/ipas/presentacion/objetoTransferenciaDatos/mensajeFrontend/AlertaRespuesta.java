@@ -8,9 +8,22 @@ import java.util.List;
 
 
 /**
- * DTO para respuestas de error estandarizadas
+ * DTO para respuestas de error estandarizadas.
  * Este objeto se convierte a JSON cuando se hace una petición AJAX
- * o se usa para el modelo en Thymeleaf
+ * o se usa para el modelo en Thymeleaf.
+ *
+ * @param <T> Tipo genérico para datos adicionales en la respuesta
+ *
+ * Parámetros del record:
+ * - marcaTiempo: Marca de tiempo de la respuesta (yyyy-MM-dd HH:mm:ss)
+ * - tipo: Tipo de alerta (éxito, advertencia, error)
+ * - estado: Código de estado HTTP
+ * - nombre: Nombre del error HTTP
+ * - mensaje: Mensaje para el usuario final
+ * - nombreCodigo: Código de error del sistema IPAS
+ * - ruta: Ruta donde se ocasionó el problema
+ * - campoErrorLista: Lista inmutable con validaciones de campos (si aplica)
+ * - datoAdicional: Dato genérico adicional de tipo T
  */
 public record AlertaRespuesta<T> (
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -18,23 +31,25 @@ public record AlertaRespuesta<T> (
 
         TipoAlerta tipo,
 
-        int estado, // Manejar codigos de estados HTTP
+        int estado,
 
-        String nombre, // nombre del error HTTP
+        String nombre,
 
-        String mensaje, // Mensaje para el usuario final
+        String mensaje,
 
-        String nombreCodigo, // Codigo de error del sistema IPAS
+        String nombreCodigo,
 
-        String ruta, // Donde se ocasiono el problema
+        String ruta,
 
-        List<CampoAlerta> campoErrorLista, // Lista inmutable pora las validaciones de campos
+        List<CampoAlerta> campoErrorLista,
 
         T datoAdicional
 
 ){
     /**
-     * Constructor compacto con algunos valores por defecto
+     * Constructor compacto con algunos valores por defecto.
+     * Inicializa marcaTiempo al momento actual si es null,
+     * e inicializa campoErrorLista como una lista inmutable vacía si es null.
      */
     public AlertaRespuesta {
         if (marcaTiempo == null) {
@@ -42,7 +57,6 @@ public record AlertaRespuesta<T> (
         }
 
         if (campoErrorLista == null) {
-            // Lista vacia inmutable
             campoErrorLista = List.of();
         }
     }

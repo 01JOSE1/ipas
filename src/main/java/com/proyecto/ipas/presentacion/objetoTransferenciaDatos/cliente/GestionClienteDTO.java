@@ -11,11 +11,20 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
+/**
+ * DTO para la gestión y validación de datos de clientes.
+ * Utilizado en procesos de creación, actualización y consulta de clientes.
+ */
 @Data
 public class GestionClienteDTO {
 
+    /** Identificador único del cliente */
     private Long idCliente;
 
+    /**
+     * Nombre del cliente
+     * Validado para contener solo caracteres alfanuméricos y algunos caracteres especiales
+     */
     @Length(min = 2, max = 40, message = "El nombre no debe ser menor a 2 y mayor a 40 caracteres")
     @NotBlank(message = "El nombre no debe estar vacio", groups = EnCreacion.class)
     @Pattern(
@@ -35,8 +44,14 @@ public class GestionClienteDTO {
     @NotBlank(message = "El numero de documento es obligatorio", groups = EnCreacion.class)
     private String numeroDocumento;
 
+    /**
+     * Fecha de nacimiento del cliente.
+     * Utiliza el formato yyyy-MM-dd requerido por Spring DateTimeFormat para Thymeleaf.
+     * Nota: El formato en JSON API usa dd-MM-yyyy según especificación JsonFormat
+     * (actualmente comentado, se usa DateTimeFormat como principal)
+     */
     @Past(message = "selecciona una fecha del pasado")
-    @DateTimeFormat(pattern = "yyyy-MM-dd") // Formato correcto de fecha para trabajar Thymleaf
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     //    @JsonFormat(pattern = "dd-MM-yyyy") // El formato que verás en el JSON de la API
     private LocalDate fechaNacimiento;
 
@@ -58,6 +73,13 @@ public class GestionClienteDTO {
     private String ciudad;
 
 
+    /**
+     * Actualiza selectivamente los atributos de una entidad ClienteEntidad basándose
+     * en los valores presentes en este DTO.
+     * Solo actualiza campos si el valor en el DTO no es null y no está vacío.
+     *
+     * @param clienteEntidad la entidad del cliente a actualizar
+     */
     public void actualizarCliente(ClienteEntidad clienteEntidad) {
         if (nombre != null && !nombre.isBlank()) {
             clienteEntidad.setNombre(nombre);

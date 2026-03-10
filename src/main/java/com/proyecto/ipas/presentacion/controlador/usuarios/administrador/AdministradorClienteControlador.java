@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Map;
 
+/**
+ * Controlador de estadísticas de clientes para el administrador.
+ */
 @Controller
 @RequestMapping("/administrador/cliente")
 public class AdministradorClienteControlador {
@@ -16,6 +19,14 @@ public class AdministradorClienteControlador {
     @Autowired
     private ClienteEstadisticasServicio clienteEstadisticasServicio;
 
+    /**
+     * Muestra estadísticas y análisis de la cartera de clientes.
+     * 
+     * Incluye distribuciones por ciudad, estado civil, tipo de documento, etc.
+     * 
+     * @param modelo el modelo MVC
+     * @return vista con gráficas y análisis de clientes
+     */
     @GetMapping("estadisticas")
     public String verEstadisticasClientes(Model modelo) {
 

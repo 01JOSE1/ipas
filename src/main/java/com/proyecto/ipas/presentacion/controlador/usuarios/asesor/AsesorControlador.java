@@ -24,6 +24,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 
+/**
+ * Controlador principal del asesor.
+ * 
+ * Maneja el dashboard del asesor, perfil y su actualización.
+ * Solo accesible por usuarios con rol ASESOR.
+ */
 @Controller
 @RequestMapping("/asesor")
 public class AsesorControlador {
@@ -42,6 +48,20 @@ public class AsesorControlador {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
     }
 
+    /**
+     * Muestra el dashboard principal del asesor con sus estadísticas personales.
+     * 
+     * Recupera y muestra:
+     * - Cantidad de clientes asignados
+     * - Pólizas activas y vencidas
+     * - Gestiones realizadas en el mes
+     * - Actividad reciente
+     * 
+     * @param sesion la sesión HTTP actual
+     * @param modelo el modelo MVC
+     * @param usuarioAutenticado el asesor logueado
+     * @return vista del dashboard del asesor
+     */
     @GetMapping("/")
     public String dashboard(HttpSession sesion, Model modelo, Authentication usuarioAutenticado) {
 
@@ -62,9 +82,13 @@ public class AsesorControlador {
         return "usuarios/asesores/dashboardPrincipal";
     }
 
-    /* -------------------------------------------------------
-       PERFIL — GET
-    ------------------------------------------------------- */
+    /**
+     * Muestra el perfil del asesor logueado con sus datos actuales.
+     * 
+     * @param model el modelo MVC
+     * @param usuarioAutenticado el usuario autenticado del sistema
+     * @return vista del perfil del asesor
+     */
     @GetMapping("/perfil")
     public String perfil(Model model, Authentication usuarioAutenticado) {
 
@@ -79,9 +103,19 @@ public class AsesorControlador {
         return "usuarios/asesores/perfilAsesor";
     }
 
-    /* -------------------------------------------------------
-       PERFIL — POST (actualizar)
-    ------------------------------------------------------- */
+    /**
+     * Actualiza los datos del perfil del asesor autenticado.
+     * 
+     * Valida los datos y actualiza correo, teléfono, documento y otros campos.
+     * Maneja errores de validación y conflictos de datos (duplicados).
+     * 
+     * @param usuarioActualizarDTO datos actualizados del usuario
+     * @param validacion resultado de la validación
+     * @param model el modelo MVC
+     * @param usuarioAutenticado el usuario autenticado
+     * @param redirectAttributes para pasar atributos en la redirección
+     * @return vista del perfil si hay errores, redirección al perfil si éxito
+     */
     @PostMapping("/perfil/actualizar")
     public String actualizarPerfil(
             @Valid @ModelAttribute("usuarioActualizarDTO") UsuarioActualizarDTO usuarioActualizarDTO,

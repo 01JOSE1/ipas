@@ -23,6 +23,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+/**
+ * Controlador de gestión de usuarios y autenticación.
+ * 
+ * Maneja registro, login y redireccionamiento de usuarios según su rol
+ * (administrador o asesor). Todas las operaciones son MVC (retornan vistas).
+ */
 @Controller
 @RequestMapping("/usuarios")
 public class UsuariosControlador {
@@ -33,17 +39,38 @@ public class UsuariosControlador {
     @Autowired
     private UsuarioMapper usuarioMapper;
 
-
+    /**
+     * Redirige a la página de login/registro.
+     * 
+     * @return redirección a /usuarios/login
+     */
     @GetMapping("/registro")
     public String redirigirRegistro() {
         return "redirect:/usuarios/login";
     }
 
+    /**
+     * Redirige a la página de login/registro.
+     * 
+     * @return redirección a /usuarios/login
+     */
     @GetMapping("/")
     public String redirigir() {
         return "redirect:/usuarios/login";
     }
 
+    /**
+     * Muestra el formulario de login/registro con redirección automática si ya está autenticado.
+     * 
+     * Si el usuario está autenticado, lo redirige a su dashboard correspondiente
+     * (administrador o asesor). En caso contrario, muestra el formulario.
+     * Recupera alertas de sesiones previas para mostrar al usuario.
+     * 
+     * @param peticion la petición HTTP actual
+     * @param model modelo para pasar datos a la vista
+     * @param usuarioAutenticado el usuario autenticado (si existe)
+     * @return nombre de la vista o redirección al dashboard
+     */
     @GetMapping("/login")
     public String verLoginRegistroFormulario(HttpServletRequest peticion, Model model, Authentication usuarioAutenticado) {
 
@@ -73,6 +100,19 @@ public class UsuariosControlador {
         return "usuarios/loginRegistroFormulario";
     }
 
+    /**
+     * Registra un nuevo usuario en el sistema.
+     * 
+     * Valida los datos del registro mediante DTO. Si hay conflictos de datos
+     * (correo, teléfono o documento duplicados), retorna los errores al formulario.
+     * En caso de éxito, redirige al login con mensaje de confirmación.
+     * 
+     * @param registroDTO datos del usuario a registrar (validaciones incluidas)
+     * @param validacion resultado de la validación
+     * @param modelo el modelo MVC
+     * @param redirectAttributes para pasar atributos en la redirección
+     * @return vista del formulario si hay errores, redirección a login si éxito
+     */
     @PostMapping("/registro")
     public String createUser(
             @Valid @ModelAttribute("registroDTO") RegistroDTO registroDTO,
@@ -112,7 +152,13 @@ public class UsuariosControlador {
 
     /**
      * Redirige al perfil del rol correspondiente.
-     * Cada controlador (asesor/admin) maneja su propia lógica de perfil.
+     * 
+     * Dependiendo del rol del usuario autenticado (ADMINISTRADOR o ASESOR),
+     * redirige a su controlador específico. Cada controlador maneja su propia
+     * vista y lógica de perfil.
+     * 
+     * @param usuarioAutenticado el usuario autenticado con su rol
+     * @return redirección al dashboard del rol correspondiente
      */
     @GetMapping("/perfil")
     public String perfil(Authentication usuarioAutenticado) {

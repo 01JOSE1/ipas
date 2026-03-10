@@ -14,9 +14,17 @@ import org.springframework.web.multipart.MultipartFile;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+/**
+ * DTO para la gestión y validación de datos de pólizas de seguros.
+ * Contiene toda la información necesaria para crear, actualizar y consultar pólizas,
+ * incluyendo referencias a cliente, ramo y aseguradora.
+ */
 @Data
 public class GestionPolizaDTO {
 
+    /**
+     * Identificador único de la póliza.
+     */
     @Positive
     private Long idPoliza;
 
@@ -58,8 +66,13 @@ public class GestionPolizaDTO {
     private Long idCliente;
 
     private String nombreCliente;
-    // Objeto para el proceso de la ia
+
+    /**
+     * Objeto de transferencia de datos para la información del cliente.
+     * Se utiliza en procesos de integración con IA para análisis de datos de pólizas.
+     */
     private GestionClienteDTO gestionClienteDTO;
+
     private boolean clienteExiste;
 
     @Positive
@@ -75,6 +88,9 @@ public class GestionPolizaDTO {
     private MultipartFile archivoPoliza;
     private String numeroPdf;
 
+    /**
+     * Constructor sin argumentos para inicialización mediante setters.
+     */
     public GestionPolizaDTO() {
     }
 

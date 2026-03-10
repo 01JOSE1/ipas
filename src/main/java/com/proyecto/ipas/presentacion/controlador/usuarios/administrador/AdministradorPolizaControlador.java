@@ -9,6 +9,9 @@ import org.springframework.ui.Model;
 
 import java.util.Map;
 
+/**
+ * Controlador de estadísticas de pólizas para el administrador.
+ */
 @Controller
 @RequestMapping("/administrador/poliza")
 public class AdministradorPolizaControlador {
@@ -16,6 +19,14 @@ public class AdministradorPolizaControlador {
     @Autowired
     private PolizaEstadisticasServicio polizaEstadisticasServicio;
 
+    /**
+     * Muestra estadísticas y análisis de la cartera de pólizas.
+     * 
+     * Incluye pólizas activas, vencidas, próximas a vencer, canceladas, etc.
+     * 
+     * @param modelo el modelo MVC
+     * @return vista con gráficas y análisis de pólizas
+     */
     @GetMapping("estadisticas")
     public String verEstadisticasPolizas(Model modelo) {
 

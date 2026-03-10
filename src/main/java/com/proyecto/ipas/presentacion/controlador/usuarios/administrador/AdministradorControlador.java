@@ -24,6 +24,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 
+/**
+ * Controlador principal del administrador.
+ * 
+ * Maneja el dashboard administrativo, perfil del administrador y su actualización.
+ * Solo accesible por usuarios con rol ADMINISTRADOR.
+ */
 @Controller
 @RequestMapping("/administrador")
 public class AdministradorControlador {
@@ -42,7 +48,18 @@ public class AdministradorControlador {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
     }
 
-
+    /**
+     * Muestra el dashboard principal del administrador con estadísticas del sistema.
+     * 
+     * Recupera y muestra:
+     * - KPIs generales (usuarios, clientes, pólizas, etc.)
+     * - Ranking de asesores por productividad
+     * - Actividad reciente del sistema
+     * 
+     * @param sesion la sesión HTTP actual
+     * @param modelo el modelo MVC
+     * @return vista del dashboard administrativo
+     */
     @GetMapping("/")
     public String dashboard(HttpSession sesion, Model modelo) {
 
@@ -64,9 +81,13 @@ public class AdministradorControlador {
         return "usuarios/administradores/dashboardPrincipal";
     }
 
-    /* -------------------------------------------------------
-       PERFIL — GET
-    ------------------------------------------------------- */
+    /**
+     * Muestra el perfil del administrador logueado con sus datos actuales.
+     * 
+     * @param model el modelo MVC
+     * @param usuarioAutenticado el usuario autenticado del sistema
+     * @return vista del perfil del administrador
+     */
     @GetMapping("/perfil")
     public String perfil(Model model, Authentication usuarioAutenticado) {
 
@@ -81,9 +102,19 @@ public class AdministradorControlador {
         return "usuarios/administradores/perfilAdmin";
     }
 
-    /* -------------------------------------------------------
-       PERFIL — POST (actualizar)
-    ------------------------------------------------------- */
+    /**
+     * Actualiza los datos del perfil del administrador autenticado.
+     * 
+     * Valida los datos y actualiza correo, teléfono, documento y otros campos.
+     * Maneja errores de validación y conflictos de datos (duplicados).
+     * 
+     * @param usuarioActualizarDTO datos actualizados del usuario
+     * @param validacion resultado de la validación
+     * @param model el modelo MVC
+     * @param usuarioAutenticado el usuario autenticado
+     * @param redirectAttributes para pasar atributos en la redirección
+     * @return vista del perfil si hay errores, redirección al perfil si éxito
+     */
     @PostMapping("/perfil/actualizar")
     public String actualizarPerfil(
             @Valid @ModelAttribute("usuarioActualizarDTO") UsuarioActualizarDTO usuarioActualizarDTO,
