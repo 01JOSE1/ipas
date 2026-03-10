@@ -3,8 +3,8 @@ package com.proyecto.ipas.presentacion.controlador.usuarios.administrador;
 import com.proyecto.ipas.datos.mapeador.UsuarioMapper;
 import com.proyecto.ipas.infraestructura.seguridad.UsuarioSeguridad;
 import com.proyecto.ipas.infraestructura.utilidades.TipoAlerta;
-import com.proyecto.ipas.negocio.servicio.administrador.AdministradorServicio;
-import com.proyecto.ipas.negocio.servicio.autenticacion.UsuarioServicio;
+import com.proyecto.ipas.negocio.servicio.usuario.administrador.AdministradorServicio;
+import com.proyecto.ipas.negocio.servicio.autenticacion.UsuarioAutenticacionServicio;
 import com.proyecto.ipas.presentacion.excepcion.ConflictoExcepcion;
 import com.proyecto.ipas.presentacion.excepcion.NegocioExcepcion;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.mensajeFrontend.AlertaRespuesta;
@@ -12,11 +12,13 @@ import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.usuario.UsuarioAc
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -27,7 +29,7 @@ import java.util.Map;
 public class AdministradorControlador {
 
     @Autowired
-    private UsuarioServicio usuarioServicio;
+    private UsuarioAutenticacionServicio usuarioAutenticacionServicio;
 
     @Autowired
     private UsuarioMapper usuarioMapper;
@@ -35,9 +37,12 @@ public class AdministradorControlador {
     @Autowired
     private AdministradorServicio administradorServicio;
 
-    /* -------------------------------------------------------
-       DASHBOARD
-    ------------------------------------------------------- */
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+    }
+
+
     @GetMapping("/")
     public String dashboard(HttpSession sesion, Model modelo) {
 
@@ -53,7 +58,10 @@ public class AdministradorControlador {
 
         datosDashboardAsesor.forEach(modelo::addAttribute);
 
-        return "usuarios/administradores/inicio";
+        modelo.addAttribute("polizasPorAsesor", administradorServicio.obtenerRankingAsesores());
+        modelo.addAttribute("actividadReciente", administradorServicio.obtenerActividadReciente());
+
+        return "usuarios/administradores/dashboardPrincipal";
     }
 
     /* -------------------------------------------------------
@@ -68,7 +76,7 @@ public class AdministradorControlador {
 
         model.addAttribute("usuarioActualizarDTO",
                 usuarioMapper.toUsuarioActualizarDTO(
-                        usuarioServicio.verDatosUsuario(usuarioSesion.getIdUsuario())));
+                        usuarioAutenticacionServicio.verDatosUsuario(usuarioSesion.getIdUsuario())));
 
         return "usuarios/administradores/perfilAdmin";
     }
@@ -92,7 +100,7 @@ public class AdministradorControlador {
         }
 
         try {
-            usuarioServicio.actualizarUsuario(usuarioSesion.getIdUsuario(), usuarioActualizarDTO);
+            usuarioAutenticacionServicio.actualizarUsuario(usuarioSesion.getIdUsuario(), usuarioActualizarDTO);
 
             redirectAttributes.addFlashAttribute("alertaRespuesta", new AlertaRespuesta(
                     HttpStatus.OK.value(),
@@ -123,6 +131,6 @@ public class AdministradorControlador {
 
 
     private void cargarCorreoPerfil(UsuarioSeguridad usuarioSesion, Model model) {
-        model.addAttribute("correo", usuarioServicio.verDatosUsuario(usuarioSesion.getIdUsuario()).correo());
+        model.addAttribute("correo", usuarioAutenticacionServicio.verDatosUsuario(usuarioSesion.getIdUsuario()).correo());
     }
 }

@@ -2,7 +2,7 @@ package com.proyecto.ipas.presentacion.controlador.usuarios;
 
 import com.proyecto.ipas.datos.mapeador.UsuarioMapper;
 import com.proyecto.ipas.infraestructura.utilidades.TipoAlerta;
-import com.proyecto.ipas.negocio.servicio.autenticacion.UsuarioServicio;
+import com.proyecto.ipas.negocio.servicio.autenticacion.UsuarioAutenticacionServicio;
 import com.proyecto.ipas.presentacion.excepcion.ConflictoExcepcion;
 import com.proyecto.ipas.presentacion.excepcion.NegocioExcepcion;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.autenticacion.RegistroDTO;
@@ -28,7 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UsuariosControlador {
 
     @Autowired
-    private UsuarioServicio usuarioServicio;
+    private UsuarioAutenticacionServicio usuarioAutenticacionServicio;
 
     @Autowired
     private UsuarioMapper usuarioMapper;
@@ -85,7 +85,7 @@ public class UsuariosControlador {
         }
 
         try {
-            RespuestaDTO respuestaDTO = usuarioServicio.crearUsuario(registroDTO);
+            RespuestaDTO respuestaDTO = usuarioAutenticacionServicio.crearUsuario(registroDTO);
 
             AlertaRespuesta alertaRespuesta = new AlertaRespuesta(
                     HttpStatus.CREATED.value(),

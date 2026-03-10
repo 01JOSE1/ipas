@@ -19,7 +19,7 @@ public class AdministradorPolizaControlador {
     @GetMapping("estadisticas")
     public String verEstadisticasPolizas(Model modelo) {
 
-        Map<String, Long> estadisticas = polizaEstadisticasServicio.obtenerEstadisticas();
+        Map<String, Object> estadisticas = polizaEstadisticasServicio.obtenerEstadisticas();
 
         estadisticas.forEach( modelo::addAttribute );
 
