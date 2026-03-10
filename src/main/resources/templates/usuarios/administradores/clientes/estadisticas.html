@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{plantillas/administrador}">
+
+<head>
+    <title>Estadísticas Clientes</title>
+    <th:block layout:fragment="cssVista">
+        <link rel="stylesheet" th:href="@{/css/usuarios/administrador/clientes/estadisticasClientes.css}">
+    </th:block>
+</head>
+
+<body>
+<th:block layout:fragment="contenidoVista">
+
+    <!-- ===== ENCABEZADO ===== -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Estadísticas de Clientes</h1>
+            <p class="page-subtitle">Perfil y distribución de la cartera de clientes</p>
+        </div>
+        <div class="header-badge">
+            <i class="fa fa-address-book"></i>
+            <span th:text="${totalClientes} + ' clientes registrados'">0 clientes registrados</span>
+        </div>
+    </div>
+
+    <!-- ===== KPIs ===== -->
+    <div class="kpi-grid">
+
+        <div class="kpi-card">
+            <div class="kpi-icon kpi-navy"><i class="fa fa-users"></i></div>
+            <div class="kpi-info">
+                <span class="kpi-label">Total clientes</span>
+                <span class="kpi-value" th:text="${totalClientes}">0</span>
+                <span class="kpi-desc">Registrados en el sistema</span>
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-icon kpi-teal"><i class="fa fa-user-plus"></i></div>
+            <div class="kpi-info">
+                <span class="kpi-label">Nuevos este mes</span>
+                <span class="kpi-value" th:text="${clientesNuevosMes}">0</span>
+                <span class="kpi-desc">Registrados en el mes actual</span>
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-icon kpi-green"><i class="fa fa-user-check"></i></div>
+            <div class="kpi-info">
+                <span class="kpi-label">Con póliza activa</span>
+                <span class="kpi-value" th:text="${clientesActivos}">0</span>
+                <span class="kpi-desc">Al menos 1 póliza vigente</span>
+            </div>
+        </div>
+
+        <div class="kpi-card">
+            <div class="kpi-icon kpi-amber"><i class="fa fa-user-times"></i></div>
+            <div class="kpi-info">
+                <span class="kpi-label">Sin póliza activa</span>
+                <span class="kpi-value" th:text="${clientesInactivos}">0</span>
+                <span class="kpi-desc">Sin cobertura vigente</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===== FILA 1: Donut activos/inactivos + Donut estado civil ===== -->
+    <div class="charts-row">
+
+        <!-- Donut: activos vs inactivos -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <div class="chart-title">
+                    <i class="fa fa-chart-pie"></i>
+                    Cobertura de clientes
+                </div>
+                <span class="chart-subtitle">¿Cuántos clientes tienen póliza activa?</span>
+            </div>
+            <div class="chart-body chart-body-donut">
+                <canvas id="chartActivos"></canvas>
+                <div class="donut-center" id="donutActivosCenter">
+                    <span class="donut-total" th:text="${totalClientes}">0</span>
+                    <span class="donut-label">Total</span>
+                </div>
+            </div>
+            <div class="chart-legend" id="legendActivos"></div>
+        </div>
+
+        <!-- Donut: estado civil -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <div class="chart-title">
+                    <i class="fa fa-heart"></i>
+                    Estado civil
+                </div>
+                <span class="chart-subtitle">Distribución de clientes por estado civil</span>
+            </div>
+            <div class="chart-body chart-body-donut">
+                <canvas id="chartEstadoCivil"></canvas>
+                <div class="donut-center" id="donutEstadoCivilCenter">
+                    <span class="donut-total" th:text="${totalClientes}">0</span>
+                    <span class="donut-label">Total</span>
+                </div>
+            </div>
+            <div class="chart-legend" id="legendEstadoCivil"></div>
+        </div>
+
+    </div>
+
+    <!-- ===== FILA 2: Bar ciudades + Bar tipo documento ===== -->
+    <div class="charts-row">
+
+        <!-- Bar horizontal: top ciudades -->
+        <div class="chart-card chart-card-wide">
+            <div class="chart-header">
+                <div class="chart-title">
+                    <i class="fa fa-map-marker-alt"></i>
+                    Clientes por ciudad
+                </div>
+                <span class="chart-subtitle">¿De qué ciudades provienen los clientes?</span>
+            </div>
+            <div class="chart-body">
+                <canvas id="chartCiudad"></canvas>
+            </div>
+        </div>
+
+        <!-- Bar: tipo de documento -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <div class="chart-title">
+                    <i class="fa fa-id-card"></i>
+                    Tipo de documento
+                </div>
+                <span class="chart-subtitle">Distribución por tipo de identificación</span>
+            </div>
+            <div class="chart-body">
+                <canvas id="chartTipoDoc"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ── Datos de Thymeleaf → JS ── -->
+    <div id="chartData" style="display:none;"
+         th:data-activos-labels="${activosLabels}"
+         th:data-activos-valores="${activosValores}"
+         th:data-ciudad-labels="${ciudadLabels}"
+         th:data-ciudad-valores="${ciudadValores}"
+         th:data-estado-civil-labels="${estadoCivilLabels}"
+         th:data-estado-civil-valores="${estadoCivilValores}"
+         th:data-tipo-doc-labels="${tipoDocLabels}"
+         th:data-tipo-doc-valores="${tipoDocValores}">
+    </div>
+
+</th:block>
+
+<th:block layout:fragment="jsVista">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script th:src="@{/js/usuarios/administrador/clientes/estadisticasClientes.js}"></script>
+</th:block>
+
+</body>
+</html>

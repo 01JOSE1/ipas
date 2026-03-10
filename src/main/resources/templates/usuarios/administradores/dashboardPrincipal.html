@@ -1,17 +1,294 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{plantillas/administrador}">
+
 <head>
-    <meta charset="UTF-8">
-    <title>ADMINISTRADOR</title>
+    <title>Dashboard</title>
+    <th:block layout:fragment="cssVista">
+        <link rel="stylesheet" th:href="@{/css/usuarios/administrador/dashboardAdministrador.css}">
+    </th:block>
 </head>
+
 <body>
+<th:block layout:fragment="contenidoVista">
 
-<div th:replace="~{fragmentos/alertas :: alertas(${alertaRespuesta})}"></div>
+    <!-- ===== BIENVENIDA ===== -->
+    <div class="welcome-banner">
+        <div class="welcome-text">
+            <h1>Panel de control, <span th:text="${#authentication.principal.nombre}">Administrador</span> 👋</h1>
+            <p>Resumen general del sistema. Aquí tienes una visión global de IPAS.</p>
+        </div>
+        <div class="welcome-date" id="fechaHoy"></div>
+    </div>
 
-<h1>HOLA ADMINISTRADOR</h1>
+    <!-- ===== KPIs GLOBALES ===== -->
+    <div class="cards-grid">
 
-<form th:action="@{/logout}" method="post" class="d-inline">
-    <button class="btn btn-danger">Logout</button>
-</form>
+        <!--
+            Variable: usuariosActivos
+            Tipo: Integer / Long
+            Descripción: Total de usuarios con estado activo en el sistema
+            Ejemplo controller: model.addAttribute("usuariosActivos", usuarioService.contarUsuariosActivos());
+        -->
+        <div class="stat-card">
+            <div class="stat-left">
+                <div class="stat-icon stat-icon-navy">
+                    <i class="fa fa-users-cog"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Usuarios activos</span>
+                    <span class="stat-value" th:text="${usuariosActivos}">0</span>
+                </div>
+            </div>
+            <div class="stat-trend stat-trend-up">
+                <i class="fa fa-arrow-up"></i>
+            </div>
+        </div>
+
+        <!--
+            Variable: totalPolizasActivas
+            Tipo: Integer / Long
+            Descripción: Total de pólizas en estado activo a nivel global del sistema
+            Ejemplo controller: model.addAttribute("totalPolizasActivas", polizaService.contarPolizasActivas());
+        -->
+        <div class="stat-card">
+            <div class="stat-left">
+                <div class="stat-icon stat-icon-blue">
+                    <i class="fa fa-file-contract"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Pólizas activas</span>
+                    <span class="stat-value" th:text="${totalPolizasActivas}">0</span>
+                </div>
+            </div>
+            <div class="stat-trend stat-trend-up">
+                <i class="fa fa-arrow-up"></i>
+            </div>
+        </div>
+
+        <!--
+            Variable: totalClientes
+            Tipo: Integer / Long
+            Descripción: Total de clientes registrados en el sistema (todos los asesores)
+            Ejemplo controller: model.addAttribute("totalClientes", clienteService.contarTotalClientes());
+        -->
+        <div class="stat-card">
+            <div class="stat-left">
+                <div class="stat-icon stat-icon-teal">
+                    <i class="fa fa-address-book"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Total clientes</span>
+                    <span class="stat-value" th:text="${totalClientes}">0</span>
+                </div>
+            </div>
+            <div class="stat-trend stat-trend-up">
+                <i class="fa fa-arrow-up"></i>
+            </div>
+        </div>
+
+        <!--
+            Variable: actualizacionesHoy
+            Tipo: Integer / Long
+            Descripción: Total de registros modificados (pólizas o clientes) en el día de hoy,
+                         por cualquier asesor del sistema.
+            Ejemplo controller: model.addAttribute("actualizacionesHoy", auditoriaService.contarActualizacionesHoy());
+        -->
+        <div class="stat-card">
+            <div class="stat-left">
+                <div class="stat-icon stat-icon-green">
+                    <i class="fa fa-pencil-alt"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Actualizaciones hoy</span>
+                    <span class="stat-value" th:text="${actualizacionesHoy}">0</span>
+                </div>
+            </div>
+            <div class="stat-trend stat-trend-up">
+                <i class="fa fa-arrow-up"></i>
+            </div>
+        </div>
+
+        <!--
+            Variable: actualizacionesMes
+            Tipo: Integer / Long
+            Descripción: Total de registros modificados (pólizas o clientes) en el mes calendario actual,
+                         por cualquier asesor del sistema.
+            Ejemplo controller: model.addAttribute("actualizacionesMes", auditoriaService.contarActualizacionesMes());
+        -->
+        <div class="stat-card">
+            <div class="stat-left">
+                <div class="stat-icon stat-icon-purple">
+                    <i class="fa fa-calendar-check"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Actualizaciones este mes</span>
+                    <span class="stat-value" th:text="${actualizacionesMes}">0</span>
+                </div>
+            </div>
+            <div class="stat-trend stat-trend-up">
+                <i class="fa fa-arrow-up"></i>
+            </div>
+        </div>
+
+        <!--
+            Variable: asesoresConActividad
+            Tipo: Integer / Long
+            Descripción: Cantidad de asesores que han realizado al menos una acción
+                         (crear, editar póliza o cliente) en los últimos 7 días.
+                         Útil para el admin para detectar asesores inactivos.
+            Ejemplo controller: model.addAttribute("asesoresConActividad", usuarioService.contarAsesoresActivosEnUltimos7Dias());
+        -->
+        <div class="stat-card">
+            <div class="stat-left">
+                <div class="stat-icon stat-icon-amber">
+                    <i class="fa fa-user-check"></i>
+                </div>
+                <div class="stat-info">
+                    <span class="stat-label">Asesores activos (7 días)</span>
+                    <span class="stat-value" th:text="${asesoresConActividad}">0</span>
+                </div>
+            </div>
+            <div class="stat-trend stat-trend-up">
+                <i class="fa fa-arrow-up"></i>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===== SECCIÓN INFERIOR: tabla asesores + actividad reciente ===== -->
+    <div class="bottom-grid">
+
+        <!-- Ranking de asesores por pólizas -->
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa fa-chart-bar"></i>
+                    Pólizas por asesor
+                </div>
+                <a th:href="@{/admin/poliza/estadisticas}" class="panel-link">Ver estadísticas</a>
+            </div>
+            <div class="panel-body">
+
+                <!--
+                    Variable: polizasPorAsesor
+                    Tipo: List<Object[]> o List<DTO>  →  [{nombre, totalPolizas, porcentaje}]
+                    Descripción: Lista de asesores con su cantidad de pólizas activas,
+                                 ordenada de mayor a menor. Máximo 5 elementos recomendado.
+                    Ejemplo controller:
+                        model.addAttribute("polizasPorAsesor",
+                            polizaService.obtenerRankingPolizasPorAsesor(5));
+                -->
+                <div th:if="${polizasPorAsesor != null and !polizasPorAsesor.isEmpty()}">
+                    <div class="asesor-row" th:each="item, iterStat : ${polizasPorAsesor}">
+                        <div class="asesor-rank" th:text="${iterStat.index + 1}">1</div>
+                        <div class="asesor-avatar" th:text="${#strings.substring(item.nombre, 0, 1)}">A</div>
+                        <div class="asesor-info">
+                            <span class="asesor-name" th:text="${item.nombre}">Nombre Asesor</span>
+                            <div class="asesor-bar-wrap">
+                                <div class="asesor-bar"
+                                     th:style="'width:' + ${item.porcentaje} + '%'"></div>
+                            </div>
+                        </div>
+                        <div class="asesor-count" th:text="${item.totalPolizas}">0</div>
+                    </div>
+                </div>
+
+                <div th:if="${polizasPorAsesor == null or polizasPorAsesor.isEmpty()}"
+                     class="empty-state">
+                    <i class="fa fa-inbox"></i>
+                    <span>Sin datos disponibles</span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Actividad reciente -->
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa fa-history"></i>
+                    Actividad reciente
+                </div>
+                <a th:href="@{/administrador/usuario/ver-usuarios}" class="panel-link">Ver usuarios</a>
+            </div>
+            <div class="panel-body">
+
+                <!--
+                    Variable: actividadReciente
+                    Tipo: List<Object[]> o List<DTO>  →  [{tipo, descripcion, fecha}]
+                    Descripción: Últimas 6 acciones del sistema (nuevos usuarios, nuevas pólizas,
+                                 clientes registrados, etc.), ordenadas por fecha descendente.
+                    Ejemplo controller:
+                        model.addAttribute("actividadReciente",
+                            actividadService.obtenerUltimasActividades(6));
+                -->
+                <div th:if="${actividadReciente != null and !actividadReciente.isEmpty()}">
+                    <div class="activity-row" th:each="act : ${actividadReciente}">
+                        <div class="activity-dot"
+                             th:classappend="${act.tipo == 'USUARIO'  ? 'dot-navy'  :
+                                              act.tipo == 'POLIZA'   ? 'dot-blue'  :
+                                              act.tipo == 'CLIENTE'  ? 'dot-teal'  : 'dot-amber'}">
+                        </div>
+                        <div class="activity-info">
+                            <span class="activity-desc" th:text="${act.descripcion}">Descripción</span>
+                            <span class="activity-time" th:text="${#temporals.format(act.fecha, 'dd/MM/yyyy HH:mm')}">
+                                01/01/2025 10:00
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${actividadReciente == null or actividadReciente.isEmpty()}"
+                     class="empty-state">
+                    <i class="fa fa-inbox"></i>
+                    <span>Sin actividad reciente</span>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===== ACCESOS RÁPIDOS ===== -->
+    <div class="quick-access-section">
+        <h2 class="section-title">Accesos rápidos</h2>
+        <div class="quick-grid">
+
+            <a th:href="@{/administrador/usuario/ver-usuarios}" class="quick-card">
+                <div class="quick-icon quick-icon-navy"><i class="fa fa-users-cog"></i></div>
+                <span class="quick-label">Gestionar Usuarios</span>
+                <i class="fa fa-arrow-right quick-arrow"></i>
+            </a>
+
+            <a th:href="@{/administrador/poliza/estadisticas}" class="quick-card">
+                <div class="quick-icon quick-icon-blue"><i class="fa fa-file-contract"></i></div>
+                <span class="quick-label">Estadísticas Pólizas</span>
+                <i class="fa fa-arrow-right quick-arrow"></i>
+            </a>
+
+            <a th:href="@{/administrador/cliente/estadisticas}" class="quick-card">
+                <div class="quick-icon quick-icon-teal"><i class="fa fa-address-book"></i></div>
+                <span class="quick-label">Estadísticas Clientes</span>
+                <i class="fa fa-arrow-right quick-arrow"></i>
+            </a>
+
+            <a th:href="@{/administrador/perfil}" class="quick-card">
+                <div class="quick-icon quick-icon-amber"><i class="fa fa-user-circle"></i></div>
+                <span class="quick-label">Mi Perfil</span>
+                <i class="fa fa-arrow-right quick-arrow"></i>
+            </a>
+
+        </div>
+    </div>
+
+</th:block>
+
+<th:block layout:fragment="jsVista">
+    <script th:src="@{/js/usuarios/administrador/dashboardAdministrador.js}"></script>
+</th:block>
+
 </body>
 </html>

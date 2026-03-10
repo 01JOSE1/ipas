@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{plantillas/administrador}">
+
+<head>
+    <title>Usuarios</title>
+    <th:block layout:fragment="cssVista">
+        <link rel="stylesheet" th:href="@{/css/usuarios/listaUsuarios.css}">
+    </th:block>
+</head>
+
+<body>
+<th:block layout:fragment="contenidoVista">
+
+    <!-- ===== ENCABEZADO DE PÁGINA ===== -->
+    <div class="page-header">
+        <div class="page-header-left">
+            <h1 class="page-title">Gestión de Usuarios</h1>
+            <p class="page-subtitle">
+                <span th:text="${totalRegistros}">0</span> usuarios registrados en el sistema
+            </p>
+        </div>
+    </div>
+
+    <!-- ===== GRID DE TARJETAS ===== -->
+    <div class="usuarios-grid" th:if="${usuarios != null and !usuarios.isEmpty()}">
+
+        <div class="usuario-card" th:each="usuario : ${usuarios}">
+
+            <!-- Cabecera de la tarjeta -->
+            <div class="card-header">
+                <div class="card-avatar"
+                     th:text="${#strings.substring(usuario.nombre, 0, 1)}">A</div>
+                <div class="card-identity">
+                    <span class="card-nombre"
+                          th:text="${usuario.nombre + ' ' + usuario.apellido}">
+                        Nombre Apellido
+                    </span>
+                    <span class="card-correo" th:text="${usuario.correo}">
+                        correo@ipas.com
+                    </span>
+                </div>
+                <!-- Badge de estado -->
+                <span class="estado-badge"
+                      th:classappend="${usuario.estado.name() == 'ACTIVO'} ? 'estado-activo' :
+                                      (${usuario.estado.name() == 'INACTIVO'} ? 'estado-inactivo' : 'estado-suspendido')"
+                      th:text="${usuario.estado.name()}">
+                    ACTIVO
+                </span>
+            </div>
+
+            <!-- Datos del usuario -->
+            <div class="card-body">
+                <div class="card-dato">
+                    <i class="fa fa-id-card"></i>
+                    <span th:text="${usuario.tipoDocumento + ' · ' + usuario.numeroDocumento}">
+                        CC · 123456789
+                    </span>
+                </div>
+                <div class="card-dato">
+                    <i class="fa fa-phone"></i>
+                    <span th:text="${usuario.telefono ?: '—'}">3001234567</span>
+                </div>
+                <div class="card-dato">
+                    <i class="fa fa-shield-alt"></i>
+                    <span class="card-rol" th:text="${usuario.rol.nombre}">ROL</span>
+                </div>
+            </div>
+
+            <!-- Acciones -->
+            <div class="card-actions">
+
+                <!-- Botón cambiar estado -->
+                <button type="button" class="btn-action btn-estado"
+                        th:data-id="${usuario.idUsuario}"
+                        th:data-nombre="${usuario.nombre + ' ' + usuario.apellido}"
+                        th:data-estado-actual="${usuario.estado.name()}"
+                        onclick="abrirModalEstado(this)">
+                    <i class="fa fa-toggle-on"></i>
+                    Cambiar estado
+                </button>
+
+                <!-- Botón cambiar rol -->
+                <button type="button" class="btn-action btn-rol"
+                        th:data-id="${usuario.idUsuario}"
+                        th:data-nombre="${usuario.nombre + ' ' + usuario.apellido}"
+                        th:data-rol-actual="${usuario.rol.idRol}"
+                        onclick="abrirModalRol(this)">
+                    <i class="fa fa-user-tag"></i>
+                    Cambiar rol
+                </button>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Estado vacío -->
+    <div class="empty-page" th:if="${usuarios == null or usuarios.isEmpty()}">
+        <i class="fa fa-users-slash"></i>
+        <span>No hay usuarios registrados</span>
+    </div>
+
+    <!-- ===== PAGINACIÓN ===== -->
+    <div class="pagination-wrap" th:if="${totalPaginas > 1}">
+
+        <!-- Anterior -->
+        <a th:href="@{/administrador/usuario/ver-usuarios(pagina=${paginaActual - 1}, cantidad=${catidadPagina})}"
+           class="page-btn"
+           th:classappend="${paginaActual == 0} ? 'page-btn-disabled'"
+           th:attr="aria-disabled=${paginaActual == 0}">
+            <i class="fa fa-chevron-left"></i>
+        </a>
+
+        <!-- Números de página -->
+        <th:block th:each="i : ${#numbers.sequence(0, totalPaginas - 1)}">
+            <a th:href="@{/administrador/usuario/ver-usuarios(pagina=${i}, cantidad=${catidadPagina})}"
+               class="page-btn"
+               th:classappend="${i == paginaActual} ? 'page-btn-active'"
+               th:text="${i + 1}">
+                1
+            </a>
+        </th:block>
+
+        <!-- Siguiente -->
+        <a th:href="@{/administrador/usuario/ver-usuarios(pagina=${paginaActual + 1}, cantidad=${catidadPagina})}"
+           class="page-btn"
+           th:classappend="${paginaActual + 1 == totalPaginas} ? 'page-btn-disabled'"
+           th:attr="aria-disabled=${paginaActual + 1 == totalPaginas}">
+            <i class="fa fa-chevron-right"></i>
+        </a>
+
+        <span class="pagination-info">
+            Página <strong th:text="${paginaActual + 1}">1</strong>
+            de <strong th:text="${totalPaginas}">1</strong>
+        </span>
+    </div>
+
+
+    <!-- ===================================================
+         MODAL — CAMBIAR ESTADO
+         =================================================== -->
+    <div class="modal-overlay" id="modalEstado" onclick="cerrarModalEstado(event)">
+        <div class="modal-box">
+
+            <div class="modal-icon modal-icon-estado">
+                <i class="fa fa-toggle-on"></i>
+            </div>
+
+            <h3 class="modal-title">Cambiar estado</h3>
+            <p class="modal-desc">
+                Selecciona el nuevo estado para
+                <strong id="modalEstadoNombre">—</strong>
+            </p>
+
+            <form th:action="@{/administrador/usuario/cambiar-estado}" method="post"
+                  id="formCambiarEstado">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <input type="hidden" name="idUsuarioCambio" id="inputEstadoIdUsuario">
+
+                <!-- Opciones de estado -->
+                <div class="estado-opciones" id="estadoOpciones">
+                    <!-- Se construyen dinámicamente en JS según el estado actual -->
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-modal-cancel" onclick="cerrarModalEstadoBtn()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-modal-confirm btn-confirm-estado"
+                            id="btnConfirmarEstado" disabled>
+                        <i class="fa fa-check"></i> Confirmar
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+    <!-- ===================================================
+         MODAL — CAMBIAR ROL
+         =================================================== -->
+    <div class="modal-overlay" id="modalRol" onclick="cerrarModalRol(event)">
+        <div class="modal-box">
+
+            <div class="modal-icon modal-icon-rol">
+                <i class="fa fa-user-tag"></i>
+            </div>
+
+            <h3 class="modal-title">Cambiar rol</h3>
+            <p class="modal-desc">
+                Selecciona el nuevo rol para
+                <strong id="modalRolNombre">—</strong>
+            </p>
+
+            <form th:action="@{/administrador/usuario/cambiar-rol}" method="post"
+                  id="formCambiarRol">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <input type="hidden" name="idUsuarioCambio" id="inputRolIdUsuario">
+
+                <!-- Opciones de rol generadas desde el modelo -->
+                <div class="rol-opciones" id="rolOpciones">
+                    <th:block th:each="rol : ${roles}">
+                        <label class="opcion-item opcion-rol"
+                               th:data-id="${rol.idRol}">
+                            <input type="radio" name="idRolCambio"
+                                   th:value="${rol.idRol}"
+                                   th:id="'rol_' + ${rol.idRol}"
+                                   onchange="onRolSeleccionado()">
+                            <span class="opcion-icono"><i class="fa fa-shield-alt"></i></span>
+                            <span class="opcion-label" th:text="${rol.nombre}">ROL</span>
+                            <span class="opcion-check"><i class="fa fa-check"></i></span>
+                        </label>
+                    </th:block>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-modal-cancel" onclick="cerrarModalRolBtn()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-modal-confirm btn-confirm-rol"
+                            id="btnConfirmarRol" disabled>
+                        <i class="fa fa-check"></i> Confirmar
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</th:block>
+
+<th:block layout:fragment="jsVista">
+    <script th:src="@{/js/usuarios/listaUsuarios.js}"></script>
+</th:block>
+
+</body>
+</html>

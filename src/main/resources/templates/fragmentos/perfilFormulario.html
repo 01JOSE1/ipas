@@ -79,7 +79,7 @@
                 <div class="fields-grid">
 
                     <div class="field-group">
-                        <label>Teléfono <span class="required">*</span></label>
+                        <label>Teléfono <span class="required"></span></label>
                         <input type="text" th:field="*{telefono}" placeholder="Ej: 3001234567">
                         <span class="field-error" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></span>
                     </div>
