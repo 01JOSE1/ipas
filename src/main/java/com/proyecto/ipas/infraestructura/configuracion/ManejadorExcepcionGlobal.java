@@ -17,13 +17,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
- * Manejador global de excepciones usando @ControllerAdvice
- * Captura TODAS las excepciones lanzadas en los controladores
- * y las convierte en respuestas estandarizadas
- *
+ * Manejador global de excepciones usando {@link ControllerAdvice}.
+ * 
+ * Captura TODAS las excepciones lanzadas en los controladores y las convierte 
+ * en respuestas JSON estandarizadas que envía al frontend.
+ * 
  * IMPORTANTE: Las excepciones de Spring Security que ocurren en FILTROS
- * NO llegan aquí. Se manejan en CustomAuthenticationEntryPoint y CustomAccessDeniedHandler.
- *
+ * (como configuración de seguridad) NO llegan aquí. Se manejan en:
+ * - {@link ManejadorPuntoEntradaAutenticacion} : errores 401
+ * - {@link ManejadorAccesoDenegado} : errores 403
+ * 
  * PERO: Si lanzas excepciones de Security DENTRO de tus controladores/servicios,
  * SÍ llegarán aquí y puedes manejarlas.
  */
@@ -35,7 +38,12 @@ public class ManejadorExcepcionGlobal {
     // EXCEPCIONES DE NEGOCIO
 
     /**
-     * Determina si la petición es AJAX/REST (espera JSON) o web (espera HTML)
+     * Determina si la petición es AJAX/REST (espera JSON) o tradicional web (espera HTML).
+     * 
+     * Comprueba el encabezado X-Requested-With o el encabezado Accept.
+     * 
+     * @param peticion la petición HTTP
+     * @return {@code true} si es AJAX, {@code false} si es web
      */
     private boolean esAjaxPeticion(HttpServletRequest peticion) {
         String encabezadoAjax = peticion.getParameter("X-Requested-With");
@@ -45,8 +53,14 @@ public class ManejadorExcepcionGlobal {
     }
 
     /**
-     * Maneja la excepcion recurso no encontrado (404)
-     * Cuando algun recurso del sistema ipas no existe (Archivo, usuario, rol, poliza)
+     * Maneja la excepción {@link RecursoNOEncontradoException} (HTTP 404).
+     * 
+     * Se lanza cuando un recurso del sistema no existe (Usuario, Rol, Póliza, Archivo, etc.).
+     * Diferencia entre peticiones AJAX (JSON) y web (HTML con redirect).
+     * 
+     * @param ex la excepción de recurso no encontrado
+     * @param peticion la petición HTTP
+     * @return respuesta JSON (AJAX) o ModelAndView con vista de error (web)
      */
     @ExceptionHandler({RecursoNOEncontradoException.class, NoResourceFoundException.class})
     public Object manejarRecursoNOEncontrado(Exception ex, HttpServletRequest peticion) {
@@ -70,35 +84,15 @@ public class ManejadorExcepcionGlobal {
         return vistaDato;
     }
 
-//    /**
-//     * Maneja la excepcion usuario suspendido (423)
-//     * Cuando el usuario no cumple con alguna regla de la logica de negocio
-//     */
-//    @ExceptionHandler(UsuarioSuspendidoExcepcion.class)
-//    public Object manejarUsuarioSuspendido(UsuarioSuspendidoExcepcion ex, HttpServletRequest peticion) {
-//        registro.warn("Cuenta suspendida: {}", ex.getMessage());
-//
-//        AlertaRespuesta alertaRespuesta = new AlertaRespuesta(
-//                HttpStatus.LOCKED.value(),
-//                TipoAlerta.ERROR,
-//                "Cuenta suspendida",
-//                "La cuenta se encuentra suspendida",
-//                ex.getErrorCodigo(),
-//                peticion.getRequestURI()
-//        );
-//
-//        if (esAjaxPeticion(peticion)) {
-//            return ResponseEntity.status(HttpStatus.LOCKED).body(alertaRespuesta);
-//        }
-//
-//        ModelAndView vistaDato = new ModelAndView("excepciones/error");
-//        vistaDato.addObject("error", alertaRespuesta);
-//        return vistaDato;
-//    }
-
     /**
-     * Maneja PermisoInsuficienteExcepcion ForbiddenException (403)
-     * Falta de permisos para realizar la acción
+     * Maneja excepciones de permisos insuficientes (HTTP 403).
+     * 
+     * Se lanza cuando el usuario no tiene los permisos necesarios para realizar una acción.
+     * Diferencia entre peticiones AJAX (JSON) y web (HTML).
+     * 
+     * @param ex la excepción de permiso insuficiente o acceso denegado
+     * @param peticion la petición HTTP
+     * @return respuesta JSON (AJAX) o ModelAndView con vista de error (web)
      */
     @ExceptionHandler({PermisoInsuficienteExcepcion.class, AccessDeniedException.class})
     public Object manejarProhibido(Exception ex, HttpServletRequest peticion) {
@@ -122,32 +116,6 @@ public class ManejadorExcepcionGlobal {
         vistaDato.addObject("error", alertaRespuesta);
         return vistaDato;
     }
-
-
-    /**
-     * Maneja excepcion de negocio (400)
-     * Errores relacionadas con las diferentes validaciones de negocio
-     */
-//    @ExceptionHandler(NegocioExcepcion.class)
-//    public Object manejarNegocioExcepcion(NegocioExcepcion ex, HttpServletRequest peticion) {
-//        registro.warn("Error de Negocio: {}", ex.getMessage());
-//
-//        AlertaRespuesta errorRespuesta = new AlertaRespuesta(
-//                HttpStatus.BAD_REQUEST.value(),
-//                "Error de Validación",
-//                ex.getMessage(),
-//                ex.getErrorCodigo(),
-//                peticion.getRequestURI()
-//        );
-//
-//        if (esAjaxPeticion(peticion)) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorRespuesta);
-//        }
-//
-//        ModelAndView vistaDato = new ModelAndView("error/400");
-//        vistaDato.addObject("error", errorRespuesta);
-//        return vistaDato;
-//    }
 
 
     /**
@@ -238,10 +206,17 @@ public class ManejadorExcepcionGlobal {
 //    }
 
     /**
-     * 413 - Payload Too Large
-     *
-     * Se lanza cuando el archivo enviado supera el tamaño máximo
-     * configurado en spring.servlet.multipart.max-file-size.
+     * Maneja el error cuando el archivo subido excede el tamaño máximo permitido (HTTP 413).
+     * 
+     * Se dispara cuando el tamaño del archivo supera lo configurado en
+     * {@code spring.servlet.multipart.max-file-size}.
+     * 
+     * Diferencia entre peticiones AJAX (JSON) y web (redirect con mensaje).
+     * 
+     * @param ex la excepción de tamaño excedido
+     * @param peticion la petición HTTP
+     * @param redirectAttributes atributos para guardar mensajes en redirect
+     * @return respuesta JSON (AJAX) o redirect a página anterior (web)
      */
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public Object manejarTamañoMaximoArchivo(
@@ -275,7 +250,13 @@ public class ManejadorExcepcionGlobal {
 
 
     /**
-     * Falla tecnica para almacenar el archivo (500)
+     * Maneja errores al almacenar archivos en el sistema de archivos local (HTTP 500).
+     * 
+     * Se lanza cuando hay problemas I/O, permisos insuficientes, o espacios en disco.
+     * 
+     * @param ex la excepción de almacenamiento
+     * @param peticion la petición HTTP
+     * @return respuesta JSON con error 500
      */
     @ExceptionHandler(AlmacenamientoExcepcion.class)
     public Object manejarAlmacenamiento(Exception ex, HttpServletRequest peticion) {

@@ -19,8 +19,13 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 public class ManejadorLoginLogout {
 
     /**
-     * Handler para cuando el login es exitoso (usuario y contraseña correctas)
-     * Maneja peticiones web como AJAX
+     * Bean que proporciona el handler ejecutado después de un login exitoso.
+     * 
+     * Detecta si la petición es AJAX (JSON) o web (HTML redirect). Valida el rol del usuario
+     * y lo redirige a su respectivo dashboard (ADMINISTRADOR a /administrador/, ASESOR a /asesor/).
+     * 
+     * @param objectMapper mapeador JSON para serializar respuestas
+     * @return handler que procesa logins exitosos
      */
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler(ObjectMapper objectMapper) {
@@ -63,8 +68,18 @@ public class ManejadorLoginLogout {
 
 
     /**
-     * Handler para cuando el login falla
-     * Maneja peticiones web como AJAX
+     * Bean que proporciona el handler ejecutado cuando un login falla.
+     * 
+     * Mapea diferentes tipos de excepciones de Spring Security a mensajes específicos:
+     * - DisabledException: cuenta inactiva
+     * - LockedException: cuenta bloqueada/suspendida
+     * - CredentialsExpiredException: credenciales expiradas
+     * - AccountExpiredException: cuenta expirada
+     * 
+     * Diferencia entre peticiones AJAX (JSON) y web (HTML redirect).
+     * 
+     * @param objectMapper mapeador JSON para serializar respuestas
+     * @return handler que procesa logins fallidos
      */
     @Bean
     public AuthenticationFailureHandler authenticationFailureHandler(ObjectMapper objectMapper) {
@@ -125,6 +140,13 @@ public class ManejadorLoginLogout {
 
 
 
+    /**
+     * Bean que proporciona el handler ejecutado después de un logout exitoso.
+     * 
+     * Guarda un mensaje de éxito en sesión y redirige al usuario a la página principal.
+     * 
+     * @return handler que procesa logins salientes (logouts)
+     */
     @Bean
     public LogoutSuccessHandler logoutSuccessHandler() {
         return (peticion, respuesta, autenticacion) -> {

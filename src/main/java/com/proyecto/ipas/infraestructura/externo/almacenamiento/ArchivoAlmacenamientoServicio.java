@@ -20,7 +20,11 @@ import java.util.Arrays;
 import java.util.UUID;
 
 /**
- * Implementación LOCAL para el almacenamiento de archivos PDF de las polizas
+ * Implementación LOCAL para el almacenamiento de archivos PDF de las pólizas.
+ * 
+ * Gestiona dos directorios: uno temporal para archivos en procesamiento y otro 
+ * permanente para archivos finales. Incluye validaciones de seguridad contra 
+ * ataques path traversal y control de tipos/tamaños de archivo.
  */
 @Service
 public class ArchivoAlmacenamientoServicio implements ArchivoAlmacenamiento {
@@ -29,12 +33,22 @@ public class ArchivoAlmacenamientoServicio implements ArchivoAlmacenamiento {
     private final Path rutaTemporal;
     private final ArchivoAlmacenamientoPropiedades propiedades;
 
+    /**
+     * Constructor que inicializa las rutas del almacenamiento desde las propiedades.
+     * 
+     * @param propiedades configuración de almacenamiento inyectada desde application.properties
+     */
     public ArchivoAlmacenamientoServicio(ArchivoAlmacenamientoPropiedades propiedades) {
         this.propiedades = propiedades;
         this.rutaLocal = Paths.get(propiedades.getDestino());
         this.rutaTemporal = Paths.get(propiedades.getDestinoTemporal());
     }
 
+    /**
+     * Inicialización posterior a la construcción que crea los directorios si no existen.
+     * 
+     * @throws AlmacenamientoExcepcion si no se pueden crear los directorios
+     */
     @PostConstruct
     public void init() {
         try {
@@ -45,7 +59,18 @@ public class ArchivoAlmacenamientoServicio implements ArchivoAlmacenamiento {
         }
     }
 
-
+    /**
+     * Almacena un archivo en la ruta especificada con medidas de seguridad.
+     * 
+     * Valida el archivo, normaliza la ruta de destino para prevenir path traversal,
+     * y copia el contenido del archivo de entrada al destino especificado.
+     * 
+     * @param archivo el archivo a almacenar (MultipartFile desde la petición)
+     * @param destino la ruta del directorio destino
+     * @param nombreArchivo el nombre del archivo generado
+     * @throws ArchivoInvalidoExcepcion si el archivo no pasa las validaciones
+     * @throws AlmacenamientoExcepcion si hay error de I/O
+     */
     @Override
     public void almacenar(MultipartFile archivo, Path destino, String nombreArchivo) {
         validarArchivo(archivo);
@@ -69,6 +94,17 @@ public class ArchivoAlmacenamientoServicio implements ArchivoAlmacenamiento {
     }
 
 
+    /**
+     * Mueve un archivo desde el directorio temporal al directorio permanente.
+     * 
+     * Realiza validaciones de seguridad en ambas rutas para prevenir path traversal.
+     * Se utiliza después de procesar un PDF para confirmar su almacenamiento definitivo.
+     * 
+     * @param numeroPdf el nombre del archivo (generado con UUID y código de póliza)
+     * @throws SecurityException si las rutas especificadas son inválidas
+     * @throws RecursoNOEncontradoException si el archivo temporal no existe
+     * @throws AlmacenamientoExcepcion si hay error al mover el archivo
+     */
     @Override
     public void moverRecurso(String numeroPdf) {
         try {
@@ -99,6 +135,18 @@ public class ArchivoAlmacenamientoServicio implements ArchivoAlmacenamiento {
     }
 
 
+    /**
+     * Carga un archivo PDF del almacenamiento permanente como recurso descargable.
+     * 
+     * Prepara el archivo para ser enviado al cliente HTTP con headers apropiados.
+     * Utiliza Spring Resource para servir archivos existentes en el sistema de archivos.
+     * 
+     * @param numeroPdf el nombre del archivo a descargar
+     * @param destino la ruta del directorio donde se busca el archivo (generalmente la ruta permanente)
+     * @return Resource del archivo listo para descargar
+     * @throws RecursoNOEncontradoException si el archivo no existe en la ruta especificada
+     * @throws AlmacenamientoExcepcion si hay error al acceder al archivo
+     */
     @Override
     public Resource cargarRecurso(String numeroPdf, Path destino) {
         try {
@@ -124,16 +172,40 @@ public class ArchivoAlmacenamientoServicio implements ArchivoAlmacenamiento {
         return rutaLocal;
     }
 
+    /**
+     * Obtiene la ruta completa del archivo en el almacenamiento permanente.
+     * 
+     * @param numeroPdf el nombre del archivo generado
+     * @return la ruta absoluta del archivo como String
+     */
     @Override
     public String getRutaArchivo(String numeroPdf) {
         return rutaLocal.resolve(numeroPdf).toString();
     }
 
+    /**
+     * Obtiene la ruta completa del archivo en el directorio temporal.
+     * 
+     * @param numeroPdf el nombre del archivo generado
+     * @return la ruta absoluta del archivo temporal como String
+     */
     @Override
     public String getRutaArchivoTemporal(String numeroPdf) {
         return rutaTemporal.resolve(numeroPdf).toString();
     }
 
+    /**
+     * Genera un nombre de archivo único combinando UUID, código de póliza y extensión.
+     * 
+     * Utiliza UUID para garantizar unicidad global del nombre, asegurando que no haya
+     * conflictos entre archivos almacenados. El nombre incluye el código de póliza para
+     * facilitar trazabilidad y búsqueda de archivos relacionados.
+     * 
+     * @param codigoPoliza el código identificador de la póliza (no puede estar en blanco)
+     * @param nombreArchivoOriginal el nombre del archivo original para extraer su extensión
+     * @return un nombre único con formato: UUID_codigoPoliza.extension
+     * @throws ArchivoInvalidoExcepcion si codigoPoliza está en blanco
+     */
     public String generarNombreArchivo(String codigoPoliza, String nombreArchivoOriginal) {
 
         if (codigoPoliza.isBlank()) {
@@ -145,6 +217,18 @@ public class ArchivoAlmacenamientoServicio implements ArchivoAlmacenamiento {
         return UUID.randomUUID().toString() + "_" + codigoPoliza + extension;
     }
 
+    /**
+     * Valida que un archivo cumple con los requisitos de almacenamiento.
+     * 
+     * Realiza múltiples validaciones:
+     * - Verifica que el archivo no sea nulo ni esté vacío
+     * - Valida que el tipo MIME sea "application/pdf"
+     * - Verifica que la extensión sea ".pdf"
+     * - Comprueba que el tamaño no exceda el límite configurado (default 10MB)
+     * 
+     * @param archivo el archivo a validar desde el formulario multipart
+     * @throws ArchivoInvalidoExcepcion si alguna validación falla con mensaje descriptivo
+     */
     public void validarArchivo(MultipartFile archivo) {
 
         if (archivo == null || archivo.isEmpty()) {
@@ -173,6 +257,16 @@ public class ArchivoAlmacenamientoServicio implements ArchivoAlmacenamiento {
 
     }
 
+    /**
+     * Extrae la extensión de un nombre de archivo.
+     * 
+     * Método auxiliar privado que localiza el último punto en el nombre y extrae
+     * la extensión incluyendo el punto (ej: ".pdf"). Si el archivo no tiene extensión
+     * o el nombre es nulo, devuelve una cadena vacía.
+     * 
+     * @param nombreArchivoOriginal el nombre del archivo del que extraer extensión
+     * @return la extensión con punto (ej: ".pdf") o cadena vacía si no hay extensión
+     */
     private String getExtensionArchivo(String nombreArchivoOriginal) {
         if (nombreArchivoOriginal == null || !nombreArchivoOriginal.contains(".")) {
             return "";

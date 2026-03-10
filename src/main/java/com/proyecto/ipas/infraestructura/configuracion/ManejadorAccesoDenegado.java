@@ -13,14 +13,28 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 /**
- * Maneja errores 403 USUARIO AUTENTICADO PERO SIN PERMISOS
+ * Manejador de acceso denegado (HTTP 403 FORBIDDEN).
+ * 
+ * Se ejecuta cuando un usuario autenticado intenta acceder a un recurso para el cual 
+ * no tiene los permisos (rol) necesarios. Diferencia entre peticiones AJAX (JSON) y web (HTML).
  */
 @Component
 public class ManejadorAccesoDenegado implements AccessDeniedHandler {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-
+    /**
+     * Maneja el error cuando un usuario autenticado pero sin permisos intenta acceder a un recurso.
+     * 
+     * Para peticiones AJAX: retorna respuesta JSON con estado 403.
+     * Para peticiones web: hace forward a la vista de error 403 manteniendo la URL.
+     * 
+     * @param peticion la petición HTTP del cliente
+     * @param respuesta la respuesta HTTP a enviar
+     * @param excepcion la excepción de acceso denegado
+     * @throws IOException si hay error al escribir la respuesta
+     * @throws ServletException si hay error en el servlet
+     */
     @Override
     public void handle(HttpServletRequest peticion, HttpServletResponse respuesta, AccessDeniedException excepcion) throws IOException, ServletException {
 

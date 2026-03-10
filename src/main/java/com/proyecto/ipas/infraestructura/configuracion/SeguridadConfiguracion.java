@@ -19,6 +19,23 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 @Configuration
 @EnableMethodSecurity
 @EnableWebSecurity
+/**
+ * Configuración centralizada de seguridad para la aplicación Spring Boot.
+ * 
+ * Define:
+ * - Cadena de filtros de seguridad con autorización por roles
+ * - Codificación de contraseñas con BCrypt
+ * - Autenticación con DAO personalizado
+ * - Manejo de login/logout
+ * - Manejo de excepciones de seguridad (401, 403)
+ * - Soporte para "Remember Me"
+ * 
+ * Configuración de rutas:
+ * - Públicas: /, /usuarios/login, /usuarios/registro, recursos estáticos
+ * - ADMINISTRADOR: /administrador/**
+ * - ASESOR: /asesor/**
+ * - Ambos roles: /usuarios/**
+ */
 public class SeguridadConfiguracion {
 
     @Value("${security.rememberme.key}")
@@ -33,6 +50,16 @@ public class SeguridadConfiguracion {
     private LogoutSuccessHandler logoutSuccessHandler;
 
 
+    /**
+     * Constructor que inyecta todos los componentes necesarios para la seguridad.
+     * 
+     * @param userDetailsService el servicio para cargar detalles del usuario
+     * @param manejadorAccesoDenegado el manejador para errores 403
+     * @param manejadorPuntoEntradaAutenticacion el manejador para errores 401
+     * @param authenticationSuccessHandler el manejador de logins exitosos
+     * @param authenticationFailureHandler el manejador de logins fallidos
+     * @param logoutSuccessHandler el manejador de logouts exitosos
+     */
     public SeguridadConfiguracion(UserDetailsService userDetailsService, ManejadorAccesoDenegado manejadorAccesoDenegado, ManejadorPuntoEntradaAutenticacion manejadorPuntoEntradaAutenticacion, AuthenticationSuccessHandler authenticationSuccessHandler, AuthenticationFailureHandler authenticationFailureHandler, LogoutSuccessHandler logoutSuccessHandler) {
         this.userDetailsService = userDetailsService;
         this.manejadorPuntoEntradaAutenticacion = manejadorPuntoEntradaAutenticacion;
@@ -43,11 +70,25 @@ public class SeguridadConfiguracion {
 
     }
 
+    /**
+     * Bean que define el codificador de contraseñas usando BCrypt.
+     * 
+     * BCrypt es un algoritmo de hash adaptativo que es resistente a ataques de fuerza bruta.
+     * 
+     * @return un PasswordEncoder configurado con BCrypt
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Bean que configura el proveedor de autenticación DAO.
+     * 
+     * Utiliza UserDetailsService para cargar usuarios y PasswordEncoder para validar contraseñas.
+     * 
+     * @return un DaoAuthenticationProvider configurado
+     */
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -56,11 +97,33 @@ public class SeguridadConfiguracion {
         return authProvider;
     }
 
+    /**
+     * Bean que obtiene el AuthenticationManager de la configuración de Spring.
+     * 
+     * @param authConfig la configuración de autenticación
+     * @return el AuthenticationManager para procesar autenticaciones
+     * @throws Exception si hay error en la configuración
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
+    /**
+     * Bean que define la cadena de filtros de seguridad HTTP.
+     * 
+     * Configura:
+     * - Autorización por roles para diferentes rutas
+     * - Form login personalizado
+     * - Logout con invalidación de sesión
+     * - "Remember Me" con tokenización segura
+     * - Manejo de excepciones de autenticación y autorización
+     * - Permisos para iframes de mismo origen
+     * 
+     * @param http el constructor de seguridad HTTP
+     * @return la cadena de filtros de seguridad configurada
+     * @throws Exception si hay error en la configuración
+     */
     @Bean
     public SecurityFilterChain cadenaFiltrosSeguridad (HttpSecurity http) throws Exception {
         http

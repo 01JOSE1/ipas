@@ -6,42 +6,55 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
 
+/**
+ * Propiedades de configuración para el almacenamiento de archivos.
+ * 
+ * Se carga desde el archivo application.properties con el prefijo "app.almacenamiento".
+ * Define rutas, límites de tamaño y tipos MIME permitidos para archivos PDF.
+ * 
+ * Ejemplo en application.properties:
+ * {@code
+ * app.almacenamiento.destino=almacenamientoPolizaPDF
+ * app.almacenamiento.destino-temporal=almacenamientoPolizaPDFTemporal
+ * app.almacenamiento.tamano-maximo-archivo=10
+ * }
+ */
 @Configuration
 @ConfigurationProperties(prefix = "app.almacenamiento")
 @Validated
 public class ArchivoAlmacenamientoPropiedades {
 
     /**
-     * Directorio raíz donde se almacenan los archivos
+     * Directorio raíz donde se almacenan los archivos PDF finales permanentemente.
      */
     @NotBlank(message = "La ubicación de almacenamiento no puede estar vacía")
     private String destino = "almacenamientoPolizaPDF";
 
     /**
-     * Directorio raíz donde se almacenan los archivos
+     * Directorio raíz donde se almacenan temporalmente los archivos durante el procesamiento.
      */
     @NotBlank(message = "La ubicación de almacenamiento temporal no puede estar vacía")
     private String destinoTemporal = "almacenamientoPolizaPDFTemporal";
 
     /**
-     * Tamaño máximo de archivo en MB
+     * Tamaño máximo permitido para un archivo individual en MB.
      */
     @Positive(message = "El tamaño máximo debe ser positivo")
     private long tamanoMaximoArchivo = 10;
 
     /**
-     * Tamaño máximo de request en MB
+     * Tamaño máximo permitido para una petición HTTP completa en MB.
      */
     @Positive
     private long TamanoMaximoPeticion = 10;
 
     /**
-     * Tipos MIME permitidos
+     * Tipos MIME permitidos para subir archivos (por defecto solo PDF).
      */
     private String[] tipoContenidoPermitido = {"application/pdf"};
 
     /**
-     * Extensiones de archivo permitidas
+     * Extensiones de archivo permitidas para subir (por defecto solo .pdf).
      */
     private String[] extensionesPermitidas = {".pdf"};
 
