@@ -1,4 +1,4 @@
-package com.proyecto.ipas.presentacion.objetoTransferenciaDatos.aseguradora;
+package com.proyecto.ipas.presentacion.objetoTransferenciaDatos.poliza.aseguradora;
 
 import com.proyecto.ipas.datos.entidad.AseguradoraEntidad;
 

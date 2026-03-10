@@ -1,11 +1,11 @@
-package com.proyecto.ipas.negocio.servicio.administrador;
+package com.proyecto.ipas.negocio.servicio.usuario.administrador;
 
 import com.proyecto.ipas.datos.repositorio.ClienteRepositorio;
 import com.proyecto.ipas.datos.repositorio.PolizaRepositorio;
 import com.proyecto.ipas.datos.repositorio.UsuarioRepositorio;
 import com.proyecto.ipas.negocio.dominio.enums.EstadoUsuario;
-import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.asesor.ActividadRecienteDTO;
-import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.asesor.AsesorRankingDTO;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.usuario.asesor.ActividadRecienteDTO;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.usuario.asesor.AsesorRankingDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;

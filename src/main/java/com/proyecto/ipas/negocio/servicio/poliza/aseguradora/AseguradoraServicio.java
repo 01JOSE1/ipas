@@ -1,7 +1,7 @@
-package com.proyecto.ipas.negocio.servicio.aseguradora;
+package com.proyecto.ipas.negocio.servicio.poliza.aseguradora;
 
 import com.proyecto.ipas.datos.repositorio.AseguradoraRepositorio;
-import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.aseguradora.ListarParaSelectAseguradoraDTO;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.poliza.aseguradora.ListarParaSelectAseguradoraDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

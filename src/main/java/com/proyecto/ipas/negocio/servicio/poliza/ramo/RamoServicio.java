@@ -1,7 +1,7 @@
-package com.proyecto.ipas.negocio.servicio.ramo;
+package com.proyecto.ipas.negocio.servicio.poliza.ramo;
 
 import com.proyecto.ipas.datos.repositorio.RamoRepositorio;
-import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.ramo.ListarParaSelectRamoDTO;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.poliza.ramo.ListarParaSelectRamoDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

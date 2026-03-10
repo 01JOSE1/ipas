@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 @Service
-public class UsuarioServicio {
+public class UsuarioAutenticacionServicio {
 
     private final UsuarioRepositorio usuarioRepositorio;
     private final RolRepositorio rolRepositorio;
@@ -33,14 +33,14 @@ public class UsuarioServicio {
     private final RolMapper rolMapper;
     private final PasswordEncoder passwordEncoder;
 
-    private static final Logger registro = LoggerFactory.getLogger( UsuarioServicio.class);
+    private static final Logger registro = LoggerFactory.getLogger( UsuarioAutenticacionServicio.class);
     private static final String ROL_PREDETERMINADO = "ASESOR";
 
     /**
      * Porque la inyección por constructor hace explícitas y obligatorias las dependencias,
      * permite objetos inmutables y testeables, y evita errores ocultos que @Autowired por campo puede causar.
      */
-    public UsuarioServicio(UsuarioRepositorio usuarioRepositorio, RolRepositorio rolRepositorio, UsuarioMapper usuarioMapper, RolMapper rolMapper, PasswordEncoder passwordEncoder) {
+    public UsuarioAutenticacionServicio(UsuarioRepositorio usuarioRepositorio, RolRepositorio rolRepositorio, UsuarioMapper usuarioMapper, RolMapper rolMapper, PasswordEncoder passwordEncoder) {
         this.usuarioRepositorio = usuarioRepositorio;
         this.rolRepositorio = rolRepositorio;
         this.usuarioMapper = usuarioMapper;
@@ -110,7 +110,7 @@ public class UsuarioServicio {
             errores.add(new ConflictoExcepcion.ErrorCampo("numeroDocumento", "Numero de documento ya existe"));
         }
 
-        if (usuarioRepositorio.existsBytelefonoAndIdUsuarioNot(usuarioActualizarDTO.getTelefono(), usuarioEntidad.getIdUsuario())) {
+        if (usuarioRepositorio.existsBytelefonoAndIdUsuarioNot(usuarioActualizarDTO.getTelefono(), usuarioEntidad.getIdUsuario()) && usuarioActualizarDTO.getTelefono() != null) {
             errores.add(new ConflictoExcepcion.ErrorCampo("telefono", "Numero de telefono ya existe"));
         }
 

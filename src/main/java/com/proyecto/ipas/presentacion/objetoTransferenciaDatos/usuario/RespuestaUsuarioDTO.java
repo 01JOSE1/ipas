@@ -4,6 +4,7 @@ import com.proyecto.ipas.datos.entidad.RolEntidad;
 import com.proyecto.ipas.datos.entidad.UsuarioEntidad;
 import com.proyecto.ipas.negocio.dominio.enums.EstadoUsuario;
 import com.proyecto.ipas.negocio.dominio.enums.TipoDocumentoUsuario;
+import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.usuario.rol.RespuestaRolDTO;
 
 public record RespuestaUsuarioDTO(
         Long idUsuario,
@@ -24,7 +25,7 @@ public record RespuestaUsuarioDTO(
 
         EstadoUsuario estado,
 
-        RolEntidad rol
+        RespuestaRolDTO rol
 ) {
 
     public RespuestaUsuarioDTO(UsuarioEntidad usuarioEntidad) {
@@ -38,7 +39,7 @@ public record RespuestaUsuarioDTO(
                 usuarioEntidad.getDireccion(),
                 usuarioEntidad.getCorreo(),
                 usuarioEntidad.getEstado(),
-                usuarioEntidad.getRol()
+                new RespuestaRolDTO(usuarioEntidad.getRol())
         );
     }
 }

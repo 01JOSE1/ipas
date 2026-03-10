@@ -1,4 +1,4 @@
-package com.proyecto.ipas.presentacion.objetoTransferenciaDatos.ramo;
+package com.proyecto.ipas.presentacion.objetoTransferenciaDatos.poliza.ramo;
 
 import com.proyecto.ipas.datos.entidad.RamoEntidad;
 import com.proyecto.ipas.negocio.dominio.enums.TipoRamo;

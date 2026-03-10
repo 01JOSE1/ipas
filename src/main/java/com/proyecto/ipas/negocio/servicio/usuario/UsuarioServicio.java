@@ -46,11 +46,11 @@ public class UsuarioServicio {
     }
 
     @Transactional(readOnly = true)
-    public Page<RespuestaUsuarioDTO> obtenerUsuariosPaginados(int pagina, int cantidad) {
+    public Page<RespuestaUsuarioDTO> obtenerUsuariosPaginados(int pagina, int cantidad, Long idUsuario) {
         registro.debug("Mostrando los registros de usuarios");
         Pageable pageable = PageRequest.of(pagina, cantidad);
 
-        return usuarioRepositorio.findAll(pageable).map(RespuestaUsuarioDTO::new);
+        return usuarioRepositorio.findByIdUsuarioNot(idUsuario, pageable).map(RespuestaUsuarioDTO::new);
 
     }
 

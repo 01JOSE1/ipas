@@ -1,4 +1,4 @@
-package com.proyecto.ipas.negocio.servicio.asesor;
+package com.proyecto.ipas.negocio.servicio.usuario.asesor;
 
 import com.proyecto.ipas.datos.repositorio.ClienteRepositorio;
 import com.proyecto.ipas.datos.repositorio.PolizaRepositorio;
