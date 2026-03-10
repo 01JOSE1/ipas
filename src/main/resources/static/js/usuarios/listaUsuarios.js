@@ -1,20 +1,13 @@
-/* =============================================
-   LISTA USUARIOS — ADMINISTRADOR JS
-   Modales: cambiar estado / cambiar rol
-   ============================================= */
+/* Modales para cambiar el estado y rol de usuarios */
 
-/* ─────────────────────────────────────────────
-   ESTADOS disponibles con sus iconos y etiquetas
-   ───────────────────────────────────────────── */
+// Estados disponibles con sus iconos y etiquetas
 const ESTADOS_DISPONIBLES = [
     { value: 'ACTIVO',     label: 'Activo',     icono: 'fa-check-circle'  },
     { value: 'INACTIVO',   label: 'Inactivo',   icono: 'fa-minus-circle'  },
     { value: 'SUSPENDIDO', label: 'Suspendido', icono: 'fa-ban'           },
 ];
 
-/* ─────────────────────────────────────────────
-   MODAL ESTADO
-   ───────────────────────────────────────────── */
+// Abre el modal para cambiar el estado del usuario
 function abrirModalEstado(btn) {
     const idUsuario    = btn.dataset.id;
     const nombre       = btn.dataset.nombre;
@@ -68,9 +61,7 @@ function cerrarModalEstado(event) {
     }
 }
 
-/* ─────────────────────────────────────────────
-   MODAL ROL
-   ───────────────────────────────────────────── */
+// Abre el modal para cambiar el rol del usuario
 function abrirModalRol(btn) {
     const idUsuario  = btn.dataset.id;
     const nombre     = btn.dataset.nombre;
@@ -121,9 +112,7 @@ function cerrarModalRol(event) {
     }
 }
 
-/* ─────────────────────────────────────────────
-   UTILIDAD
-   ───────────────────────────────────────────── */
+// Función auxiliar para cerrar modales
 function _cerrarModal(idModal) {
     document.getElementById(idModal).classList.remove('open');
     document.body.style.overflow = '';

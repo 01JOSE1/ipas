@@ -1,8 +1,4 @@
-/* =============================================
-   GESTIÓN CLIENTE — CSS CORPORATIVO
-   ============================================= */
 
-/* ===== LAYOUT DOS COLUMNAS ===== */
 .gestion-layout {
     display: grid;
     grid-template-columns: 300px 1fr;
@@ -10,9 +6,6 @@
     align-items: start;
 }
 
-/* =============================================
-   CARD CLIENTE (columna izquierda)
-   ============================================= */
 .cliente-card {
     background: var(--fondo-card);
     border-radius: 16px;
@@ -110,9 +103,6 @@
     word-break: break-all;
 }
 
-/* =============================================
-   PANEL ACCIONES (columna derecha)
-   ============================================= */
 .acciones-panel {
     background: var(--fondo-card);
     border-radius: 16px;
@@ -220,7 +210,6 @@
     transform: translateX(3px);
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 900px) {
     .gestion-layout {
         grid-template-columns: 1fr;

@@ -1,8 +1,6 @@
-/* =============================================
-   ESTADÍSTICAS CLIENTES — JS (Chart.js 4)
-   ============================================= */
+/* Gráficos de estadísticas de clientes con Chart.js */
 
-/* ── Paleta corporativa ── */
+// Paleta de colores corporativa
 const PALETA = {
     navy:   '#081E42',
     blue:   '#0F4C9C',
@@ -21,13 +19,13 @@ const COLORES_EST_CIVIL = [PALETA.navy, PALETA.blue, PALETA.cyan, PALETA.amber, 
 const COLORES_CIUDAD    = [PALETA.navy, PALETA.blue, PALETA.cyan, PALETA.teal, PALETA.amber, PALETA.purple, PALETA.gray, PALETA.light];
 const COLORES_TIPO_DOC  = [PALETA.navy, PALETA.blue, PALETA.cyan, PALETA.amber, PALETA.purple];
 
-/* ── Configuración global Chart.js ── */
+// Configuración global para Chart.js
 Chart.defaults.font.family = "'DM Sans', sans-serif";
 Chart.defaults.font.size   = 12;
 Chart.defaults.color       = '#6C757D';
 Chart.defaults.plugins.legend.display = false;
 
-/* ── Leer datos del DOM ── */
+// Funciones auxiliares para parsear datos del HTML
 function parsearLista(str) {
     if (!str || str.trim() === '' || str === '[]') return [];
     return str.replace(/^\[|\]$/g, '').split(',').map(s => s.trim());
@@ -47,7 +45,7 @@ const estCivilValores   = parsearNumericos(datos.dataset.estadoCivilValores);
 const tipoDocLabels     = parsearLista(datos.dataset.tipoDocLabels);
 const tipoDocValores    = parsearNumericos(datos.dataset.tipoDocValores);
 
-/* ── Utilidad: leyenda custom ── */
+// Función auxiliar para construir leyenda personalizada de gráficos
 function construirLeyenda(idContenedor, labels, colores) {
     const contenedor = document.getElementById(idContenedor);
     if (!contenedor) return;
@@ -63,16 +61,14 @@ function construirLeyenda(idContenedor, labels, colores) {
     });
 }
 
-/* ── Config tooltip reutilizable ── */
+// Función para mostrar porcentaje en los tooltips de gráficos
 function tooltipPorcentaje(ctx) {
     const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
     const pct   = total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : 0;
     return ` ${ctx.label}: ${ctx.parsed} (${pct}%)`;
 }
 
-/* ─────────────────────────────────────────────
-   GRÁFICA 1 — Donut: activos vs inactivos
-   ───────────────────────────────────────────── */
+// Gráfico 1 - Donut de clientes activos vs inactivos
 if (activosLabels.length > 0) {
     new Chart(document.getElementById('chartActivos'), {
         type: 'doughnut',
@@ -95,9 +91,7 @@ if (activosLabels.length > 0) {
     construirLeyenda('legendActivos', activosLabels, COLORES_ACTIVOS);
 }
 
-/* ─────────────────────────────────────────────
-   GRÁFICA 2 — Donut: estado civil
-   ───────────────────────────────────────────── */
+// Gráfico 2 - Donut de estado civil
 if (estCivilLabels.length > 0) {
     new Chart(document.getElementById('chartEstadoCivil'), {
         type: 'doughnut',
@@ -120,9 +114,7 @@ if (estCivilLabels.length > 0) {
     construirLeyenda('legendEstadoCivil', estCivilLabels, COLORES_EST_CIVIL);
 }
 
-/* ─────────────────────────────────────────────
-   GRÁFICA 3 — Bar horizontal: clientes por ciudad
-   ───────────────────────────────────────────── */
+// Gráfico 3 - Clientes por ciudad
 if (ciudadLabels.length > 0) {
     new Chart(document.getElementById('chartCiudad'), {
         type: 'bar',
@@ -160,9 +152,7 @@ if (ciudadLabels.length > 0) {
     });
 }
 
-/* ─────────────────────────────────────────────
-   GRÁFICA 4 — Bar vertical: tipo de documento
-   ───────────────────────────────────────────── */
+// Gráfico 4 - Tipo de documento
 if (tipoDocLabels.length > 0) {
     new Chart(document.getElementById('chartTipoDoc'), {
         type: 'bar',

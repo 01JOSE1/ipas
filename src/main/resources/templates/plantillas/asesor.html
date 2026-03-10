@@ -19,7 +19,7 @@
 
     <div class="dashboard-wrapper">
 
-        <!-- ===== SIDEBAR ===== -->
+        <!-- SIDEBAR -->
         <aside class="sidebar" id="sidebar">
 
             <!-- Logo / Brand -->
@@ -95,11 +95,7 @@
 
                 <div class="topbar-right">
 
-                    <!--
-                        ✅ DATOS DEL USUARIO: leídos directo del principal de Spring Security.
-                           No se necesita enviar desde ningún controlador.
-                           Requiere: thymeleaf-extras-springsecurity6
-                    -->
+                    <!-- Datos del usuario directos del principal de Spring Security. No se necesita enviar desde ningún controlador. -->
                     <div class="user-info" id="userDropdownTrigger" onclick="toggleUserMenu()">
                         <div class="user-avatar">
                             <span
@@ -118,7 +114,6 @@
                         <i class="fa fa-chevron-down user-chevron" id="userChevron"></i>
                     </div>
 
-                    <!-- Dropdown usuario -->
                     <div class="user-dropdown" id="userDropdown">
                         <a th:href="@{/usuarios/perfil}" class="dropdown-item">
                             <i class="fa fa-user"></i> Mi Perfil
@@ -134,7 +129,6 @@
                 </div>
             </header>
 
-            <!-- CONTENIDO DE CADA VISTA SE INYECTA AQUÍ -->
             <main class="page-content">
                 <th:block layout:fragment="contenidoVista"></th:block>
             </main>
@@ -145,7 +139,6 @@
 </th:block>
 
 <th:block layout:fragment="js">
-    <!-- Inyecta el context path para que el JS lo use -->
     <script th:inline="javascript">
         window.IPAS_CTX = /*[[@{/}]]*/ "/";
     </script>

@@ -1,8 +1,6 @@
-/* =============================================
-   PERFIL USUARIO — CSS CORPORATIVO
-   ============================================= */
+/* Formulario de perfil de usuario */
 
-/* ===== ENCABEZADO PERFIL ===== */
+/* Encabezado del perfil con información del usuario */
 .perfil-header {
     display: flex;
     align-items: center;
@@ -74,7 +72,7 @@
     font-size: 11px;
 }
 
-/* ===== CARD FORMULARIO ===== */
+/* Card que contiene el formulario */
 .form-card {
     background: var(--fondo-card);
     border-radius: 16px;
@@ -83,7 +81,7 @@
     overflow: hidden;
 }
 
-/* ===== SECCIONES ===== */
+/* Secciones del formulario */
 .form-section {
     padding: 28px 32px;
     border-bottom: 1px solid #f0f3f7;
@@ -118,7 +116,7 @@
     grid-column: 1 / -1;
 }
 
-/* ===== CAMPO ===== */
+/* Campo individual del formulario */
 .field-group {
     display: flex;
     flex-direction: column;
@@ -182,7 +180,7 @@
     font-size: 11px;
 }
 
-/* ===== ERROR ===== */
+/* Mensajes de error */
 .field-error {
     font-size: 12px;
     color: var(--estado-error);
@@ -204,7 +202,7 @@
     background: rgba(220, 53, 69, 0.02);
 }
 
-/* ===== BOTONES ===== */
+/* Botones del formulario */
 .form-actions {
     padding: 24px 32px;
     background: #fafbfc;
@@ -265,7 +263,7 @@
 }
 
 
-/* ===== RESPONSIVE ===== */
+/* Estilos para dispositivos móviles */
 @media (max-width: 700px) {
     .perfil-header {
         flex-direction: column;

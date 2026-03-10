@@ -1,9 +1,6 @@
-/* =============================================
-   DASHBOARD ASESOR — JS
-   Solo lógica propia del dashboard
-   ============================================= */
+/* Dashboard del asesor - fecha y hora en el banner de bienvenida */
 
-// ===== FECHA Y HORA EN BANNER =====
+// Muestra la fecha y hora actual en el dashboard
 document.addEventListener('DOMContentLoaded', function () {
     var fechaEl = document.getElementById('fechaHoy');
     if (fechaEl) {

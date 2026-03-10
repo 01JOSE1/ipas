@@ -1,8 +1,4 @@
-/* =============================================
-   HISTORIAL PÓLIZAS — CSS CORPORATIVO
-   ============================================= */
 
-/* ===== ENCABEZADO ===== */
 .page-header {
     display: flex;
     align-items: flex-start;
@@ -31,7 +27,6 @@
     font-weight: 600;
 }
 
-/* ===== EMPTY STATE ===== */
 .empty-card {
     background: var(--fondo-card);
     border-radius: 14px;
@@ -57,7 +52,6 @@
     font-weight: 500;
 }
 
-/* ===== TABLA CARD ===== */
 .table-card {
     background: var(--fondo-card);
     border-radius: 14px;
@@ -66,7 +60,6 @@
     overflow: hidden;
 }
 
-/* ===== TABLA ===== */
 .polizas-table {
     width: 100%;
     border-collapse: collapse;
@@ -108,7 +101,6 @@
     vertical-align: middle;
 }
 
-/* ===== BADGE CÓDIGO ===== */
 .badge-codigo {
     display: inline-block;
     background: rgba(15, 76, 156, 0.08);
@@ -121,7 +113,6 @@
     letter-spacing: 0.5px;
 }
 
-/* ===== VIGENCIA ===== */
 .td-vigencia {
     min-width: 200px;
 }
@@ -162,7 +153,6 @@
     font-weight: 600;
 }
 
-/* ===== BADGE VIGENCIA ===== */
 .badge-vigencia {
     display: inline-flex;
     align-items: center;
@@ -184,8 +174,6 @@
     color: var(--estado-error);
 }
 
-
-/* ===== MONTOS ===== */
 .td-monto {
     font-size: 13.5px;
     color: var(--texto-secundario);
@@ -197,7 +185,6 @@
     color: var(--texto-principal);
 }
 
-/* ===== BADGE ESTADO PÓLIZA ===== */
 .badge-estado {
     display: inline-block;
     font-size: 11.5px;
@@ -212,7 +199,6 @@
 .badge-cancelada{ background: rgba(220,53,69,0.10);  color: var(--estado-error); }
 .badge-otro     { background: rgba(108,117,125,0.10);color: var(--texto-secundario); }
 
-/* ===== BADGE ESTADO PAGO ===== */
 .badge-pago {
     display: inline-flex;
     align-items: center;
@@ -228,7 +214,6 @@
 .pago-pendiente{ background: rgba(255,193,7,0.15);  color: #856404; }
 .pago-vencido  { background: rgba(220,53,69,0.10);  color: var(--estado-error); }
 
-/* ===== BADGE PLACA ===== */
 .badge-placa {
     display: inline-block;
     background: #f4f6f9;
@@ -242,7 +227,6 @@
     letter-spacing: 1px;
 }
 
-/* ===== ACCIONES ===== */
 .td-acciones {
     white-space: nowrap;
 }
@@ -293,7 +277,6 @@
     font-size: 12px;
 }
 
-/* ===== BOTÓN CANCELAR PÓLIZA ===== */
 .btn-cancelar {
     display: inline-flex;
     align-items: center;
@@ -324,7 +307,6 @@
     font-size: 12px;
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 1100px) {
     .td-vigencia { min-width: 160px; }
     .polizas-table thead th:nth-child(10),

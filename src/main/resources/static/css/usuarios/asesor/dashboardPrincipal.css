@@ -1,10 +1,4 @@
-/* =============================================
-   DASHBOARD ASESOR — CSS
-   Solo contenido propio del dashboard:
-   banner bienvenida, tarjetas, accesos rápidos
-   ============================================= */
 
-/* Banner bienvenida */
 .welcome-banner {
     display: flex;
     align-items: center;
@@ -40,7 +34,6 @@
     line-height: 1.6;
 }
 
-/* ===== TARJETAS ESTADÍSTICAS ===== */
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -100,7 +93,6 @@
     line-height: 1;
 }
 
-/* ===== ACCESOS RÁPIDOS ===== */
 .section-title {
     font-size: 16px;
     font-weight: 700;
@@ -175,7 +167,6 @@
     transform: translateX(0);
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 1100px) {
     .cards-grid,
     .quick-grid {

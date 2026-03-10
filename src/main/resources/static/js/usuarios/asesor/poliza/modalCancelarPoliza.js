@@ -1,8 +1,10 @@
+// Precarga datos en el modal de cancelación de póliza
 document.addEventListener("DOMContentLoaded", () => {
 
     const modal = document.getElementById("modalCancelarPoliza");
     if (!modal) return;
 
+    // Cuando el modal se abre, carga los datos de la póliza
     modal.addEventListener("show.bs.modal", (event) => {
 
         const button = event.relatedTarget;

@@ -1,25 +1,10 @@
-/* =============================================
-   PLANTILLA ASESOR — JS
-   ============================================= */
+/* Plantilla para asesor - navegación automática, sidebar y dropdown */
 
-// ─────────────────────────────────────────────
-// CONTEXT PATH — inyectado desde Thymeleaf
-// ─────────────────────────────────────────────
+// Context path inyectado desde Thymeleaf
 const CTX = (window.IPAS_CTX || '').replace(/\/$/, '');
 
-// ─────────────────────────────────────────────
-// MAPA DE SECCIONES
-// La clave es el prefijo único de la sección.
-// Cualquier ruta que empiece con ese prefijo
-// activará esa pestaña automáticamente.
-//
-// Ejemplos que se activan solos sin tocar nada:
-//   /asesor/poliza/ver          → Pólizas
-//   /asesor/poliza/detalle/123  → Pólizas
-//   /asesor/poliza/editar/456   → Pólizas
-//   /asesor/cliente/ver         → Clientes
-//   /asesor/cliente/crear       → Clientes
-// ─────────────────────────────────────────────
+// Mapa de secciones con rutas que se activan automáticamente
+// Ejemplo: /asesor/poliza/ver y sus sub-rutas activan la sección de Pólizas
 const SECCIONES = {
     '/asesor/cliente' : { titulo: 'Clientes'   },
     '/asesor/poliza'  : { titulo: 'Pólizas'    },
@@ -28,17 +13,13 @@ const SECCIONES = {
     '/asesor/'        : { titulo: 'Dashboard', exacto: true },
 };
 
-// ─────────────────────────────────────────────
 // Quita el context path de la URL actual
-// ─────────────────────────────────────────────
 function pathSinCtx() {
     const path = window.location.pathname;
     return CTX ? path.replace(CTX, '') || '/' : path;
 }
 
-// ─────────────────────────────────────────────
 // Encuentra qué sección está activa
-// ─────────────────────────────────────────────
 function seccionActiva() {
     const path = pathSinCtx();
 
@@ -53,9 +34,7 @@ function seccionActiva() {
     return null;
 }
 
-// ─────────────────────────────────────────────
-// NAV ACTIVO
-// ─────────────────────────────────────────────
+// Marca la sección activa en la navegación
 function marcarNavActivo() {
     const activa = seccionActiva();
 
@@ -64,9 +43,7 @@ function marcarNavActivo() {
     });
 }
 
-// ─────────────────────────────────────────────
-// TÍTULO DEL TOPBAR
-// ─────────────────────────────────────────────
+// Actualiza el título de la página según la sección activa
 function actualizarTitulo() {
     const activa  = seccionActiva();
     const titulo  = activa ? (SECCIONES[activa]?.titulo ?? 'IPAS') : 'IPAS';
@@ -76,9 +53,7 @@ function actualizarTitulo() {
     document.title = 'IPAS - ' + titulo;
 }
 
-// ─────────────────────────────────────────────
-// SIDEBAR TOGGLE
-// ─────────────────────────────────────────────
+// Abre o cierra el sidebar
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     if (!sidebar) return;
@@ -92,6 +67,7 @@ function toggleSidebar() {
     localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
 }
 
+// Restaura el estado del sidebar desde el almacenamiento local
 function restaurarSidebar() {
     const sidebar = document.getElementById('sidebar');
     if (!sidebar || window.innerWidth <= 700) return;
@@ -101,9 +77,7 @@ function restaurarSidebar() {
     }
 }
 
-// ─────────────────────────────────────────────
-// DROPDOWN USUARIO
-// ─────────────────────────────────────────────
+// Abre o cierra el menú del usuario
 function toggleUserMenu() {
     const dropdown = document.getElementById('userDropdown');
     const chevron  = document.getElementById('userChevron');
@@ -125,9 +99,7 @@ document.addEventListener('click', function (e) {
     }
 });
 
-// ─────────────────────────────────────────────
-// CERRAR SIDEBAR MOBILE al clic fuera
-// ─────────────────────────────────────────────
+// Cierra el sidebar móvil cuando se hace clic fuera
 document.addEventListener('click', function (e) {
     if (window.innerWidth > 700) return;
 
@@ -140,9 +112,7 @@ document.addEventListener('click', function (e) {
     }
 });
 
-// ─────────────────────────────────────────────
-// INIT
-// ─────────────────────────────────────────────
+// Inicialización cuando la página carga
 document.addEventListener('DOMContentLoaded', function () {
     restaurarSidebar();
     marcarNavActivo();

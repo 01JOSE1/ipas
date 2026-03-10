@@ -1,8 +1,4 @@
-/* =============================================
-   CARGA PDF PÓLIZA IA — CSS CORPORATIVO
-   ============================================= */
 
-/* ===== ENCABEZADO ===== */
 .page-header {
     display: flex;
     align-items: center;
@@ -45,7 +41,6 @@
     margin: 0;
 }
 
-/* ===== CARD ===== */
 .upload-card {
     background: var(--fondo-card);
     border-radius: 16px;
@@ -56,7 +51,6 @@
     margin: 0 auto;
 }
 
-/* ===== INPUT OCULTO ===== */
 #archivo {
     position: absolute;
     width: 0;
@@ -65,7 +59,6 @@
     pointer-events: none;
 }
 
-/* ===== DROP ZONE ===== */
 .drop-zone {
     border: 2px dashed #d1d9e0;
     border-radius: 14px;
@@ -114,7 +107,6 @@
     margin: 0;
 }
 
-/* ===== FILE INFO ===== */
 .file-info {
     display: none;
     margin-bottom: 24px;
@@ -190,7 +182,6 @@
     color: var(--estado-error);
 }
 
-/* ===== BOTONES ===== */
 .form-actions {
     display: flex;
     align-items: center;
@@ -253,7 +244,6 @@
 
 .btn-procesar i { font-size: 14px; }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 600px) {
     .upload-card { padding: 24px 18px; }
     .drop-zone { padding: 36px 20px; }

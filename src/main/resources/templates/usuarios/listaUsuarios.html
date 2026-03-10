@@ -14,7 +14,7 @@
 <body>
 <th:block layout:fragment="contenidoVista">
 
-    <!-- ===== ENCABEZADO DE PÁGINA ===== -->
+    <!-- ENCABEZADO DE PÁGINA -->
     <div class="page-header">
         <div class="page-header-left">
             <h1 class="page-title">Gestión de Usuarios</h1>
@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <!-- ===== GRID DE TARJETAS ===== -->
+    <!-- GRID DE TARJETAS -->
     <div class="usuarios-grid" th:if="${usuarios != null and !usuarios.isEmpty()}">
 
         <div class="usuario-card" th:each="usuario : ${usuarios}">
@@ -103,7 +103,7 @@
         <span>No hay usuarios registrados</span>
     </div>
 
-    <!-- ===== PAGINACIÓN ===== -->
+    <!-- PAGINACIÓN -->
     <div class="pagination-wrap" th:if="${totalPaginas > 1}">
 
         <!-- Anterior -->
@@ -139,9 +139,7 @@
     </div>
 
 
-    <!-- ===================================================
-         MODAL — CAMBIAR ESTADO
-         =================================================== -->
+    <!-- MODAL — CAMBIAR ESTADO -->
     <div class="modal-overlay" id="modalEstado" onclick="cerrarModalEstado(event)">
         <div class="modal-box">
 
@@ -180,9 +178,7 @@
     </div>
 
 
-    <!-- ===================================================
-         MODAL — CAMBIAR ROL
-         =================================================== -->
+    <!-- MODAL — CAMBIAR ROL -->
     <div class="modal-overlay" id="modalRol" onclick="cerrarModalRol(event)">
         <div class="modal-box">
 

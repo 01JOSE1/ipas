@@ -1,3 +1,4 @@
+/* Contenedor principal centrado con flexbox */
 body {
     margin: 0; padding: 0;
     background-color: var(--fondo-general);
@@ -9,6 +10,7 @@ body {
     overflow: hidden;
 }
 
+/* Wrapper para alinear el logo y la tarjeta */
 .main-container {
     width: 100%;
     max-width: 1100px;
@@ -17,7 +19,7 @@ body {
     align-items: center;
 }
 
-/* ── Canvas stage — más grande ───────────────── */
+/* Área para el canvas animado del logo 3D */
 .logo-stage {
     width: 100vw;
     max-width: 1100px;
@@ -31,7 +33,7 @@ body {
     display: block;
 }
 
-/* ── Tarjeta ────────────────────────────────── */
+/* Tarjeta de error con animación de entrada */
 .error-card {
     width: 100%;
     max-width: 620px;
@@ -49,12 +51,13 @@ body {
     animation-delay: 0.2s;
 }
 
+/* Animación para deslizar la tarjeta hacia arriba */
 @keyframes cardEnter {
     from { opacity: 0; transform: translateY(12px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Badge */
+/* Badge con indicador de error parpadeante */
 .badge-error {
     display: inline-flex;
     align-items: center;
@@ -83,7 +86,7 @@ body {
     50%       { opacity: 0.18; }
 }
 
-/* Código HTTP */
+/* Código de error HTTP prominente */
 .http-code {
     font-size: 108px;
     font-weight: 800;
@@ -93,7 +96,7 @@ body {
     margin: 0 0 6px;
 }
 
-/* Tipo de error */
+/* Descripción del tipo de error */
 .error-type {
     font-size: 18px;
     font-weight: 700;

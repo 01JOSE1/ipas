@@ -1,8 +1,6 @@
-/* =============================================
-   ESTADÍSTICAS PÓLIZAS — JS (Chart.js 4)
-   ============================================= */
+/* Gráficos de estadísticas de pólizas con Chart.js */
 
-/* ── Paleta corporativa ── */
+// Paleta de colores corporativa
 const PALETA = {
     navy:   '#081E42',
     blue:   '#0F4C9C',

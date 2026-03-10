@@ -1,10 +1,4 @@
-/* =============================================
-   ESTADÍSTICAS (Pólizas y Clientes) — CSS
-   Compartido: copiar como estadisticasPolizas.css
-   y estadisticasClientes.css (idéntico)
-   ============================================= */
 
-/* ===== ENCABEZADO ===== */
 .page-header {
     display: flex;
     align-items: flex-start;
@@ -45,7 +39,7 @@
     font-size: 14px;
 }
 
-/* ===== KPI GRID ===== */
+
 .kpi-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -115,7 +109,7 @@
     color: var(--texto-desactivado);
 }
 
-/* ===== FILAS DE GRÁFICAS ===== */
+
 .charts-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -123,7 +117,7 @@
     margin-bottom: 20px;
 }
 
-/* ===== TARJETA DE GRÁFICA ===== */
+
 .chart-card {
     background: var(--fondo-card);
     border-radius: 16px;
@@ -246,7 +240,7 @@
     flex-shrink: 0;
 }
 
-/* ===== RESPONSIVE ===== */
+
 @media (max-width: 1100px) {
     .kpi-grid    { grid-template-columns: repeat(2, 1fr); }
     .charts-row  { grid-template-columns: 1fr; }

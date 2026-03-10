@@ -8,11 +8,7 @@ var limiteIzquierda = 0;
 
 var movimientoDerecha = true;
 
-
-/* -------------------------------------------------------
-   Al cargar la página, si hay errores en el form de registro
-   se mueve el bloque animado a la izquierda para dejarlo visible
-------------------------------------------------------- */
+// Detecta errores en el formulario de registro y muestra el panel correspondiente
 document.addEventListener("DOMContentLoaded", function () {
     var hayErroresRegistro = document.querySelectorAll("#form-register .error").length > 0;
 
@@ -59,12 +55,7 @@ function moverYCambiar() {
     movimientoDerecha = !movimientoDerecha;
 }
 
-
-/* -------------------------------------------------------
-   toggleContraseñaVisibility
-   Acepta el ID del input y el ID del botón (string)
-   como los pasa el HTML: onclick="toggleContraseñaVisibility('id-input','id-boton')"
-------------------------------------------------------- */
+// Alterna visibilidad de contraseña
 function toggleContraseñaVisibility(inputId, buttonId) {
     var input = document.getElementById(inputId);
     var boton = document.getElementById(buttonId);

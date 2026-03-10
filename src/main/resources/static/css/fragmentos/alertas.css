@@ -1,4 +1,4 @@
-/* ===== TOAST ALERTAS - ESTILO CORPORATIVO ===== */
+
 .toast-wrapper {
     position: fixed;
     top: 24px;
@@ -39,7 +39,6 @@
     animation: toastProgress 5s linear forwards;
 }
 
-/* ===== VARIANTES ===== */
 .toast-success {
     border-left-color: var(--estado-exito);
 }
@@ -68,14 +67,12 @@
 .toast-warning .toast-tipo  { color: var(--estado-advertencia); }
 .toast-warning::after       { background: var(--estado-advertencia); }
 
-/* ===== ÍCONO ===== */
 .toast-icon {
     font-size: 1.1rem;
     flex-shrink: 0;
     margin-top: 2px;
 }
 
-/* ===== CONTENIDO ===== */
 .toast-body {
     display: flex;
     flex-direction: column;
@@ -97,7 +94,6 @@
     word-break: break-word;
 }
 
-/* ===== BOTÓN CERRAR ===== */
 .toast-close {
     background: none;
     border: none;
@@ -113,7 +109,6 @@
 }
 .toast-close:hover { opacity: 1; }
 
-/* ===== ANIMACIONES ===== */
 @keyframes toastEntrada {
     from {
         opacity: 0;

@@ -1,8 +1,4 @@
-/* =============================================
-   VER CLIENTES — CSS CORPORATIVO
-   ============================================= */
 
-/* ===== ENCABEZADO ===== */
 .page-header {
     display: flex;
     align-items: flex-start;
@@ -62,7 +58,6 @@
     font-weight: 600;
 }
 
-/* ===== TARJETA TABLA ===== */
 .table-card {
     background: var(--fondo-card);
     border-radius: 14px;
@@ -72,7 +67,6 @@
     margin-bottom: 24px;
 }
 
-/* ===== TABLA ===== */
 .clientes-table {
     width: 100%;
     border-collapse: collapse;
@@ -118,7 +112,6 @@
     vertical-align: middle;
 }
 
-/* ===== BADGE ID ===== */
 .badge-id {
     display: inline-flex;
     align-items: center;
@@ -132,7 +125,6 @@
     min-width: 36px;
 }
 
-/* ===== CLIENTE INFO con avatar ===== */
 .cliente-info {
     display: flex;
     align-items: center;
@@ -154,7 +146,6 @@
     flex-shrink: 0;
 }
 
-/* ===== BADGE TIPO DOCUMENTO ===== */
 .badge-doc {
     display: inline-block;
     background: rgba(0, 180, 216, 0.1);
@@ -166,13 +157,11 @@
     white-space: nowrap;
 }
 
-/* ===== CORREO ===== */
 .td-correo {
     color: var(--texto-secundario);
     font-size: 13.5px;
 }
 
-/* ===== BOTÓN GESTIONAR ===== */
 .btn-gestionar {
     display: inline-flex;
     align-items: center;
@@ -198,7 +187,6 @@
     font-size: 12px;
 }
 
-/* ===== EMPTY STATE ===== */
 .empty-row td {
     padding: 48px 0 !important;
 }
@@ -221,7 +209,7 @@
     font-weight: 500;
 }
 
-/* ===== PAGINACIÓN ===== */
+
 .pagination-wrapper {
     display: flex;
     align-items: center;
@@ -272,7 +260,6 @@
     padding: 0 10px;
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 900px) {
     .clientes-table thead th:nth-child(3),
     .clientes-table td:nth-child(3) {

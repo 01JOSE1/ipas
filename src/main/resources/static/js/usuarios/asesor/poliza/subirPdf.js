@@ -1,6 +1,4 @@
-/* =============================================
-   CARGA PDF PÓLIZA IA — JS
-   ============================================= */
+/* Carga de PDF para pólizas con soporte drag-drop */
 
 const input    = document.getElementById("archivo");
 const dropZone = document.getElementById("dropZone");
@@ -9,18 +7,14 @@ const fileName = document.getElementById("fileName");
 const fileSize = document.getElementById("fileSize");
 const btnEnviar = document.getElementById("btnEnviar");
 
-/* -------------------------------------------------------
-   INPUT normal (clic)
-------------------------------------------------------- */
+// Carga archivo desde input normal
 input.addEventListener("change", () => {
     if (input.files.length > 0) {
         mostrarArchivo(input.files[0]);
     }
 });
 
-/* -------------------------------------------------------
-   DRAG & DROP
-------------------------------------------------------- */
+// Gestiona drag & drop de archivos
 dropZone.addEventListener("dragover", (e) => {
     e.preventDefault();
     dropZone.classList.add("dragover");

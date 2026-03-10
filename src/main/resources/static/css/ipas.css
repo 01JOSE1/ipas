@@ -1,13 +1,6 @@
-/* ============================================
-   IPAS - LANDING PAGE
-   Intermediario de Pólizas Ágil y Seguro
-   ============================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap');
 
-/* ============================================
-   RESET & BASE
-   ============================================ */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -21,9 +14,6 @@ body {
     overflow-x: hidden;
 }
 
-/* ============================================
-   NAVBAR
-   ============================================ */
 .lp-navbar {
     position: fixed;
     top: 0;
@@ -138,9 +128,6 @@ body {
     box-shadow: 0 4px 16px rgba(0,0,0,0.15);
 }
 
-/* ============================================
-   HERO SECTION
-   ============================================ */
 .lp-hero {
     position: relative;
     min-height: 100vh;
@@ -377,9 +364,6 @@ body {
     font-size: 1rem;
 }
 
-/* ============================================
-   CARACTERÍSTICAS
-   ============================================ */
 .lp-features {
     padding: 6rem 0;
     background: var(--fondo-general);
@@ -509,9 +493,6 @@ body {
     font-weight: 400;
 }
 
-/* ============================================
-   SOBRE NOSOTROS
-   ============================================ */
 .lp-about {
     padding: 6rem 0;
     background: #FFFFFF;
@@ -688,9 +669,6 @@ body {
     flex-shrink: 0;
 }
 
-/* ============================================
-   ESTADÍSTICAS
-   ============================================ */
 .lp-stats-section {
     padding: 5rem 0;
     background: linear-gradient(135deg, var(--color-primario-oscuro), var(--color-primario));
@@ -757,9 +735,6 @@ body {
     font-weight: 400;
 }
 
-/* ============================================
-   CTA FINAL
-   ============================================ */
 .lp-cta {
     padding: 6rem 0;
     background: var(--fondo-general);
@@ -867,9 +842,6 @@ body {
     color: var(--color-primario);
 }
 
-/* ============================================
-   FOOTER
-   ============================================ */
 .lp-footer {
     background: var(--color-primario-oscuro);
     padding: 3.5rem 0 1.5rem;
@@ -951,9 +923,6 @@ body {
     color: rgba(255,255,255,0.7);
 }
 
-/* ============================================
-   ANIMACIONES
-   ============================================ */
 @keyframes fadeUp {
     from {
         opacity: 0;
@@ -987,9 +956,7 @@ body {
 .lp-reveal-delay-3 { transition-delay: 0.3s; }
 .lp-reveal-delay-4 { transition-delay: 0.4s; }
 
-/* ============================================
-   RESPONSIVE
-   ============================================ */
+
 @media (max-width: 992px) {
     .lp-about .container {
         grid-template-columns: 1fr;
@@ -1045,9 +1012,6 @@ body {
     }
 }
 
-/* ============================================
-   TYPOGRAPHY OVERRIDES — DM Sans consistency
-   ============================================ */
 .lp-section-title {
     letter-spacing: -1px;
     font-weight: 800;

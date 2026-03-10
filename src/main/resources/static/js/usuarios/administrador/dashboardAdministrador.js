@@ -1,7 +1,4 @@
-/* =============================================
-   DASHBOARD ADMINISTRADOR — JS
-   Fecha dinámica en el banner de bienvenida
-   ============================================= */
+/* Dashboard del administrador - fecha dinámica en el banner */
 
 (function setFechaHoy() {
     const el = document.getElementById('fechaHoy');
@@ -15,7 +12,7 @@
         day:     'numeric'
     };
 
-    // Capitaliza la primera letra
+    // Capitaliza la primera letra de la fecha
     const texto = ahora.toLocaleDateString('es-CO', opciones);
     el.textContent = texto.charAt(0).toUpperCase() + texto.slice(1);
 })();

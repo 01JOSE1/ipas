@@ -1,10 +1,8 @@
-/* ============================================
-   IPAS - LANDING PAGE JS
-   ============================================ */
+/* Landing page - efectos de navegación, animaciones y contadores */
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ── 1. Navbar scroll effect ──────────────────
+    // Cambia el estilo del navbar cuando se hace scroll
     const navbar = document.querySelector('.lp-navbar');
     if (navbar) {
         window.addEventListener('scroll', () => {
@@ -12,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ── 2. Scroll reveal (IntersectionObserver) ──
+    // Revela elementos con animación cuando aparecen en pantalla
     const reveals = document.querySelectorAll('.lp-reveal');
     if (reveals.length) {
         const observer = new IntersectionObserver((entries) => {
@@ -27,8 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
         reveals.forEach(el => observer.observe(el));
     }
 
-    // ── 3. Contador animado para estadísticas ───
-    function animateCounter(el, target, duration = 1800) {
+    // Anima números en las estadísticas\n    function animateCounter(el, target, duration = 1800) {
         let start = 0;
         const isDecimal = String(target).includes('.');
         const increment = target / (duration / 16);
@@ -65,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
         statNums.forEach(el => statsObserver.observe(el));
     }
 
-    // ── 4. Smooth scroll para anchor links ──────
+    // Scroll suave para los enlaces internos de la página
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             const target = document.querySelector(this.getAttribute('href'));

@@ -1,8 +1,4 @@
-/* =============================================
-   FORMULARIO PÓLIZA — CSS CORPORATIVO
-   ============================================= */
 
-/* ===== ENCABEZADO ===== */
 .page-header {
     display: flex;
     align-items: center;
@@ -40,7 +36,6 @@
     margin: 0;
 }
 
-/* ===== CARD FORMULARIO ===== */
 .form-card {
     background: var(--fondo-card);
     border-radius: 16px;
@@ -49,7 +44,6 @@
     overflow: hidden;
 }
 
-/* ===== SECCIONES ===== */
 .form-section {
     padding: 28px 32px;
     border-bottom: 1px solid #f0f3f7;
@@ -71,7 +65,6 @@
     width: auto;
 }
 
-/* ===== GRID ===== */
 .fields-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -80,7 +73,6 @@
 
 .field-group-full { grid-column: 1 / -1; }
 
-/* ===== CAMPO ===== */
 .field-group {
     display: flex;
     flex-direction: column;
@@ -130,7 +122,6 @@
     outline: none;
 }
 
-/* ===== PREFIX $ ===== */
 .input-prefix-wrapper {
     display: flex;
     align-items: center;
@@ -166,7 +157,6 @@
     flex: 1;
 }
 
-/* ===== BUSCADOR CLIENTE ===== */
 .search-wrapper {
     position: relative;
     display: flex;
@@ -294,7 +284,6 @@
     color: var(--texto-desactivado);
 }
 
-/* ===== PDF ACTUAL ===== */
 .pdf-actual {
     display: flex;
     align-items: center;
@@ -365,7 +354,6 @@
     transform: translateY(-1px);
 }
 
-/* ===== UPLOAD FILE ===== */
 .file-upload-wrapper {
     position: relative;
 }
@@ -401,7 +389,6 @@
     height: 100%;
 }
 
-/* ===== HINTS Y ERRORES ===== */
 .field-hint {
     font-size: 12px;
     color: var(--texto-desactivado);
@@ -432,7 +419,6 @@
     border-color: var(--estado-error);
 }
 
-/* ===== BOTONES ===== */
 .form-actions {
     padding: 24px 32px;
     background: #fafbfc;
@@ -485,7 +471,6 @@
 .btn-submit-green { background: var(--estado-exito); }
 .btn-submit-blue  { background: var(--color-primario); }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 700px) {
     .fields-grid { grid-template-columns: 1fr; }
     .field-group-full { grid-column: 1; }

@@ -14,7 +14,6 @@
 <body>
 <th:block layout:fragment="contenidoVista">
 
-    <!-- ===== ENCABEZADO ===== -->
     <div class="page-header">
         <div>
             <h1 class="page-title">Estadísticas de Pólizas</h1>
@@ -26,7 +25,6 @@
         </div>
     </div>
 
-    <!-- ===== KPIs ===== -->
     <div class="kpi-grid">
 
         <div class="kpi-card">
@@ -67,7 +65,7 @@
 
     </div>
 
-    <!-- ===== FILA GRÁFICAS: Donut estado + Bar ramos ===== -->
+    <!-- FILA GRÁFICAS: Donut estado + Bar ramos -->
     <div class="charts-row">
 
         <!-- Donut: distribución por estado -->
@@ -105,7 +103,7 @@
 
     </div>
 
-    <!-- ===== FILA GRÁFICAS: Bar horizontal aseguradoras ===== -->
+    <!-- FILA GRÁFICAS: Bar horizontal aseguradoras -->
     <div class="charts-row">
 
         <div class="chart-card chart-card-full">
@@ -123,7 +121,7 @@
 
     </div>
 
-    <!-- ── Datos de Thymeleaf → JS (pasados como JSON seguro) ── -->
+    <!-- Datos de Thymeleaf → JS (pasados como JSON seguro) -->
     <div id="chartData" style="display:none;"
          th:data-estado-labels="${estadoLabels}"
          th:data-estado-valores="${estadoValores}"

@@ -1,8 +1,4 @@
-/* =============================================
-   FORMULARIO CLIENTE — CSS CORPORATIVO
-   ============================================= */
 
-/* ===== ENCABEZADO ===== */
 .page-header {
     display: flex;
     align-items: center;
@@ -40,7 +36,7 @@
     margin: 0;
 }
 
-/* ===== CARD FORMULARIO ===== */
+
 .form-card {
     background: var(--fondo-card);
     border-radius: 16px;
@@ -49,7 +45,6 @@
     overflow: hidden;
 }
 
-/* ===== SECCIONES ===== */
 .form-section {
     padding: 28px 32px;
     border-bottom: 1px solid #f0f3f7;
@@ -77,14 +72,12 @@
     font-size: 13px;
 }
 
-/* ===== GRID DE CAMPOS ===== */
 .fields-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 18px 24px;
 }
 
-/* ===== CAMPO INDIVIDUAL ===== */
 .field-group {
     display: flex;
     flex-direction: column;
@@ -158,7 +151,6 @@
     background: rgba(220, 53, 69, 0.02);
 }
 
-/* ===== BOTONES ===== */
 .form-actions {
     padding: 24px 32px;
     background: #fafbfc;
@@ -219,7 +211,6 @@
     font-size: 14px;
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 700px) {
     .fields-grid {
         grid-template-columns: 1fr;

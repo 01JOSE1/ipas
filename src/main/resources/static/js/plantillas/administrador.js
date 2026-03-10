@@ -1,10 +1,7 @@
-/* =============================================
-   LAYOUT ADMIN — JS
-   Sidebar toggle, user dropdown, nav activo
-   ============================================= */
+/* Plantilla para admin - manejo del sidebar, dropdown y navegación activa */
 
 /**
- * Toggle sidebar colapsado / expandido
+ * Abre o cierra el sidebar
  */
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
@@ -18,7 +15,7 @@ function toggleSidebar() {
 }
 
 /**
- * Toggle dropdown de usuario
+ * Abre o cierra el menú del usuario
  */
 function toggleUserMenu() {
     const dropdown = document.getElementById('userDropdown');
@@ -28,7 +25,7 @@ function toggleUserMenu() {
 }
 
 /**
- * Cierra el dropdown si se hace click fuera
+ * Cierra el dropdown cuando se hace clic fuera de él
  */
 document.addEventListener('click', function (e) {
     const trigger  = document.getElementById('userDropdownTrigger');
@@ -42,8 +39,8 @@ document.addEventListener('click', function (e) {
 });
 
 /**
- * Marca el nav-item activo según la URL actual
- * y setea el título del topbar
+ * Marca la sección activa según la ruta actual
+ * y actualiza el título del topbar
  */
 (function setActiveNav() {
     const ctx      = (window.IPAS_CTX || '/').replace(/\/$/, '');

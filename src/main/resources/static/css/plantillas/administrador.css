@@ -1,7 +1,4 @@
-/* =============================================
-   LAYOUT ADMINISTRADOR — CSS
-   Sidebar, Topbar, Wrapper principal
-   ============================================= */
+
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
 
@@ -19,16 +16,13 @@ body {
     display: block;
 }
 
-/* ===== WRAPPER ===== */
+
 .dashboard-wrapper {
     display: flex;
     height: 100vh;
     overflow: hidden;
 }
 
-/* =============================================
-   SIDEBAR — Admin: navy profundo con acento ámbar
-   ============================================= */
 .sidebar {
     width: 260px;
     min-width: 260px;
@@ -227,9 +221,7 @@ body {
     color: #ff6b6b;
 }
 
-/* =============================================
-   MAIN CONTENT
-   ============================================= */
+
 .main-content {
     flex: 1;
     display: flex;
@@ -238,9 +230,6 @@ body {
     min-width: 0;
 }
 
-/* =============================================
-   TOPBAR
-   ============================================= */
 .topbar {
     display: flex;
     align-items: center;
@@ -436,18 +425,12 @@ body {
     margin: 4px 0;
 }
 
-/* =============================================
-   PAGE CONTENT
-   ============================================= */
 .page-content {
     flex: 1;
     overflow-y: auto;
     padding: 28px 32px;
 }
 
-/* =============================================
-   RESPONSIVE
-   ============================================= */
 @media (max-width: 700px) {
     .sidebar {
         position: fixed;

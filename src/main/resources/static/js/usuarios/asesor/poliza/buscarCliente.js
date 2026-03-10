@@ -1,6 +1,4 @@
-/* =============================================
-   FORMULARIO PÓLIZA — JS
-   ============================================= */
+/* Buscador autocomplete de clientes para formulario de póliza */
 
 const inputBusqueda   = document.getElementById("busquedaCliente");
 const inputIdCliente  = document.getElementById("idCliente");
@@ -10,9 +8,7 @@ const btnClear        = document.getElementById("searchClear");
 let timeout = null;
 let clienteSeleccionado = false;
 
-/* -------------------------------------------------------
-   BUSCADOR DE CLIENTE
-------------------------------------------------------- */
+// Controla el evento de búsqueda con debounce
 inputBusqueda.addEventListener("input", function () {
 
     const termino = this.value.trim();

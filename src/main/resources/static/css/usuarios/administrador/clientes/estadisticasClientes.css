@@ -221,7 +221,7 @@
     font-weight: 500;
 }
 
-/* ===== LEYENDA CUSTOM ===== */
+
 .chart-legend {
     display: flex;
     flex-wrap: wrap;
@@ -246,7 +246,6 @@
     flex-shrink: 0;
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 1100px) {
     .kpi-grid    { grid-template-columns: repeat(2, 1fr); }
     .charts-row  { grid-template-columns: 1fr; }

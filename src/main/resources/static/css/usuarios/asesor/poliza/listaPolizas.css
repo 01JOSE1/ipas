@@ -1,8 +1,4 @@
-/* =============================================
-   VER PÓLIZAS — CSS CORPORATIVO
-   ============================================= */
 
-/* ===== ENCABEZADO ===== */
 .page-header {
     display: flex;
     align-items: flex-start;
@@ -37,7 +33,6 @@
     font-weight: 600;
 }
 
-/* ===== ACCIONES HEADER ===== */
 .header-actions {
     display: flex;
     align-items: center;
@@ -96,7 +91,6 @@
     font-size: 14px;
 }
 
-/* ===== TABLA CARD ===== */
 .table-card {
     background: var(--fondo-card);
     border-radius: 14px;
@@ -106,7 +100,6 @@
     margin-bottom: 24px;
 }
 
-/* ===== TABLA ===== */
 .polizas-table {
     width: 100%;
     border-collapse: collapse;
@@ -148,7 +141,6 @@
     vertical-align: middle;
 }
 
-/* ===== EMPTY STATE ===== */
 .empty-row td {
     padding: 56px 0 !important;
 }
@@ -171,7 +163,6 @@
     font-weight: 500;
 }
 
-/* ===== BADGE CÓDIGO ===== */
 .badge-codigo {
     display: inline-block;
     background: rgba(15, 76, 156, 0.08);
@@ -184,7 +175,6 @@
     letter-spacing: 0.5px;
 }
 
-/* ===== VIGENCIA ===== */
 .td-vigencia { min-width: 190px; }
 
 .vigencia-info {
@@ -222,7 +212,6 @@
     font-weight: 600;
 }
 
-/* ===== BADGE VIGENCIA ===== */
 .badge-vigencia {
     display: inline-flex;
     align-items: center;
@@ -244,8 +233,6 @@
     color: var(--estado-error);
 }
 
-
-/* ===== MONTOS ===== */
 .td-monto {
     font-size: 13.5px;
     color: var(--texto-secundario);
@@ -257,7 +244,6 @@
     color: var(--texto-principal);
 }
 
-/* ===== BADGE ESTADO PÓLIZA ===== */
 .badge-estado {
     display: inline-block;
     font-size: 11.5px;
@@ -272,7 +258,6 @@
 .badge-cancelada { background: rgba(220,53,69,0.10);   color: var(--estado-error); }
 .badge-otro      { background: rgba(108,117,125,0.10); color: var(--texto-secundario); }
 
-/* ===== BADGE ESTADO PAGO ===== */
 .badge-pago {
     display: inline-block;
     font-size: 11.5px;
@@ -286,7 +271,6 @@
 .pago-pendiente { background: rgba(255,193,7,0.15);  color: #856404; }
 .pago-vencido   { background: rgba(220,53,69,0.10);  color: var(--estado-error); }
 
-/* ===== BADGE PLACA ===== */
 .badge-placa {
     display: inline-block;
     background: #f4f6f9;
@@ -300,7 +284,6 @@
     letter-spacing: 1px;
 }
 
-/* ===== BOTONES ACCIÓN ===== */
 .td-acciones { white-space: nowrap; }
 
 .btn-accion {
@@ -328,7 +311,7 @@
 
 .btn-accion i { font-size: 12px; }
 
-/* ===== BOTÓN CANCELAR PÓLIZA ===== */
+
 .btn-cancelar {
     display: inline-flex;
     align-items: center;
@@ -359,8 +342,6 @@
     font-size: 12px;
 }
 
-
-/* ===== PAGINACIÓN ===== */
 .pagination-wrapper {
     display: flex;
     align-items: center;
@@ -409,7 +390,6 @@
     min-width: 36px;
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 1100px) {
     .page-header { flex-direction: column; align-items: flex-start; }
 }
