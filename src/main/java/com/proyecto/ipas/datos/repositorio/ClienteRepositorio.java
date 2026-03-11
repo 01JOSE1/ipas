@@ -166,7 +166,7 @@ public interface ClienteRepositorio extends JpaRepository<ClienteEntidad, Long> 
      */
     @Query(value = """
             SELECT COUNT(*)
-            FROM Auditorias
+            FROM auditorias
             WHERE accion = 'INSERT'
             AND tabla_afectada = 'Clientes'
             AND MONTH(fecha_accion) = MONTH(CURRENT_DATE())

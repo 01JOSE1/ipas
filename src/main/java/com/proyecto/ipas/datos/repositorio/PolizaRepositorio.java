@@ -192,7 +192,7 @@ public interface PolizaRepositorio extends JpaRepository<PolizaEntidad, Long> {
      */
     @Query(value = """
             SELECT COUNT(*)
-            FROM Auditorias
+            FROM auditorias
             WHERE accion = 'UPDATE'
             AND tabla_afectada = 'Polizas'
             AND fecha_accion <= CURRENT_DATE

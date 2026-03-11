@@ -87,7 +87,7 @@ public interface UsuarioRepositorio extends JpaRepository<UsuarioEntidad, Long> 
      */
     @Query(value = """
             SELECT COUNT(*)
-            FROM Auditorias
+            FROM auditorias
             WHERE usuario_id = :idUsuario
             AND accion = 'UPDATE'
             AND tabla_afectada IN ('Clientes','Polizas')
@@ -113,7 +113,7 @@ public interface UsuarioRepositorio extends JpaRepository<UsuarioEntidad, Long> 
      */
     @Query(value = """
             SELECT COUNT(*)
-            FROM Auditorias
+            FROM auditorias
             WHERE accion = 'UPDATE'
             AND fecha_accion >= CURRENT_DATE()
         """, nativeQuery = true)
@@ -128,7 +128,7 @@ public interface UsuarioRepositorio extends JpaRepository<UsuarioEntidad, Long> 
      */
     @Query(value = """
             SELECT COUNT(*)
-            FROM Auditorias
+            FROM auditorias
             WHERE accion = 'UPDATE'
             AND MONTH(fecha_accion) = MONTH(CURRENT_DATE())
             AND YEAR(fecha_accion) = YEAR(CURRENT_DATE())
@@ -147,7 +147,7 @@ public interface UsuarioRepositorio extends JpaRepository<UsuarioEntidad, Long> 
      */
     @Query(value = """
             SELECT COUNT(DISTINCT usuario_id)
-            FROM Auditorias
+            FROM auditorias
             WHERE fecha_accion >= :fecha 
             AND fecha_accion < DATE_ADD(CURRENT_DATE, INTERVAL 1 DAY)
         """, nativeQuery = true)
