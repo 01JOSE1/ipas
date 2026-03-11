@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  ipas:
+    build: ipas
+    mem_limit: 512m
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod       # activa perfil produccion
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      REMEMBER_ME_KEY: ${REMEMBER_ME_KEY}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    volumes:
+      # Persistencia de archivos PDF (fuera del contenedor)
+      - ./almacenamientoPolizaPDF:/app/almacenamientoPolizaPDF
+      - ./almacenamientoPolizaPDFTemporal:/app/almacenamientoPolizaPDFTemporal
+      # Persistencia de logs
+      - ./logs:/app/logs
+    restart: always
+    depends_on:
+      ipas_db:
+        condition: service_healthy
+
+  ipas_db:
+    image: mysql:8.3.0
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ipas
+    volumes:
+      # Cargar SQL inicial (solo se ejecuta la primera vez)
+      - ./db/ipas.sql:/docker-entrypoint-initdb.d/ipas.sql
+      # Persistencia de datos MySQL
+      - ipas_data:/var/lib/mysql
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
+
+volumes:
+  ipas_data:
