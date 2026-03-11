@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.proyecto</groupId>
 	<artifactId>ipas</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>ipas</name>
 	<description>Prototipo de app web ipas</description>
 	<url/>
@@ -160,7 +160,7 @@
                         <exclude>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>${org.projectlombok.version}</version>
+<!--                            <version>${org.projectlombok.version}</version>-->
                         </exclude>
                     </excludes>
                 </configuration>
