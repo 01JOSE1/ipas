@@ -25,7 +25,8 @@ document.addEventListener('DOMContentLoaded', function () {
         reveals.forEach(el => observer.observe(el));
     }
 
-    // Anima números en las estadísticas\n    function animateCounter(el, target, duration = 1800) {
+    // Anima números en las estadísticas
+    function animateCounter(el, target, duration = 1800) {
         let start = 0;
         const isDecimal = String(target).includes('.');
         const increment = target / (duration / 16);
