@@ -31,7 +31,7 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ipas
     volumes:
-      - ./db/IPAS.sql:/docker-entrypoint-initdb.d/IPAS.sql
+      - ./db/ipas.sql:/docker-entrypoint-initdb.d/ipas.sql
       - ipas_data:/var/lib/mysql
     restart: always
     healthcheck:
