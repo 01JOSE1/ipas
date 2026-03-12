@@ -24,15 +24,15 @@ USE ipas;
 -- Orden: De la mas dependiente a la mas independiente
 
 -- NIVEL 3: Tabla hijo de multiples padres
-DROP TABLE IF EXISTS Polizas;
+DROP TABLE IF EXISTS polizas;
 -- NIVEL 2: Tablas con Foreign Keys o dependencias
-DROP TABLE IF EXISTS Clientes;
-DROP TABLE IF EXISTS Auditorias;
-DROP TABLE IF EXISTS Usuarios;
+DROP TABLE IF EXISTS clientes;
+DROP TABLE IF EXISTS auditorias;
+DROP TABLE IF EXISTS usuarios;
 -- NIVEL 1: Tablas padre (sin Foreign Keys desde otras tablas)
-DROP TABLE IF EXISTS Ramos;
-DROP TABLE IF EXISTS Aseguradoras;
-DROP TABLE IF EXISTS Roles;
+DROP TABLE IF EXISTS ramos;
+DROP TABLE IF EXISTS aseguradoras;
+DROP TABLE IF EXISTS roles;
 
 
 -- ==========================================
@@ -41,10 +41,10 @@ DROP TABLE IF EXISTS Roles;
 -- PRIMERO: Tablas independientes (sin FK)
 
 -- ------------------------------------------
--- Tabla: Roles
+-- Tabla: roles
 -- Almacena los roles del sistema (ADMINISTRADOR, ASESOR)
 -- ------------------------------------------
-CREATE TABLE Roles (
+CREATE TABLE roles (
     -- BIGINT para consistencia con el resto del esquema y escalabilidad futura
     id_role BIGINT AUTO_INCREMENT,
     nombre_rol VARCHAR(20) NOT NULL,
@@ -56,10 +56,10 @@ CREATE TABLE Roles (
 
 
 -- ------------------------------------------
--- Tabla: Aseguradoras
+-- Tabla: aseguradoras
 -- Empresas aseguradoras con las que opera el sistema
 -- ------------------------------------------
-CREATE TABLE Aseguradoras (
+CREATE TABLE aseguradoras (
     id_aseguradora BIGINT AUTO_INCREMENT,
     nombre_aseguradora VARCHAR(40) NOT NULL,
     numero_documento VARCHAR(15) NOT NULL,
@@ -78,10 +78,10 @@ CREATE TABLE Aseguradoras (
 
 
 -- ------------------------------------------
--- Tabla: Ramos
+-- Tabla: ramos
 -- Categorías de seguros que maneja la agencia
 -- ------------------------------------------
-CREATE TABLE Ramos (
+CREATE TABLE ramos (
     id_ramo BIGINT AUTO_INCREMENT,
     nombre_ramo VARCHAR(40) NOT NULL,
     -- Porcentaje de comisión del asesor por este ramo (0-30%)
@@ -96,10 +96,10 @@ CREATE TABLE Ramos (
 -- SEGUNDO: Tablas con FK a una tabla o dependencias a otras tablas
 
 -- ------------------------------------------
--- Tabla: Usuarios
+-- Tabla: usuarios
 -- Asesores y administradores del sistema IPAS
 -- ------------------------------------------
-CREATE TABLE Usuarios (
+CREATE TABLE usuarios (
     id_usuario BIGINT AUTO_INCREMENT,
     nombre VARCHAR(40) NOT NULL,
     apellido VARCHAR(40) NOT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE Usuarios (
 
     -- Constraints a nivel de tabla llaves foraneas
     CONSTRAINT fk_roles_usuarios FOREIGN KEY (role_id)
-    REFERENCES Roles(id_role)
+    REFERENCES roles(id_role)
     ON DELETE RESTRICT
     ON UPDATE CASCADE
 
@@ -131,11 +131,11 @@ CREATE TABLE Usuarios (
 
 
 -- ------------------------------------------
--- Tabla: Auditorias
+-- Tabla: auditorias
 -- Registro automático de cambios críticos en el sistema
 -- Se alimenta exclusivamente mediante triggers (no inserción directa)
 -- ------------------------------------------
-CREATE TABLE Auditorias (
+CREATE TABLE auditorias (
     id_auditoria BIGINT AUTO_INCREMENT,
     tabla_afectada VARCHAR(50) NOT NULL,
     -- ID del registro modificado dentro de la tabla afectada
@@ -154,7 +154,7 @@ CREATE TABLE Auditorias (
 
     -- Constraints a nivel de tabla llaves foraneas
     CONSTRAINT fk_usuarios_auditorias FOREIGN KEY (usuario_id)
-    REFERENCES Usuarios(id_usuario)
+    REFERENCES usuarios(id_usuario)
     ON DELETE RESTRICT
     ON UPDATE CASCADE
 
@@ -162,10 +162,10 @@ CREATE TABLE Auditorias (
 
 
 -- ------------------------------------------
--- Tabla: Clientes
+-- Tabla: clientes
 -- Personas naturales o jurídicas titulares de pólizas
 -- ------------------------------------------
-CREATE TABLE Clientes (
+CREATE TABLE clientes (
     id_cliente BIGINT AUTO_INCREMENT,
     nombre VARCHAR(40) NOT NULL,
     apellido VARCHAR(40) DEFAULT NULL,
@@ -191,7 +191,7 @@ CREATE TABLE Clientes (
 
     -- Constraints a nivel de tabla llaves foraneas
     CONSTRAINT fk_usuarios_clientes FOREIGN KEY (usuario_id)
-    REFERENCES Usuarios(id_usuario)
+    REFERENCES usuarios(id_usuario)
     ON DELETE RESTRICT
     ON UPDATE CASCADE
 
@@ -201,10 +201,10 @@ CREATE TABLE Clientes (
 -- TERCERO: Tablas con FK a múltiples tablas
 
 -- ------------------------------------------
--- Tabla: Polizas
+-- Tabla: polizas
 -- Contratos de seguro emitidos por la agencia
 -- ------------------------------------------
-CREATE TABLE Polizas (
+CREATE TABLE polizas (
     id_poliza BIGINT AUTO_INCREMENT,
     -- Código legible de la póliza (ej: POL-2024-SAL-1001)
     codigo_poliza VARCHAR(20) NOT NULL,
@@ -239,22 +239,22 @@ CREATE TABLE Polizas (
 
     -- Constraints a nivel de tabla llaves foraneas
     CONSTRAINT fk_clientes_polizas FOREIGN KEY (cliente_id)
-    REFERENCES Clientes(id_cliente)
+    REFERENCES clientes(id_cliente)
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
 
     CONSTRAINT fk_usuarios_polizas FOREIGN KEY (usuario_id)
-    REFERENCES Usuarios(id_usuario)
+    REFERENCES usuarios(id_usuario)
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
 
     CONSTRAINT fk_ramos_polizas FOREIGN KEY (ramo_id)
-    REFERENCES Ramos(id_ramo)
+    REFERENCES ramos(id_ramo)
     ON DELETE RESTRICT
     ON UPDATE CASCADE,
 
     CONSTRAINT fk_aseguradoras_polizas FOREIGN KEY (aseguradora_id)
-    REFERENCES Aseguradoras(id_aseguradora)
+    REFERENCES aseguradoras(id_aseguradora)
     ON DELETE RESTRICT
     ON UPDATE CASCADE
 
@@ -266,18 +266,18 @@ CREATE TABLE Polizas (
 -- ==========================================
 -- Mejoramos las busquedas en los puntos criticos como clientes y polizas
 
-CREATE INDEX idx_clientes_documento ON Clientes(numero_documento);
-CREATE INDEX idx_clientes_apellido ON Clientes(apellido);
-CREATE INDEX idx_clientes_telefono ON Clientes(telefono);
+CREATE INDEX idx_clientes_documento ON clientes(numero_documento);
+CREATE INDEX idx_clientes_apellido ON clientes(apellido);
+CREATE INDEX idx_clientes_telefono ON clientes(telefono);
 
-CREATE INDEX idx_polizas_codigo ON Polizas(codigo_poliza);
-CREATE INDEX idx_polizas_placa ON Polizas(placa);
-CREATE INDEX idx_polizas_estado ON Polizas(estado);
+CREATE INDEX idx_polizas_codigo ON polizas(codigo_poliza);
+CREATE INDEX idx_polizas_placa ON polizas(placa);
+CREATE INDEX idx_polizas_estado ON polizas(estado);
 -- Para consultas por cliente + estado:
-CREATE INDEX idx_polizas_cliente_estado ON Polizas(cliente_id, estado);
+CREATE INDEX idx_polizas_cliente_estado ON polizas(cliente_id, estado);
 -- Para consultas por fecha:
-CREATE INDEX idx_polizas_fecha_inicio ON Polizas(fecha_inicio);
-CREATE INDEX idx_polizas_fecha_vencimiento ON Polizas(fecha_vencimiento);
+CREATE INDEX idx_polizas_fecha_inicio ON polizas(fecha_inicio);
+CREATE INDEX idx_polizas_fecha_vencimiento ON polizas(fecha_vencimiento);
 
 
 -- ==========================================
@@ -294,7 +294,7 @@ CREATE INDEX idx_polizas_fecha_vencimiento ON Polizas(fecha_vencimiento);
 DELIMITER //
 
 CREATE TRIGGER validar_edad_cliente
-BEFORE INSERT ON Clientes
+BEFORE INSERT ON clientes
 FOR EACH ROW
 BEGIN
     IF TIMESTAMPDIFF(YEAR, NEW.fecha_nacimiento, CURDATE()) < 18 THEN
@@ -313,7 +313,7 @@ DELIMITER ;
 DELIMITER //
 
 CREATE TRIGGER validar_edad_cliente_update
-BEFORE UPDATE ON Clientes
+BEFORE UPDATE ON clientes
 FOR EACH ROW
 BEGIN
     IF TIMESTAMPDIFF(YEAR, NEW.fecha_nacimiento, CURDATE()) < 18 THEN
@@ -327,15 +327,15 @@ DELIMITER ;
 
 -- ------------------------------------------
 -- Trigger: tr_auditoria_crear_cliente
--- Registra en Auditorias cada vez que se crea un nuevo cliente
+-- Registra en auditorias cada vez que se crea un nuevo cliente
 -- ------------------------------------------
 DELIMITER //
 
 CREATE TRIGGER tr_auditoria_crear_cliente
-AFTER INSERT ON Clientes
+AFTER INSERT ON clientes
 FOR EACH ROW
 BEGIN
-    INSERT INTO Auditorias (
+    INSERT INTO auditorias (
         tabla_afectada,
         id_registro,
         accion,
@@ -344,7 +344,7 @@ BEGIN
         usuario_id
     )
     VALUES (
-        'Clientes',
+        'clientes',
         NEW.id_cliente,
         'INSERT',
         NOW(),
@@ -358,14 +358,14 @@ DELIMITER ;
 
 -- ------------------------------------------
 -- Trigger: auditoria_clientes
--- Cada vez que se actualiza un registro en la tabla Clientes este trigger se activa.
+-- Cada vez que se actualiza un registro en la tabla clientes este trigger se activa.
 -- Registra solo los campos que efectivamente cambiaron.
 -- ------------------------------------------
 DELIMITER //
 
 -- Se ejecuta una vez por registro (cliente) afectado por el UPDATE
 CREATE TRIGGER auditoria_clientes
-AFTER UPDATE ON Clientes
+AFTER UPDATE ON clientes
 FOR EACH ROW
 -- Inicia el bloque de código
 BEGIN
@@ -411,7 +411,7 @@ BEGIN
 
     -- Insertamos en la tabla de auditoria solo si hay cambios
     IF cambios <> '' THEN
-        INSERT INTO Auditorias(
+        INSERT INTO auditorias(
             tabla_afectada,
             id_registro,
             accion,
@@ -420,7 +420,7 @@ BEGIN
             usuario_id
         )
         VALUES (
-            'Clientes',
+            'clientes',
             OLD.id_cliente,
             'UPDATE',
             NOW(),
@@ -445,14 +445,14 @@ DELIMITER ;
 DELIMITER //
 
 CREATE TRIGGER validar_placa_insert
-BEFORE INSERT ON Polizas
+BEFORE INSERT ON polizas
 FOR EACH ROW
 BEGIN
     DECLARE v_nombre_ramo VARCHAR(40);
 
     -- Consultar el nombre del ramo de la póliza
     SELECT nombre_ramo INTO v_nombre_ramo
-    FROM Ramos
+    FROM ramos
     WHERE id_ramo = NEW.ramo_id;
 
     -- Validar que si es AUTOMOVIL, la placa no puede ser vacía ni nula
@@ -472,13 +472,13 @@ DELIMITER ;
 DELIMITER //
 
 CREATE TRIGGER validar_placa_update
-BEFORE UPDATE ON Polizas
+BEFORE UPDATE ON polizas
 FOR EACH ROW
 BEGIN
     DECLARE v_nombre_ramo VARCHAR(40);
 
     SELECT nombre_ramo INTO v_nombre_ramo
-    FROM Ramos
+    FROM ramos
     WHERE id_ramo = NEW.ramo_id;
 
     IF v_nombre_ramo = 'AUTOMOVIL' AND (NEW.placa IS NULL OR NEW.placa = '') THEN
@@ -492,13 +492,13 @@ DELIMITER ;
 
 -- ------------------------------------------
 -- Trigger: auditoria_polizas
--- Registra en Auditorias cada cambio relevante realizado sobre una póliza.
+-- Registra en auditorias cada cambio relevante realizado sobre una póliza.
 -- Usa el operador <=> (NULL-safe equals) para comparar correctamente campos opcionales.
 -- ------------------------------------------
 DELIMITER //
 
 CREATE TRIGGER auditoria_polizas
-AFTER UPDATE ON Polizas
+AFTER UPDATE ON polizas
 FOR EACH ROW
 BEGIN
     DECLARE cambios TEXT DEFAULT '';
@@ -568,7 +568,7 @@ BEGIN
     END IF;
 
     IF cambios <> '' THEN
-        INSERT INTO Auditorias(
+        INSERT INTO auditorias(
             tabla_afectada,
             id_registro,
             accion,
@@ -577,7 +577,7 @@ BEGIN
             usuario_id
         )
         VALUES (
-            'Polizas',
+            'polizas',
             OLD.id_poliza,
             'UPDATE',
             NOW(),
@@ -684,7 +684,7 @@ DELIMITER ;
 -- ==========================================
 -- 1. ROLES
 -- ==========================================
-INSERT INTO Roles (nombre_rol, descripcion) VALUES
+INSERT INTO roles (nombre_rol, descripcion) VALUES
 ('ADMINISTRADOR', 'Acceso total al sistema, gestión de usuarios y configuración'),
 ('ASESOR',        'Gestión de clientes y pólizas, ventas');
 
@@ -692,7 +692,7 @@ INSERT INTO Roles (nombre_rol, descripcion) VALUES
 -- ==========================================
 -- 2. RAMOS
 -- ==========================================
-INSERT INTO Ramos (nombre_ramo, comision) VALUES
+INSERT INTO ramos (nombre_ramo, comision) VALUES
 ('SALUD',                    12.50),
 ('VIDA',                     15.00),
 ('AUTOMOVIL',                10.00),
@@ -709,7 +709,7 @@ INSERT INTO Ramos (nombre_ramo, comision) VALUES
 -- ==========================================
 -- 3. ASEGURADORAS EN COLOMBIA
 -- ==========================================
-INSERT INTO Aseguradoras (nombre_aseguradora, numero_documento, direccion, ciudad, telefono, clave) VALUES
+INSERT INTO aseguradoras (nombre_aseguradora, numero_documento, direccion, ciudad, telefono, clave) VALUES
 ('Suramericana S.A.',              '890903407-9', 'Calle 49 #63-50',        'Medellín', '6045108000', 'SUR#2024$SEC'),
 ('Seguros Bolívar S.A.',           '860002503',   'Carrera 7 #26-20',       'Bogotá',   '6013077000', 'BOL*SEC@2024'),
 ('Mapfre Seguros',                 '890903476',   'Calle 72 #10-07',        'Bogotá',   '6014239090', 'MAP#KEY$2024'),
@@ -727,7 +727,7 @@ INSERT INTO Aseguradoras (nombre_aseguradora, numero_documento, direccion, ciuda
 -- 4. USUARIOS
 -- ==========================================
 -- Nota: Contraseña hasheada con bcrypt correspondiente a "1234qwer"
-INSERT INTO Usuarios (nombre, apellido, tipo_documento, numero_documento, telefono, direccion, correo, clave, estado, role_id) VALUES
+INSERT INTO usuarios (nombre, apellido, tipo_documento, numero_documento, telefono, direccion, correo, clave, estado, role_id) VALUES
 -- Administradores
 ('Carlos',    'Rodríguez', 'CEDULA_CIUDADANIA', '1098765432', '3001234562', 'Calle 45 #23-10',        'carlos.rodriguez@ipas.com.co', '$2a$10$WvaF0TOXjHmSH.1hcAAB3.VT7A.OWPZxT3nJVKcur9uLTsa1dKZfq', 'ACTIVO',     1),
 ('María',     'Gómez',     'CEDULA_CIUDADANIA', '1098765433', '3001234568', 'Carrera 27 #45-67',      'maria.gomez@ipas.com.co',      '$2a$10$WvaF0TOXjHmSH.1hcAAB3.VT7A.OWPZxT3nJVKcur9uLTsa1dKZfq', 'ACTIVO',     1),
@@ -747,43 +747,43 @@ INSERT INTO Usuarios (nombre, apellido, tipo_documento, numero_documento, telefo
 -- ==========================================
 -- 5. CLIENTES
 -- ==========================================
-INSERT INTO Clientes (
+INSERT INTO clientes (
     nombre, apellido, tipo_documento, numero_documento, fecha_nacimiento,
     estado_civil, telefono, correo, direccion, ciudad, usuario_id
 ) VALUES
--- Clientes del usuario id=1 (Carlos Rodríguez - ADMINISTRADOR)
+-- clientes del usuario id=1 (Carlos Rodríguez - ADMINISTRADOR)
 ('Roberto',  'Pérez García',    'CEDULA_CIUDADANIA',  '3784562178',   '1985-03-15', 'SOLTERO',    '3112345676', 'roberto.perez@gmail.com',       'Calle 45 #12-34',       'Bucaramanga', 1),
 ('Claudia',  'Ruiz Mendoza',    'CEDULA_CIUDADANIA',  '37845622',     '1990-07-22', 'VIUDO',      '3112345679', 'claudia.ruiz@hotmail.com',      'Carrera 27 #56-78',     'Bucaramanga', 1),
 ('Fernando', 'Silva Ortiz',     'CEDULA_CIUDADANIA',  '91234567',     '1978-11-30', 'SOLTERO',    '3112345680', 'fernando.silva@yahoo.com',      'Calle 67 #23-45',       'Bogotá',      1),
 ('Patricia', 'Jiménez Cruz',    'PASAPORTE',          'PA123456',     '1988-05-18', 'DIVORCIADO', '3112345681', 'patricia.jimenez@outlook.com',  'Avenida 9 #45-67',      'Medellín',    1),
 
--- Clientes del usuario id=2 (María Gómez - ADMINISTRADOR)
+-- clientes del usuario id=2 (María Gómez - ADMINISTRADOR)
 ('Miguel',   'Hernández Rojas', 'CEDULA_EXTRANJERA',  '1075234567',   '1982-09-10', 'CASADO',     '3123456789', 'miguel.hernandez@gmail.com',    'Carrera 33 #78-90',     'Bogotá',      2),
 ('Diana',    'Gutiérrez Pardo', 'PASAPORTE',          '5234567823',   '1995-02-14', 'SOLTERO',    '3123456790', 'diana.gutierrez@hotmail.com',   'Calle 100 #23-45',      'Bogotá',      2),
 ('Javier',   'Morales Vega',    'CEDULA_EXTRANJERA',  '8023456723',   '1975-12-05', 'VIUDO',      '3123456791', 'javier.morales@yahoo.com',      'Carrera 15 #34-56',     'Barranquilla',2),
 ('Karen',    'Ramírez Díaz',    'PASAPORTE',          '3785678945',   '1992-08-20', 'UNION_LIBRE','3123456792', 'carolina.ramirez@gmail.com',    'Calle 85 #12-34',       'Bucaramanga', 2),
 
--- Clientes del usuario id=3 (Juan Martínez - ASESOR)
+-- clientes del usuario id=3 (Juan Martínez - ASESOR)
 ('Lucas',    'Torres Medina',   'CEDULA_EXTRANJERA',  '37856734',     '1980-04-25', 'CASADO',     '3134567890', 'luis.torres@outlook.com',       'Avenida 19 #67-89',     'Medellín',    3),
 ('Maria',    'López Castillo',  'PASAPORTE',          '52456789233',  '1987-10-12', 'SOLTERO',    '3134567891', 'sandra.lopez@gmail.com',        'Carrera 7 #45-67',      'Bogotá',      3),
 ('Oscar',    'García Soto',     'LICENCIA_CONDUCCION','9134567823',   '1983-06-08', 'DIVORCIADO', '3134567892', 'oscar.garcia@hotmail.com',      'Calle 50 #23-45',       'Bucaramanga', 3),
 ('Melissa',  'Martínez Luna',   'CEDULA_EXTRANJERA',  '37867890',     '1993-01-30', 'VIUDO',      '3134567893', 'melissa.martinez@yahoo.com',    'Carrera 28 #56-78',     'Bucaramanga', 3),
 
--- Clientes del usuario id=4 (Ana López - ASESOR)
+-- clientes del usuario id=4 (Ana López - ASESOR)
 ('Andrés',   'Rodríguez Villa', 'LICENCIA_CONDUCCION','1075345678',   '1979-11-15', 'CASADO',     '3145678901', 'andres.rodriguez@gmail.com',    'Calle 72 #34-56',       'Bogotá',      4),
 ('Natalia',  'Vargas Rojas',    'PASAPORTE',          '52567890',     '1991-03-22', 'SOLTERO',    '3145678902', 'natalia.vargas@hotmail.com',    'Carrera 40 #67-89',     'Medellín',    4),
 ('Camilo',   'Suárez Pinto',    'CEDULA_EXTRANJERA',  '80345678',     '1986-07-18', 'CASADO',     '3145678903', 'camilo.suarez@outlook.com',     'Avenida 30 #45-67',     'Cali',        4),
 
--- Clientes del usuario id=5 (Pedro Sánchez - ADMINISTRADOR)
+-- clientes del usuario id=5 (Pedro Sánchez - ADMINISTRADOR)
 ('Paola',    'Gómez Reyes',     'PASAPORTE',          '37878901',     '1994-12-10', 'UNION_LIBRE','3156789012', 'paola.gomez@gmail.com',         'Calle 15 #23-45',       'Bucaramanga', 5),
 ('Ricardo',  'Mendoza Cruz',    'LICENCIA_CONDUCCION','1098345678',   '1981-05-28', 'CASADO',     '3156789013', 'ricardo.mendoza@yahoo.com',     'Carrera 11 #56-78',     'Barranquilla',5),
 ('Juliana',  'Castro Ríos',     'LICENCIA_CONDUCCION','52678901',     '1989-09-16', 'VIUDO',      '3156789014', 'juliana.castro@hotmail.com',    'Calle 95 #34-56',       'Bogotá',      5),
 
--- Clientes del usuario id=6 (Laura Torres - ASESOR)
+-- clientes del usuario id=6 (Laura Torres - ASESOR)
 ('Daniel',   'Ortiz Paredes',   'LICENCIA_CONDUCCION','91456789',     '1984-02-20', 'CASADO',     '3167890123', 'daniel.ortiz@gmail.com',        'Carrera 50 #78-90',     'Medellín',    6),
 ('Marcela',  'Ríos Gómez',      'CEDULA_EXTRANJERA',  '37889012',     '1996-06-14', 'UNION_LIBRE','3167890124', 'marcela.rios@outlook.com',      'Calle 120 #23-45',      'Bucaramanga', 6),
 
--- Clientes del usuario id=11 (Mario Gomez - ASESOR)
+-- clientes del usuario id=11 (Mario Gomez - ASESOR)
 ('José',          'Ordoñez Díaz',  'CEDULA_CIUDADANIA',               '1098765341', '2005-01-06', 'SOLTERO',    '3002375112', 'oljd2002@gmail.com',                   'CALLE 104 E # 12-05',  'Bucaramanga',   11),
 ('Juana',         'diaz',          'CEDULA_CIUDADANIA',               '234234234',  '2008-02-08', 'SOLTERO',    '3002375231', 'cara.ramirez@gmail.com',               'CALLE 104 E # 12-05',  'Bucaramanga',   11),
 ('Ramiro',        'Perez',         'CEDULA_EXTRANJERA',               '1098761141', '1998-04-08', 'UNION_LIBRE','3002372112', 'leon@gmail.com',                       'CALLE 104 E # 12-05',  'Bucaramanga',   11),
@@ -797,7 +797,7 @@ INSERT INTO Clientes (
 -- 6. PÓLIZAS
 -- ==========================================
 -- Pólizas de SALUD (ramo_id = 1)
-INSERT INTO Polizas (id_poliza, codigo_poliza, fecha_inicio, fecha_vencimiento, prima_neta, prima_total, estado, estado_pago, numero_pdf, placa, descripcion, cliente_id, usuario_id, ramo_id, aseguradora_id) VALUES
+INSERT INTO polizas (id_poliza, codigo_poliza, fecha_inicio, fecha_vencimiento, prima_neta, prima_total, estado, estado_pago, numero_pdf, placa, descripcion, cliente_id, usuario_id, ramo_id, aseguradora_id) VALUES
 (1001, 'POL-2024-SAL-1001', '2024-01-15', '2025-01-15', 450000.00, 520000.00, 'CANCELADA', 'PAGADA',    'PDF-1001', '526HTS', NULL, 1,  2, 3,  1),
 (1002, 'POL-2024-SAL-1002', '2024-02-20', '2025-02-20', 380000.00, 440000.00, 'ACTIVA',    'PENDIENTE', 'PDF-1002', NULL,     NULL, 5,  1, 1,  2),
 (1003, 'POL-2024-SAL-1003', '2024-03-10', '2025-03-10', 520000.00, 600000.00, 'CANCELADA', 'PENDIENTE', 'PDF-1003', NULL,     NULL, 9,  3, 1,  3),
