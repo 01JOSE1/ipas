@@ -38,8 +38,8 @@ public interface AseguradoraRepositorio extends JpaRepository<AseguradoraEntidad
      */
     @Query(value = """
         SELECT * FROM aseguradoras a 
-        WHERE levenshtein(LOWER(a.nombre), LOWER(:nombre)) <= 5 
-        ORDER BY levenshtein(LOWER(a.nombre), LOWER(:nombre)) ASC 
+        WHERE levenshtein(LOWER(a.nombre_aseguradora), LOWER(:nombre)) <= 5 
+        ORDER BY levenshtein(LOWER(a.nombre_aseguradora), LOWER(:nombre)) ASC 
         LIMIT 1
     """, nativeQuery = true)
     Optional<AseguradoraEntidad> buscarPorSimilitud(@Param("nombre") String nombre);
