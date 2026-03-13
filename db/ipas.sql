@@ -1,8 +1,10 @@
+
 -- ==========================================
 -- BASE DE DATOS: IPAS
 -- Sistema de gestión de pólizas de seguros
 -- ==========================================
-
+-- Esto obliga a MySQL a interpretar correctamente la codificacion.
+SET NAMES utf8mb4;
 
 -- ==========================================
 -- 1. ELIMINACION DE BASE DE DATOS (Opcional)
