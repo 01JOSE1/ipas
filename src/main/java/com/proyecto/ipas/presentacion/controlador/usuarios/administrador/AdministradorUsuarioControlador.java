@@ -73,6 +73,10 @@ public class AdministradorUsuarioControlador {
         modelo.addAttribute("totalRegistros",  paginaUsuarios.getTotalElements());
         modelo.addAttribute("catidadPagina", cantidad);
 
+        System.out.println("_________________________________________________________________________________________________________");
+        System.out.println("================================================USUARIOS==================================================");
+        System.out.println(paginaUsuarios.getContent());
+
         return "usuarios/listaUsuarios";
     }
 
