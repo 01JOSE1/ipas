@@ -15,6 +15,7 @@ services:
     volumes:
       - ./almacenamientoPolizaPDF:/app/almacenamientoPolizaPDF
       - ./almacenamientoPolizaPDFTemporal:/app/almacenamientoPolizaPDFTemporal
+      - ./manuales:/app/manuales
       - ./logs:/app/logs
     restart: always
     depends_on:
