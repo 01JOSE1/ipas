@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{plantillas/administrador}">
+
+<head>
+    <title>Ayuda - Administrador IPAS</title>
+    <th:block layout:fragment="cssVista">
+        <link rel="stylesheet" th:href="@{/css/usuarios/administrador/ayuda.css}">
+    </th:block>
+</head>
+
+<body>
+<th:block layout:fragment="contenidoVista">
+
+    <!-- ===== HERO ===== -->
+    <div class="help-hero">
+        <div class="hero-text">
+            <div class="hero-badge"><i class="fa fa-shield-alt"></i> Centro de Ayuda — Administrador</div>
+            <h1>Panel de Referencia Rápida</h1>
+            <p>Consulta aquí todas las funciones disponibles para tu rol de Administrador en IPAS. Gestión de usuarios, estadísticas globales y control del sistema.</p>
+        </div>
+        <a th:href="@{/administrador/ver-manual}" target="_blank" class="btn-manual-pdf">
+            <i class="fa fa-file-pdf"></i>
+            Ver Manual Completo (PDF)
+        </a>
+    </div>
+
+    <!-- ===== QUICK NAV ===== -->
+    <div class="quick-nav">
+        <a href="#sec-dashboard" class="qnav-card">
+            <div class="qnav-icon" style="background:rgba(8,30,66,0.07); color:#081E42;">
+                <i class="fa fa-th-large"></i>
+            </div>
+            <span class="qnav-label">Dashboard</span>
+            <span class="qnav-sub">KPIs y actividad global</span>
+        </a>
+        <a href="#sec-usuarios" class="qnav-card">
+            <div class="qnav-icon" style="background:rgba(255,193,7,0.12); color:#7a5800;">
+                <i class="fa fa-users-cog"></i>
+            </div>
+            <span class="qnav-label">Usuarios</span>
+            <span class="qnav-sub">Estado y roles</span>
+        </a>
+        <a href="#sec-polizas-est" class="qnav-card">
+            <div class="qnav-icon" style="background:#e0f5fb; color:#0a6c84;">
+                <i class="fa fa-file-contract"></i>
+            </div>
+            <span class="qnav-label">Estadísticas Pólizas</span>
+            <span class="qnav-sub">Análisis de portafolio</span>
+        </a>
+        <a href="#sec-clientes-est" class="qnav-card">
+            <div class="qnav-icon" style="background:#e8f8ed; color:#1a7a38;">
+                <i class="fa fa-address-book"></i>
+            </div>
+            <span class="qnav-label">Estadísticas Clientes</span>
+            <span class="qnav-sub">Perfil demográfico</span>
+        </a>
+        <a href="#sec-perfil" class="qnav-card">
+            <div class="qnav-icon" style="background:#f0e8fb; color:#5a007a;">
+                <i class="fa fa-user-circle"></i>
+            </div>
+            <span class="qnav-label">Mi Perfil</span>
+            <span class="qnav-sub">Actualizar datos</span>
+        </a>
+        <a href="#sec-errores" class="qnav-card">
+            <div class="qnav-icon" style="background:#fdeaec; color:#b02030;">
+                <i class="fa fa-exclamation-triangle"></i>
+            </div>
+            <span class="qnav-label">Errores</span>
+            <span class="qnav-sub">Mensajes del sistema</span>
+        </a>
+    </div>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div class="help-section" id="sec-dashboard">
+        <div class="section-header">
+            <div class="section-icon" style="background:rgba(8,30,66,0.08); color:#081E42;">
+                <i class="fa fa-th-large"></i>
+            </div>
+            <div>
+                <p class="section-title">Dashboard del Administrador</p>
+                <p class="section-desc">Visión global del negocio. Toda la información es consolidada de <strong>todos los asesores</strong>, no solo de tu cuenta.</p>
+            </div>
+        </div>
+
+        <div class="module-grid">
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:rgba(255,193,7,0.12); color:#7a5800;">
+                        <i class="fa fa-tachometer-alt"></i>
+                    </div>
+                    <span class="module-card-title">KPIs e indicadores operativos</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-card-body-inner">
+                        <div class="kpi-grid">
+                            <div class="kpi-chip">
+                                <div class="kpi-chip-icon" style="background:rgba(255,193,7,0.12); color:#7a5800;"><i class="fa fa-users"></i></div>
+                                <span class="kpi-chip-label">Usuarios activos en el sistema</span>
+                            </div>
+                            <div class="kpi-chip">
+                                <div class="kpi-chip-icon" style="background:#e0f5fb; color:#0a6c84;"><i class="fa fa-file-contract"></i></div>
+                                <span class="kpi-chip-label">Pólizas activas globales</span>
+                            </div>
+                            <div class="kpi-chip">
+                                <div class="kpi-chip-icon" style="background:#e8f8ed; color:#1a7a38;"><i class="fa fa-address-book"></i></div>
+                                <span class="kpi-chip-label">Total de clientes registrados</span>
+                            </div>
+                            <div class="kpi-chip">
+                                <div class="kpi-chip-icon" style="background:#f0e8fb; color:#5a007a;"><i class="fa fa-sync-alt"></i></div>
+                                <span class="kpi-chip-label">Actualizaciones hoy / este mes</span>
+                            </div>
+                            <div class="kpi-chip" style="grid-column: 1 / -1;">
+                                <div class="kpi-chip-icon" style="background:rgba(8,30,66,0.07); color:#081E42;"><i class="fa fa-user-check"></i></div>
+                                <span class="kpi-chip-label">Asesores activos en los últimos 7 días</span>
+                            </div>
+                        </div>
+                        <div class="supervisor-note">
+                            <div class="supervisor-note-icon"><i class="fa fa-eye"></i></div>
+                            <p><strong>Visibilidad total:</strong> A diferencia del asesor, tú ves los datos globales de <strong>todos los usuarios, clientes y pólizas</strong> registrados en IPAS.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#e8f0fb; color:#0F4C9C;">
+                        <i class="fa fa-chart-bar"></i>
+                    </div>
+                    <span class="module-card-title">Gráfica de pólizas por asesor</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-card-body-inner">
+                        <ul class="step-list">
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Permite <strong>comparar el rendimiento individual</strong> de cada colaborador.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Lista a los asesores junto a la cantidad de pólizas bajo su responsabilidad.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Facilita identificar los <strong>perfiles más productivos</strong> del equipo.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#e8f8ed; color:#1a7a38;">
+                        <i class="fa fa-history"></i>
+                    </div>
+                    <span class="module-card-title">Registro de actividad reciente</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-card-body-inner">
+                        <p style="font-size:13px; color:var(--texto-secundario); margin:0 0 12px 0;">Historial de auditoría en vivo. Incluye:</p>
+                        <ul class="step-list">
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Últimas acciones realizadas: creación de clientes, cambios de estado, etc.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Fechas y horas de cada operación.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Datos específicos del registro afectado.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:rgba(255,193,7,0.12); color:#7a5800;">
+                        <i class="fa fa-bolt"></i>
+                    </div>
+                    <span class="module-card-title">Accesos rápidos del dashboard</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-card-body-inner">
+                        <ul class="step-list">
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Gestionar Usuarios</strong> – acceso directo al módulo de usuarios.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Estadísticas de Pólizas</strong> – métricas del portafolio global.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Estadísticas de Clientes</strong> – análisis sociodemográfico.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Gestión de Perfil</strong> – actualiza tu información personal.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="help-divider"></div>
+
+    <!-- ===== GESTIÓN DE USUARIOS ===== -->
+    <div class="help-section" id="sec-usuarios">
+        <div class="section-header">
+            <div class="section-icon" style="background:rgba(255,193,7,0.12); color:#7a5800;">
+                <i class="fa fa-users-cog"></i>
+            </div>
+            <div>
+                <p class="section-title">Gestión de Usuarios <span class="tag-admin"><i class="fa fa-shield-alt"></i> Solo Admin</span></p>
+                <p class="section-desc">Administra cuentas, estados y roles desde el menú lateral → <strong>Usuarios</strong>.</p>
+            </div>
+        </div>
+
+        <div class="module-grid">
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#e8f0fb; color:#0F4C9C;">
+                        <i class="fa fa-list"></i>
+                    </div>
+                    <span class="module-card-title">Listado de usuarios</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-card-body-inner">
+                        <p style="font-size:13px; color:var(--texto-secundario); margin:0 0 12px 0;">Las tarjetas de perfil muestran por cada usuario:</p>
+                        <ul class="step-list">
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Nombre y correo</strong> del colaborador.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Estado de cuenta:</strong> <span class="badge badge-active">Activo</span> <span class="badge badge-inactive">Inactivo</span> o <span class="badge badge-suspended">Suspendido</span>.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Documento de identidad</strong> – tipo y número registrado.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Teléfono</strong> de contacto.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Rol asignado:</strong> <span class="badge badge-admin"><i class="fa fa-shield-alt"></i> Administrador</span> o <span class="badge badge-asesor">Asesor</span>.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Acciones:</strong> Cambiar estado / Cambiar rol.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:rgba(255,193,7,0.12); color:#7a5800;">
+                        <i class="fa fa-toggle-on"></i>
+                    </div>
+                    <span class="module-card-title">Cambiar estado de un usuario</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-card-body-inner">
+                        <ul class="step-list">
+                            <li class="step-item"><span class="step-num">1</span><span class="step-text">Ubica el usuario en el listado y haz clic en <strong>Cambiar estado</strong>.</span></li>
+                            <li class="step-item"><span class="step-num">2</span><span class="step-text">El sistema mostrará un modal con las opciones: <span class="badge badge-active">ACTIVO</span> <span class="badge badge-inactive">INACTIVO</span> <span class="badge badge-suspended">SUSPENDIDO</span>.</span></li>
+                            <li class="step-item"><span class="step-num">3</span><span class="step-text">Selecciona el nuevo estado y haz clic en <strong>Confirmar</strong>.</span></li>
+                            <li class="step-item"><span class="step-num">4</span><span class="step-text">El sistema actualizará el estado y mostrará una notificación de éxito.</span></li>
+                        </ul>
+                        <div class="note-box warn-box">
+                            <i class="fa fa-exclamation-triangle"></i>
+                            <p>Un usuario <strong>INACTIVO o SUSPENDIDO</strong> no podrá iniciar sesión. Además, <strong>no es posible cambiarle el rol</strong> mientras esté en alguno de estos estados — debes activarlo primero.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:rgba(8,30,66,0.08); color:#081E42;">
+                        <i class="fa fa-user-tag"></i>
+                    </div>
+                    <span class="module-card-title">Cambiar rol de un usuario</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-card-body-inner">
+                        <ul class="step-list">
+                            <li class="step-item"><span class="step-num">1</span><span class="step-text">Ubica el usuario y haz clic en <strong>Cambiar rol</strong>.</span></li>
+                            <li class="step-item"><span class="step-num">2</span><span class="step-text">El modal mostrará los roles: <span class="badge badge-admin"><i class="fa fa-shield-alt"></i> ADMINISTRADOR</span> <span class="badge badge-asesor">ASESOR</span>.</span></li>
+                            <li class="step-item"><span class="step-num">3</span><span class="step-text">Selecciona el nuevo rol y haz clic en <strong>Confirmar</strong>.</span></li>
+                            <li class="step-item"><span class="step-num">4</span><span class="step-text">El sistema actualizará el rol y confirmará con una notificación de éxito.</span></li>
+                        </ul>
+                        <div class="note-box">
+                            <i class="fa fa-info-circle"></i>
+                            <p>Solo es posible cambiar el rol de un usuario con estado <strong>ACTIVO</strong>. Si está INACTIVO o SUSPENDIDO, primero cambia su estado.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="help-divider"></div>
+
+    <!-- ===== ESTADÍSTICAS PÓLIZAS ===== -->
+    <div class="help-section" id="sec-polizas-est">
+        <div class="section-header">
+            <div class="section-icon" style="background:#e0f5fb; color:#0a6c84;">
+                <i class="fa fa-file-contract"></i>
+            </div>
+            <div>
+                <p class="section-title">Estadísticas de Pólizas <span class="tag-admin"><i class="fa fa-shield-alt"></i> Solo Admin</span></p>
+                <p class="section-desc">Visión macro y analítica del portafolio de seguros. Módulo consultivo — no permite crear ni editar pólizas.</p>
+            </div>
+        </div>
+
+        <div class="module-grid">
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#e0f5fb; color:#0a6c84;">
+                        <i class="fa fa-chart-pie"></i>
+                    </div>
+                    <span class="module-card-title">Indicadores de estado global</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-card-body-inner">
+                        <ul class="step-list">
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Volumen total de registros en el sistema.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Cantidad de pólizas con <strong>cobertura vigente</strong> actualmente.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Conteo de contratos <strong>vencidos y cancelados</strong> durante el mes actual.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:rgba(255,193,7,0.12); color:#7a5800;">
+                        <i class="fa fa-chart-bar"></i>
+                    </div>
+                    <span class="module-card-title">Análisis de distribución por ramo</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-card-body-inner">
+                        <p style="font-size:13px; color:var(--texto-secundario); margin:0 0 12px 0;">Gráfico de barras que muestra la predominancia por tipo de seguro en la cartera:</p>
+                        <ul class="step-list">
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Automóvil, Vida, SOAT, Salud y Arrendamiento.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Facilita la detección de <strong>nichos de mercado</strong> con mayor actividad.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#e8f0fb; color:#0F4C9C;">
+                        <i class="fa fa-building"></i>
+                    </div>
+                    <span class="module-card-title">Distribución por estado y aseguradora</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-card-body-inner">
+                        <ul class="step-list">
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Clasificación de contratos según situación: <strong>Activa vs. Cancelada</strong>.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Monitoreo de con qué <strong>entidades aseguradoras</strong> se concentra la mayor operatividad.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#e8f8ed; color:#1a7a38;">
+                        <i class="fa fa-user-tie"></i>
+                    </div>
+                    <span class="module-card-title">Rendimiento por asesor</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-card-body-inner">
+                        <ul class="step-list">
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Comparativa gráfica de la <strong>eficiencia del equipo humano</strong>.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Cantidad de pólizas emitidas por cada colaborador.</span></li>
+                        </ul>
+                        <div class="supervisor-note">
+                            <div class="supervisor-note-icon"><i class="fa fa-ban"></i></div>
+                            <p>Este módulo es <strong>estrictamente consultivo</strong>. El Administrador supervisa métricas pero <strong>no puede crear, editar ni anular pólizas</strong> — esas funciones son exclusivas del Asesor.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="help-divider"></div>
+
+    <!-- ===== ESTADÍSTICAS CLIENTES ===== -->
+    <div class="help-section" id="sec-clientes-est">
+        <div class="section-header">
+            <div class="section-icon" style="background:#e8f8ed; color:#1a7a38;">
+                <i class="fa fa-address-book"></i>
+            </div>
+            <div>
+                <p class="section-title">Estadísticas de Clientes <span class="tag-admin"><i class="fa fa-shield-alt"></i> Solo Admin</span></p>
+                <p class="section-desc">Análisis del perfil sociodemográfico y comportamiento de la base de clientes registrada en IPAS.</p>
+            </div>
+        </div>
+
+        <div class="module-grid">
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#e8f8ed; color:#1a7a38;">
+                        <i class="fa fa-chart-line"></i>
+                    </div>
+                    <span class="module-card-title">Métricas de crecimiento y cobertura</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-card-body-inner">
+                        <ul class="step-list">
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Total de clientes registrados en el sistema.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Volumen de <strong>nuevas captaciones en el mes vigente</strong>.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Tasa de conversión: clientes <strong>con póliza activa</strong> vs. <strong>sin cobertura</strong>.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#e0f5fb; color:#0a6c84;">
+                        <i class="fa fa-users"></i>
+                    </div>
+                    <span class="module-card-title">Perfil sociodemográfico</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-card-body-inner">
+                        <p style="font-size:13px; color:var(--texto-secundario); margin:0 0 12px 0;">Gráficos que segmentan la cartera según:</p>
+                        <ul class="step-list">
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Estado Civil</strong> – solteros, casados, viudos, divorciados, unión libre.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Ubicación Geográfica</strong> – ranking de ciudades (Bucaramanga, Bogotá, Medellín, etc.).</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Tipo de Identificación</strong> – clasificación por documento de identidad.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:rgba(255,193,7,0.12); color:#7a5800;">
+                        <i class="fa fa-star"></i>
+                    </div>
+                    <span class="module-card-title">Análisis de fidelización</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-card-body-inner">
+                        <ul class="step-list">
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Identificación de clientes con <strong>mayor densidad de pólizas activas</strong>.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Permite reconocer los <strong>usuarios más rentables</strong> para la organización.</span></li>
+                            <li class="step-item"><span class="step-dot"></span><span class="step-text">Útil para estrategias de retención y expansión regional.</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="help-divider"></div>
+
+    <!-- ===== PERFIL ===== -->
+    <div class="help-section" id="sec-perfil">
+        <div class="section-header">
+            <div class="section-icon" style="background:#f0e8fb; color:#5a007a;">
+                <i class="fa fa-user-circle"></i>
+            </div>
+            <div>
+                <p class="section-title">Mi Perfil</p>
+                <p class="section-desc">Visualiza y actualiza tu información personal registrada en el sistema.</p>
+            </div>
+        </div>
+
+        <div class="module-grid">
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#f0e8fb; color:#5a007a;">
+                        <i class="fa fa-id-card"></i>
+                    </div>
+                    <span class="module-card-title">Actualizar información personal</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <div class="module-card-body-inner">
+                        <ul class="step-list">
+                            <li class="step-item"><span class="step-num">1</span><span class="step-text">Haz clic en <strong>Mi Perfil</strong> en el menú lateral o en el menú desplegable superior derecho.</span></li>
+                            <li class="step-item"><span class="step-num">2</span><span class="step-text">Modifica los campos que deseas actualizar: nombre, teléfono, cargo, entre otros.</span></li>
+                            <li class="step-item"><span class="step-num">3</span><span class="step-text">Haz clic en <strong>Guardar cambios</strong>. El sistema confirmará la actualización.</span></li>
+                        </ul>
+                        <div class="note-box">
+                            <i class="fa fa-info-circle"></i>
+                            <p>El <strong>correo electrónico</strong> no puede modificarse desde esta pantalla. Para cambios en correo o contraseña, comunícate con soporte técnico.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="help-divider"></div>
+
+    <!-- ===== ERRORES ===== -->
+    <div class="help-section" id="sec-errores">
+        <div class="section-header">
+            <div class="section-icon" style="background:#fdeaec; color:#b02030;">
+                <i class="fa fa-exclamation-triangle"></i>
+            </div>
+            <div>
+                <p class="section-title">Mensajes del sistema y errores</p>
+                <p class="section-desc">Referencia rápida de los mensajes que puedes encontrar y cómo resolverlos.</p>
+            </div>
+        </div>
+
+        <h3 style="font-size:15px; font-weight:700; color:var(--texto-principal); margin:0 0 14px 0;">Tipos de notificaciones</h3>
+        <div class="error-table-wrap">
+            <table class="error-table">
+                <thead>
+                <tr><th>Tipo</th><th>Cuándo aparece</th><th>Ejemplo</th></tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><span class="badge badge-success"><i class="fa fa-check-circle"></i> ÉXITO</span></td>
+                    <td>La acción se completó correctamente.</td>
+                    <td><em>"Rol del usuario actualizado exitosamente."</em></td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-info"><i class="fa fa-info-circle"></i> INFO</span></td>
+                    <td>Mensaje informativo sin éxito ni fallo.</td>
+                    <td><em>"Su sesión expirará en 5 minutos."</em></td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-warn"><i class="fa fa-exclamation-circle"></i> ADVERTENCIA</span></td>
+                    <td>La acción se completó, pero hay un detalle a considerar.</td>
+                    <td><em>"El archivo es muy pesado, puede tardar."</em></td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-error"><i class="fa fa-times-circle"></i> ERROR</span></td>
+                    <td>La acción no pudo completarse.</td>
+                    <td><em>"No es posible cambiar el rol de un usuario INACTIVO."</em></td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-fatal"><i class="fa fa-skull-crossbones"></i> FATAL</span></td>
+                    <td>Error crítico del sistema. Requiere soporte.</td>
+                    <td><em>"Error de conexión. Contacte al administrador."</em></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 style="font-size:15px; font-weight:700; color:var(--texto-principal); margin:0 0 14px 0;">Errores en gestión de usuarios</h3>
+        <div class="error-table-wrap">
+            <table class="error-table">
+                <thead>
+                <tr><th>Situación</th><th>Tipo</th><th>Mensaje</th><th>Acción recomendada</th></tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Cambiar rol a usuario INACTIVO o SUSPENDIDO</td>
+                    <td><span class="badge badge-error">ERROR</span></td>
+                    <td><em>"No es posible cambiar el rol de un usuario INACTIVO O SUSPENDIDO."</em></td>
+                    <td>Cambia primero el estado a <span class="badge badge-active">ACTIVO</span> y luego procede.</td>
+                </tr>
+                <tr>
+                    <td>Cambio de rol exitoso</td>
+                    <td><span class="badge badge-success">ÉXITO</span></td>
+                    <td><em>"Rol del usuario actualizado exitosamente."</em></td>
+                    <td>No se requiere acción adicional.</td>
+                </tr>
+                <tr>
+                    <td>Cambio de estado a ACTIVO</td>
+                    <td><span class="badge badge-success">ÉXITO</span></td>
+                    <td><em>"El estado del usuario ha sido actualizado a ACTIVO."</em></td>
+                    <td>El usuario podrá iniciar sesión desde ese momento.</td>
+                </tr>
+                <tr>
+                    <td>Cambio de estado a INACTIVO</td>
+                    <td><span class="badge badge-success">ÉXITO</span></td>
+                    <td><em>"El estado del usuario ha sido actualizado a INACTIVO."</em></td>
+                    <td>El usuario no podrá iniciar sesión hasta que se reactive.</td>
+                </tr>
+                <tr>
+                    <td>Cambio de estado a SUSPENDIDO</td>
+                    <td><span class="badge badge-success">ÉXITO</span></td>
+                    <td><em>"El estado del usuario ha sido actualizado a SUSPENDIDO."</em></td>
+                    <td>El usuario no podrá acceder mientras esté suspendido.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 style="font-size:15px; font-weight:700; color:var(--texto-principal); margin:0 0 14px 0;">Errores de acceso y autenticación</h3>
+        <div class="error-table-wrap">
+            <table class="error-table">
+                <thead>
+                <tr><th>Situación</th><th>Tipo</th><th>Acción recomendada</th></tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Credenciales incorrectas al iniciar sesión</td>
+                    <td><span class="badge badge-error">ERROR</span></td>
+                    <td>Verifica que el correo y contraseña sean correctos.</td>
+                </tr>
+                <tr>
+                    <td>Cuenta aún no activada</td>
+                    <td><span class="badge badge-error">ERROR</span></td>
+                    <td>Espera confirmación. Si lleva más de 24 h, contacta soporte.</td>
+                </tr>
+                <tr>
+                    <td>Cuenta bloqueada por otro administrador</td>
+                    <td><span class="badge badge-error">ERROR</span></td>
+                    <td>Comunícate con el Administrador del sistema para reactivar tu cuenta.</td>
+                </tr>
+                <tr>
+                    <td>Intento de acceso sin sesión activa</td>
+                    <td><span class="badge badge-info">PÁGINA</span></td>
+                    <td>El sistema redirige al login automáticamente. Ingresa tus credenciales.</td>
+                </tr>
+                <tr>
+                    <td>Sesión expirando por inactividad</td>
+                    <td><span class="badge badge-info">INFO</span></td>
+                    <td>Guarda tu trabajo y continúa navegando para mantener la sesión activa.</td>
+                </tr>
+                <tr>
+                    <td>Acceso a URL sin permisos de Administrador</td>
+                    <td><span class="badge badge-error">PÁGINA</span></td>
+                    <td>Usa solo el menú lateral. No ingreses rutas manualmente.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 style="font-size:15px; font-weight:700; color:var(--texto-principal); margin:0 0 14px 0;">Mensajes de confirmación (operaciones exitosas)</h3>
+        <div class="error-table-wrap">
+            <table class="error-table">
+                <thead>
+                <tr><th>Acción completada</th><th>Mensaje del sistema</th></tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Cambio de rol de usuario</td>
+                    <td><span class="badge badge-success"><i class="fa fa-check"></i> "Rol del usuario actualizado exitosamente."</span></td>
+                </tr>
+                <tr>
+                    <td>Cambio de estado a ACTIVO</td>
+                    <td><span class="badge badge-success"><i class="fa fa-check"></i> "El estado del usuario ha sido actualizado a ACTIVO."</span></td>
+                </tr>
+                <tr>
+                    <td>Cambio de estado a INACTIVO</td>
+                    <td><span class="badge badge-success"><i class="fa fa-check"></i> "El estado del usuario ha sido actualizado a INACTIVO."</span></td>
+                </tr>
+                <tr>
+                    <td>Cambio de estado a SUSPENDIDO</td>
+                    <td><span class="badge badge-success"><i class="fa fa-check"></i> "El estado del usuario ha sido actualizado a SUSPENDIDO."</span></td>
+                </tr>
+                <tr>
+                    <td>Actualización de perfil personal</td>
+                    <td><span class="badge badge-success"><i class="fa fa-check"></i> "Tus datos han sido actualizados correctamente."</span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="help-divider"></div>
+
+    <!-- ===== GLOSARIO ===== -->
+    <div class="help-section" id="sec-glosario">
+        <div class="section-header">
+            <div class="section-icon" style="background:rgba(8,30,66,0.08); color:#081E42;">
+                <i class="fa fa-book"></i>
+            </div>
+            <div>
+                <p class="section-title">Glosario</p>
+                <p class="section-desc">Términos clave del rol Administrador en la plataforma IPAS.</p>
+            </div>
+        </div>
+
+        <div class="glossary-grid">
+            <div class="glossary-card">
+                <div class="glossary-term">Administrador</div>
+                <div class="glossary-def">Usuario con privilegios avanzados para gestionar usuarios, visualizar estadísticas globales y supervisar el sistema.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Dashboard Administrativo</div>
+                <div class="glossary-def">Panel principal con métricas globales, actividad del sistema y desempeño de todos los usuarios de IPAS.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Estado de Usuario</div>
+                <div class="glossary-def">Condición de una cuenta: <strong>Activo</strong> (acceso permitido), <strong>Inactivo</strong> o <strong>Suspendido</strong> (acceso restringido).</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Cambio de Rol</div>
+                <div class="glossary-def">Proceso mediante el cual se modifican los permisos de un usuario (ej. de Asesor a Administrador). Solo disponible si el usuario está Activo.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">KPIs</div>
+                <div class="glossary-def">Indicadores clave de rendimiento que permiten evaluar el estado del sistema y el desempeño de los usuarios en tiempo real.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Registro de Actividad</div>
+                <div class="glossary-def">Historial de auditoría que muestra las acciones recientes con fechas, horas y registros afectados.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Datos Globales</div>
+                <div class="glossary-def">Información consolidada de todos los usuarios, clientes y pólizas — no filtrada por asesor como en el rol Asesor.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Auditoría</div>
+                <div class="glossary-def">Proceso de seguimiento y revisión de las actividades realizadas dentro del sistema para control y verificación.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Supervisión</div>
+                <div class="glossary-def">Capacidad del Administrador para monitorear el uso del sistema y las actividades de todos los usuarios registrados.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Permisos / Rol</div>
+                <div class="glossary-def">Nivel de acceso que determina las funciones disponibles. Los roles disponibles son Administrador y Asesor.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Sesión</div>
+                <div class="glossary-def">Periodo de tiempo en el que un usuario permanece autenticado dentro del sistema tras iniciar sesión.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Módulo Consultivo</div>
+                <div class="glossary-def">Módulo que solo permite visualizar información sin posibilidad de crear, editar ni eliminar registros.</div>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+
+<th:block layout:fragment="jsVista">
+    <script th:src="@{/js/usuarios/administrador/ayuda.js}"></script>
+</th:block>
+
+</body>
+</html>

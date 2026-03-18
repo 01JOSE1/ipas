@@ -1,6 +1,7 @@
 package com.proyecto.ipas.presentacion.controlador.usuarios.asesor;
 
 import com.proyecto.ipas.datos.mapeador.UsuarioMapper;
+import com.proyecto.ipas.infraestructura.externo.almacenamiento.ArchivoAlmacenamientoServicio;
 import com.proyecto.ipas.infraestructura.seguridad.UsuarioSeguridad;
 import com.proyecto.ipas.infraestructura.utilidades.TipoAlerta;
 import com.proyecto.ipas.negocio.servicio.usuario.asesor.AsesorServicio;
@@ -13,7 +14,10 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +26,8 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 /**
@@ -42,6 +48,9 @@ public class AsesorControlador {
 
     @Autowired
     private AsesorServicio asesorServicio;
+
+    @Autowired
+    ArchivoAlmacenamientoServicio archivoAlmacenamientoServicio;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -168,4 +177,25 @@ public class AsesorControlador {
     private void cargarCorreoPerfil(UsuarioSeguridad usuarioSesion, Model model) {
         model.addAttribute("correo", usuarioAutenticacionServicio.verDatosUsuario(usuarioSesion.getIdUsuario()).correo());
     }
+
+    @GetMapping("/ayuda")
+    public String ayuda(Model model) {
+
+        return "usuarios/asesores/ayuda";
+    }
+
+    @GetMapping("/ver-manual")
+    public ResponseEntity<Resource> ayuda() {
+
+        final Path rutaManual = Paths.get("manuales");
+
+        Resource recurso = archivoAlmacenamientoServicio.cargarRecurso("Manual_de_asesor.pdf", rutaManual);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, "application/pdf") // Le dice al navegador que es un PDF
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + recurso.getFilename() + "\"")
+                .body(recurso);
+    }
+
+
 }

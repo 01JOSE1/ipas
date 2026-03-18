@@ -157,10 +157,10 @@ public class ArchivoAlmacenamientoServicio implements ArchivoAlmacenamiento {
             if (recurso.exists() && recurso.isReadable()) {
                 return recurso;
             } else {
-                throw new RecursoNOEncontradoException("archivo pdf", "nombre del archivo: ", numeroPdf);
+                throw new RecursoNOEncontradoException("archivo pdf", "nombre del archivo", numeroPdf);
             }
         } catch (MalformedURLException e) {
-            throw new RecursoNOEncontradoException("archivo pdf", "nombre del archivo: ", numeroPdf);
+            throw new RecursoNOEncontradoException("archivo pdf", "nombre del archivo", numeroPdf);
         }
     }
 

@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{plantillas/asesor}">
+
+<head>
+    <title>Ayuda - IPAS</title>
+    <th:block layout:fragment="cssVista">
+        <link rel="stylesheet" th:href="@{/css/usuarios/asesor/ayuda.css}">
+    </th:block>
+</head>
+
+<body>
+<th:block layout:fragment="contenidoVista">
+
+    <!-- ===== HERO ===== -->
+    <div class="help-hero">
+        <div class="hero-text">
+            <div class="hero-badge"><i class="fa fa-question-circle"></i> Centro de Ayuda</div>
+            <h1>¿En qué podemos ayudarte?</h1>
+            <p>Aquí encontrarás una guía rápida de todas las funciones disponibles en tu plataforma IPAS como Asesor. Navega por los módulos o descarga el manual completo.</p>
+        </div>
+        <a th:href="@{/asesor/ver-manual}" target="_blank" class="btn-manual-pdf">
+
+            <i class="fa fa-file-pdf"></i>
+            Ver Manual Completo (PDF)
+        </a>
+    </div>
+
+    <!-- ===== QUICK NAV ===== -->
+    <div class="quick-nav">
+        <a href="#sec-dashboard" class="qnav-card">
+            <div class="qnav-icon" style="background:#e8f0fb; color:#0F4C9C;">
+                <i class="fa fa-th-large"></i>
+            </div>
+            <span class="qnav-label">Dashboard</span>
+            <span class="qnav-sub">Resumen de actividad</span>
+        </a>
+        <a href="#sec-clientes" class="qnav-card">
+            <div class="qnav-icon" style="background:#e8f8ed; color:#1a7a38;">
+                <i class="fa fa-users"></i>
+            </div>
+            <span class="qnav-label">Clientes</span>
+            <span class="qnav-sub">Registrar y gestionar</span>
+        </a>
+        <a href="#sec-polizas" class="qnav-card">
+            <div class="qnav-icon" style="background:#e0f5fb; color:#0a6c84;">
+                <i class="fa fa-file-contract"></i>
+            </div>
+            <span class="qnav-label">Pólizas</span>
+            <span class="qnav-sub">Manual e IA</span>
+        </a>
+        <a href="#sec-perfil" class="qnav-card">
+            <div class="qnav-icon" style="background:#fff3cd; color:#7a5800;">
+                <i class="fa fa-user-circle"></i>
+            </div>
+            <span class="qnav-label">Mi Perfil</span>
+            <span class="qnav-sub">Actualizar datos</span>
+        </a>
+        <a href="#sec-errores" class="qnav-card">
+            <div class="qnav-icon" style="background:#fdeaec; color:#b02030;">
+                <i class="fa fa-exclamation-triangle"></i>
+            </div>
+            <span class="qnav-label">Errores</span>
+            <span class="qnav-sub">Mensajes del sistema</span>
+        </a>
+        <a href="#sec-glosario" class="qnav-card">
+            <div class="qnav-icon" style="background:#f0e0f8; color:#6a0080;">
+                <i class="fa fa-book"></i>
+            </div>
+            <span class="qnav-label">Glosario</span>
+            <span class="qnav-sub">Términos clave</span>
+        </a>
+    </div>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div class="help-section" id="sec-dashboard">
+        <div class="section-header">
+            <div class="section-icon" style="background:#e8f0fb; color:#0F4C9C;">
+                <i class="fa fa-th-large"></i>
+            </div>
+            <div>
+                <p class="section-title">Dashboard del Asesor</p>
+                <p class="section-desc">Pantalla principal con estadísticas y accesos rápidos a tus funciones.</p>
+            </div>
+        </div>
+
+        <div class="module-grid">
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#e8f0fb; color:#0F4C9C;">
+                        <i class="fa fa-chart-bar"></i>
+                    </div>
+                    <span class="module-card-title">Indicadores estadísticos</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <div class="stat-grid">
+                        <div class="stat-chip">
+                            <div class="stat-chip-icon" style="background:#e8f0fb; color:#0F4C9C;"><i class="fa fa-file-contract"></i></div>
+                            <span class="stat-chip-label">Pólizas creadas este mes</span>
+                        </div>
+                        <div class="stat-chip">
+                            <div class="stat-chip-icon" style="background:#e8f8ed; color:#1a7a38;"><i class="fa fa-tasks"></i></div>
+                            <span class="stat-chip-label">Gestiones este mes</span>
+                        </div>
+                        <div class="stat-chip">
+                            <div class="stat-chip-icon" style="background:#e0f5fb; color:#0a6c84;"><i class="fa fa-users"></i></div>
+                            <span class="stat-chip-label">Clientes gestionados</span>
+                        </div>
+                        <div class="stat-chip">
+                            <div class="stat-chip-icon" style="background:#fff3cd; color:#7a5800;"><i class="fa fa-clock"></i></div>
+                            <span class="stat-chip-label">Pólizas por vencer (≤8 días)</span>
+                        </div>
+                    </div>
+                    <div class="note-box">
+                        <i class="fa fa-info-circle"></i>
+                        <p>Solo verás los datos vinculados a <strong>tu cuenta</strong>. El sistema filtra automáticamente la información por asesor.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#e8f8ed; color:#1a7a38;">
+                        <i class="fa fa-bolt"></i>
+                    </div>
+                    <span class="module-card-title">Accesos rápidos</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <ul class="step-list">
+                        <li class="step-item">
+                            <span class="step-dot"></span>
+                            <span class="step-text"><strong>Ver Clientes</strong> – accede directamente al listado de tus clientes.</span>
+                        </li>
+                        <li class="step-item">
+                            <span class="step-dot"></span>
+                            <span class="step-text"><strong>Ver Pólizas</strong> – consulta todas tus pólizas registradas.</span>
+                        </li>
+                        <li class="step-item">
+                            <span class="step-dot"></span>
+                            <span class="step-text"><strong>Actualizar Perfil</strong> – modifica tus datos personales.</span>
+                        </li>
+                        <li class="step-item">
+                            <span class="step-dot"></span>
+                            <span class="step-text"><strong>Soporte técnico</strong> – enlace a este centro de ayuda.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="help-divider"></div>
+
+    <!-- ===== CLIENTES ===== -->
+    <div class="help-section" id="sec-clientes">
+        <div class="section-header">
+            <div class="section-icon" style="background:#e8f8ed; color:#1a7a38;">
+                <i class="fa fa-users"></i>
+            </div>
+            <div>
+                <p class="section-title">Gestión de Clientes</p>
+                <p class="section-desc">Consulta, registra y administra a tus clientes desde el menú lateral → <strong>Clientes</strong>.</p>
+            </div>
+        </div>
+
+        <div class="module-grid">
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#e8f8ed; color:#1a7a38;">
+                        <i class="fa fa-list"></i>
+                    </div>
+                    <span class="module-card-title">Listado de clientes</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <p style="font-size:13px; color:var(--texto-secundario); margin:0 0 12px 0;">La tabla muestra la información básica de cada cliente:</p>
+                    <ul class="step-list">
+                        <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>ID</strong> – identificador único asignado automáticamente.</span></li>
+                        <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Cliente</strong> – nombre completo con avatar inicial.</span></li>
+                        <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Tipo de Doc. / N° Documento</strong> – documento de identidad.</span></li>
+                        <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Teléfono / Correo</strong> – datos de contacto del cliente.</span></li>
+                        <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Acciones</strong> – botón <em>"Gestionar"</em> para acceder al perfil completo.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#e8f0fb; color:#0F4C9C;">
+                        <i class="fa fa-user-plus"></i>
+                    </div>
+                    <span class="module-card-title">Crear nuevo cliente</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <ul class="step-list">
+                        <li class="step-item"><span class="step-num">1</span><span class="step-text">En el listado, haz clic en el botón verde <strong>Nuevo Cliente</strong>.</span></li>
+                        <li class="step-item"><span class="step-num">2</span><span class="step-text">Completa todos los campos obligatorios (nombre, documento, correo, teléfono, dirección).</span></li>
+                        <li class="step-item"><span class="step-num">3</span><span class="step-text">Haz clic en <strong>Crear Cliente</strong> para guardar, o en <strong>Cancelar</strong> para descartar.</span></li>
+                        <li class="step-item"><span class="step-num">4</span><span class="step-text">El sistema confirmará y te redirigirá al listado con el nuevo registro visible.</span></li>
+                    </ul>
+                    <div class="note-box">
+                        <i class="fa fa-info-circle"></i>
+                        <p>Los campos con <strong>asterisco (*)</strong> son obligatorios. El formulario no se guardará si alguno está vacío.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#fff3cd; color:#7a5800;">
+                        <i class="fa fa-user-edit"></i>
+                    </div>
+                    <span class="module-card-title">Actualizar datos del cliente</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <ul class="step-list">
+                        <li class="step-item"><span class="step-num">1</span><span class="step-text">En el listado, haz clic en <strong>Gestionar</strong> del cliente.</span></li>
+                        <li class="step-item"><span class="step-num">2</span><span class="step-text">Modifica los campos que necesiten actualización en el formulario.</span></li>
+                        <li class="step-item"><span class="step-num">3</span><span class="step-text">Haz clic en <strong>Guardar cambios</strong>.</span></li>
+                        <li class="step-item"><span class="step-num">4</span><span class="step-text">El sistema confirmará la actualización con un mensaje de éxito.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#e0f5fb; color:#0a6c84;">
+                        <i class="fa fa-history"></i>
+                    </div>
+                    <span class="module-card-title">Ver historial de pólizas del cliente</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <p style="font-size:13px; color:var(--texto-secundario); margin:0 0 12px 0;">Dentro del perfil del cliente, encontrarás automáticamente una tabla con:</p>
+                    <ul class="step-list">
+                        <li class="step-item"><span class="step-dot"></span><span class="step-text">Número de póliza, tipo y estado.</span></li>
+                        <li class="step-item"><span class="step-dot"></span><span class="step-text">Fecha de inicio y fecha de vencimiento.</span></li>
+                        <li class="step-item"><span class="step-dot"></span><span class="step-text">Opciones de acceso directo a cada póliza.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#e8f8ed; color:#1a7a38;">
+                        <i class="fa fa-plus-circle"></i>
+                    </div>
+                    <span class="module-card-title">Crear póliza desde el perfil del cliente</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <ul class="step-list">
+                        <li class="step-item"><span class="step-num">1</span><span class="step-text">En la pantalla del cliente, haz clic en <strong>Crear nueva póliza</strong>.</span></li>
+                        <li class="step-item"><span class="step-num">2</span><span class="step-text">El formulario se abrirá con el cliente <em>ya vinculado</em>.</span></li>
+                        <li class="step-item"><span class="step-num">3</span><span class="step-text">Completa todos los campos y haz clic en <strong>Guardar</strong>.</span></li>
+                        <li class="step-item"><span class="step-num">4</span><span class="step-text">La póliza aparecerá en el historial del cliente y en el listado general de pólizas.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:linear-gradient(135deg,#00b4d8,#0F4C9C); color:#fff;">
+                        <i class="fa fa-robot"></i>
+                    </div>
+                    <span class="module-card-title">Generar póliza con IA <span class="tag-ia"><i class="fa fa-magic"></i> IA</span></span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <ul class="step-list">
+                        <li class="step-item"><span class="step-num">1</span><span class="step-text">En el perfil del cliente, haz clic en <strong>Generar póliza con IA</strong>.</span></li>
+                        <li class="step-item"><span class="step-num">2</span><span class="step-text">Selecciona el archivo <strong>PDF</strong> de la póliza desde tu dispositivo.</span></li>
+                        <li class="step-item"><span class="step-num">3</span><span class="step-text">Haz clic en <strong>Procesar con IA</strong>. El sistema analizará el documento.</span></li>
+                        <li class="step-item"><span class="step-num">4</span><span class="step-text">Si el cliente ya existe, irá al formulario de póliza con campos <em>autocompletados</em>.</span></li>
+                        <li class="step-item"><span class="step-num">5</span><span class="step-text">Si el cliente no existe, se abrirá el formulario de cliente con datos extraídos del PDF.</span></li>
+                        <li class="step-item"><span class="step-num">6</span><span class="step-text">Verifica, ajusta si es necesario y haz clic en <strong>Guardar</strong>.</span></li>
+                    </ul>
+                    <div class="note-box warn-box">
+                        <i class="fa fa-exclamation-triangle"></i>
+                        <p>Siempre <strong>verifica los campos autocompletados</strong> por IA antes de guardar. La precisión depende de la calidad del PDF cargado.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="help-divider"></div>
+
+    <!-- ===== PÓLIZAS ===== -->
+    <div class="help-section" id="sec-polizas">
+        <div class="section-header">
+            <div class="section-icon" style="background:#e0f5fb; color:#0a6c84;">
+                <i class="fa fa-file-contract"></i>
+            </div>
+            <div>
+                <p class="section-title">Gestión de Pólizas</p>
+                <p class="section-desc">Consulta, crea y administra todas tus pólizas desde el menú lateral → <strong>Pólizas</strong>.</p>
+            </div>
+        </div>
+
+        <div class="module-grid">
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#e0f5fb; color:#0a6c84;">
+                        <i class="fa fa-table"></i>
+                    </div>
+                    <span class="module-card-title">Listado de pólizas</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <p style="font-size:13px; color:var(--texto-secundario); margin:0 0 12px 0;">La tabla muestra la información de cada póliza:</p>
+                    <ul class="step-list">
+                        <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Código de Póliza</strong> – identificador alfanumérico único.</span></li>
+                        <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Vigencia</strong> – fechas de inicio y fin de cobertura con etiqueta de estado.</span></li>
+                        <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Prima Neta / Prima Total</strong> – desglose del costo del seguro.</span></li>
+                        <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Estado Póliza</strong> – Activa, Cancelada o Vencida.</span></li>
+                        <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Estado de Pago</strong> – Pagada o Pendiente.</span></li>
+                        <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Placa</strong> – para seguros vehiculares.</span></li>
+                        <li class="step-item"><span class="step-dot"></span><span class="step-text"><strong>Acciones</strong> – Editar, Ver PDF, Cancelar.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#e8f8ed; color:#1a7a38;">
+                        <i class="fa fa-pen"></i>
+                    </div>
+                    <span class="module-card-title">Crear nueva póliza (manual)</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <ul class="step-list">
+                        <li class="step-item"><span class="step-num">1</span><span class="step-text">En el listado de pólizas, haz clic en <strong>Nueva Póliza (manual)</strong>.</span></li>
+                        <li class="step-item"><span class="step-num">2</span><span class="step-text">Completa los campos: cliente, tipo de póliza, vigencia, valor asegurado, entre otros.</span></li>
+                        <li class="step-item"><span class="step-num">3</span><span class="step-text">Adjunta el documento <strong>PDF</strong> de la póliza.</span></li>
+                        <li class="step-item"><span class="step-num">4</span><span class="step-text">Haz clic en <strong>Guardar</strong>. La póliza quedará registrada en el listado.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:linear-gradient(135deg,#00b4d8,#0F4C9C); color:#fff;">
+                        <i class="fa fa-robot"></i>
+                    </div>
+                    <span class="module-card-title">Generar póliza con IA <span class="tag-ia"><i class="fa fa-magic"></i> IA</span></span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <p style="font-size:13px; color:var(--texto-secundario); margin:0 0 10px 0;">El proceso es idéntico al explicado en el módulo de Clientes. Puedes acceder desde aquí:</p>
+                    <ul class="step-list">
+                        <li class="step-item"><span class="step-num">1</span><span class="step-text">Haz clic en <strong>Nueva Póliza con IA</strong> en el listado de pólizas.</span></li>
+                        <li class="step-item"><span class="step-num">2</span><span class="step-text">Carga el PDF, procesa con IA, verifica datos y guarda. El flujo es igual al de la sección de clientes.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#fff3cd; color:#7a5800;">
+                        <i class="fa fa-edit"></i>
+                    </div>
+                    <span class="module-card-title">Editar información de póliza</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <ul class="step-list">
+                        <li class="step-item"><span class="step-num">1</span><span class="step-text">Localiza la póliza en el listado y haz clic en <strong>Editar</strong>.</span></li>
+                        <li class="step-item"><span class="step-num">2</span><span class="step-text">El sistema abrirá el formulario con los datos actuales de la póliza.</span></li>
+                        <li class="step-item"><span class="step-num">3</span><span class="step-text">Realiza los cambios necesarios y haz clic en <strong>Guardar</strong>.</span></li>
+                    </ul>
+                    <div class="note-box warn-box">
+                        <i class="fa fa-exclamation-triangle"></i>
+                        <p>Las pólizas con estado <strong>Cancelada</strong> no pueden ser editadas desde la interfaz.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#fdeaec; color:#b02030;">
+                        <i class="fa fa-file-pdf"></i>
+                    </div>
+                    <span class="module-card-title">Ver documento PDF de póliza</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <ul class="step-list">
+                        <li class="step-item"><span class="step-num">1</span><span class="step-text">Localiza la póliza en el listado.</span></li>
+                        <li class="step-item"><span class="step-num">2</span><span class="step-text">Haz clic en el botón o ícono <strong>PDF</strong>.</span></li>
+                        <li class="step-item"><span class="step-num">3</span><span class="step-text">El sistema abrirá el documento en una <strong>nueva pestaña</strong> del navegador.</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#fdeaec; color:#b02030;">
+                        <i class="fa fa-ban"></i>
+                    </div>
+                    <span class="module-card-title">Cancelar póliza</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <ul class="step-list">
+                        <li class="step-item"><span class="step-num">1</span><span class="step-text">Haz clic en el botón <strong>Cancelar</strong> de la póliza correspondiente.</span></li>
+                        <li class="step-item"><span class="step-num">2</span><span class="step-text">Se abrirá un modal de confirmación.</span></li>
+                        <li class="step-item"><span class="step-num">3</span><span class="step-text">Escribe el <strong>motivo de cancelación</strong> en el campo habilitado (obligatorio).</span></li>
+                        <li class="step-item"><span class="step-num">4</span><span class="step-text">Haz clic en <strong>Confirmar cancelación</strong>.</span></li>
+                        <li class="step-item"><span class="step-num">5</span><span class="step-text">El estado de la póliza se actualizará a <em>"Cancelada"</em> y se registrará el motivo.</span></li>
+                    </ul>
+                    <div class="note-box warn-box">
+                        <i class="fa fa-exclamation-triangle"></i>
+                        <p>La cancelación <strong>no puede deshacerse</strong> desde la interfaz. Si necesitas revertirla, comunícate con el Administrador.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="help-divider"></div>
+
+    <!-- ===== PERFIL ===== -->
+    <div class="help-section" id="sec-perfil">
+        <div class="section-header">
+            <div class="section-icon" style="background:#fff3cd; color:#7a5800;">
+                <i class="fa fa-user-circle"></i>
+            </div>
+            <div>
+                <p class="section-title">Mi Perfil</p>
+                <p class="section-desc">Visualiza y actualiza tu información personal registrada en el sistema.</p>
+            </div>
+        </div>
+
+        <div class="module-grid">
+            <div class="module-card">
+                <div class="module-card-header" onclick="toggleCard(this)">
+                    <div class="module-card-icon" style="background:#fff3cd; color:#7a5800;">
+                        <i class="fa fa-id-card"></i>
+                    </div>
+                    <span class="module-card-title">Actualizar información personal</span>
+                    <i class="fa fa-chevron-down module-card-chevron"></i>
+                </div>
+                <div class="module-card-body">
+                    <ul class="step-list">
+                        <li class="step-item"><span class="step-num">1</span><span class="step-text">Haz clic en <strong>Mi Perfil</strong> en el menú lateral o en el menú desplegable superior derecha.</span></li>
+                        <li class="step-item"><span class="step-num">2</span><span class="step-text">Modifica los campos que deseas actualizar (nombre, teléfono, cargo, entre otros).</span></li>
+                        <li class="step-item"><span class="step-num">3</span><span class="step-text">Haz clic en <strong>Guardar cambios</strong>. El sistema confirmará la actualización.</span></li>
+                    </ul>
+                    <div class="note-box">
+                        <i class="fa fa-info-circle"></i>
+                        <p>El <strong>correo electrónico</strong> no puede modificarse desde esta pantalla. Para cambios en correo o contraseña, comunícate con el Administrador.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="help-divider"></div>
+
+    <!-- ===== ERRORES ===== -->
+    <div class="error-section" id="sec-errores">
+        <div class="section-header">
+            <div class="section-icon" style="background:#fdeaec; color:#b02030;">
+                <i class="fa fa-exclamation-triangle"></i>
+            </div>
+            <div>
+                <p class="section-title">Mensajes del sistema y errores</p>
+                <p class="section-desc">Referencia rápida de los mensajes que puedes encontrar y cómo resolverlos.</p>
+            </div>
+        </div>
+
+        <!-- Tipos de notificación -->
+        <h3 style="font-size:15px; font-weight:700; color:var(--texto-principal); margin:0 0 14px 0;">Tipos de notificaciones</h3>
+        <div class="error-table-wrap" style="margin-bottom:24px;">
+            <table class="error-table">
+                <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Cuándo aparece</th>
+                    <th>Ejemplo</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><span class="badge badge-success"><i class="fa fa-check-circle"></i> ÉXITO</span></td>
+                    <td>La acción se completó correctamente.</td>
+                    <td><em>"Cliente registrado exitosamente"</em></td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-info"><i class="fa fa-info-circle"></i> INFO</span></td>
+                    <td>Mensaje informativo sin éxito ni fallo.</td>
+                    <td><em>"Su sesión expirará en 5 minutos"</em></td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-warn"><i class="fa fa-exclamation-circle"></i> ADVERTENCIA</span></td>
+                    <td>La acción se completó, pero hay un detalle a considerar.</td>
+                    <td><em>"El archivo es muy pesado, puede tardar"</em></td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-error"><i class="fa fa-times-circle"></i> ERROR</span></td>
+                    <td>La acción no pudo completarse por validación o fallo esperado.</td>
+                    <td><em>"El usuario ya existe en el sistema"</em></td>
+                </tr>
+                <tr>
+                    <td><span class="badge badge-fatal"><i class="fa fa-skull-crossbones"></i> FATAL</span></td>
+                    <td>Error crítico del sistema. Requiere contactar soporte.</td>
+                    <td><em>"Error de conexión. Contacte al administrador"</em></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Errores de formulario -->
+        <h3 style="font-size:15px; font-weight:700; color:var(--texto-principal); margin:0 0 14px 0;">Errores de validación en formularios</h3>
+        <div class="error-table-wrap" style="margin-bottom:24px;">
+            <table class="error-table">
+                <thead>
+                <tr>
+                    <th>Situación</th>
+                    <th>Tipo</th>
+                    <th>Acción recomendada</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Campo obligatorio vacío</td>
+                    <td><span class="badge badge-error">Campo</span></td>
+                    <td>Completa el campo señalado antes de guardar.</td>
+                </tr>
+                <tr>
+                    <td>Formato de correo incorrecto</td>
+                    <td><span class="badge badge-error">Campo</span></td>
+                    <td>Usa el formato correcto: <code>usuario@dominio.com</code></td>
+                </tr>
+                <tr>
+                    <td>Número de teléfono inválido</td>
+                    <td><span class="badge badge-error">Campo</span></td>
+                    <td>Ingresa solo números con el formato requerido.</td>
+                </tr>
+                <tr>
+                    <td>Placa vacía en póliza vehicular</td>
+                    <td><span class="badge badge-error">Campo</span></td>
+                    <td>Ingresa la placa del vehículo en el campo correspondiente.</td>
+                </tr>
+                <tr>
+                    <td>Fecha de vencimiento anterior a inicio</td>
+                    <td><span class="badge badge-error">Campo</span></td>
+                    <td>La fecha de fin debe ser posterior a la fecha de inicio.</td>
+                </tr>
+                <tr>
+                    <td>Número de identificación de cliente duplicado</td>
+                    <td><span class="badge badge-error">ERROR</span></td>
+                    <td>Verifica si el cliente ya está registrado en el listado.</td>
+                </tr>
+                <tr>
+                    <td>Número de póliza duplicado</td>
+                    <td><span class="badge badge-error">ERROR</span></td>
+                    <td>Revisa e ingresa el número de póliza correcto.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Errores de PDF -->
+        <h3 style="font-size:15px; font-weight:700; color:var(--texto-principal); margin:0 0 14px 0;">Errores en carga de archivos PDF</h3>
+        <div class="error-table-wrap" style="margin-bottom:24px;">
+            <table class="error-table">
+                <thead>
+                <tr>
+                    <th>Situación</th>
+                    <th>Tipo</th>
+                    <th>Acción recomendada</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Archivo supera 10 MB</td>
+                    <td><span class="badge badge-error">ERROR</span></td>
+                    <td>Comprime el PDF o solicita una versión de menor tamaño.</td>
+                </tr>
+                <tr>
+                    <td>El archivo no es un PDF válido</td>
+                    <td><span class="badge badge-error">ERROR</span></td>
+                    <td>Verifica que el archivo tenga extensión <code>.pdf</code>.</td>
+                </tr>
+                <tr>
+                    <td>PDF escaneado como imagen (sin texto)</td>
+                    <td><span class="badge badge-warn">ADVERTENCIA</span></td>
+                    <td>Carga una versión digital. Si es físico, asegura que el escaneo sea nítido.</td>
+                </tr>
+                <tr>
+                    <td>PDF protegido con contraseña</td>
+                    <td><span class="badge badge-error">ERROR</span></td>
+                    <td>Remueve la protección del archivo antes de subirlo.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Errores IA -->
+        <h3 style="font-size:15px; font-weight:700; color:var(--texto-principal); margin:0 0 14px 0;">Errores en procesamiento con Inteligencia Artificial</h3>
+        <div class="error-table-wrap" style="margin-bottom:24px;">
+            <table class="error-table">
+                <thead>
+                <tr>
+                    <th>Situación</th>
+                    <th>Tipo</th>
+                    <th>Acción recomendada</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Fallo en la extracción de datos por IA</td>
+                    <td><span class="badge badge-error">ERROR</span></td>
+                    <td>Vuelve a intentarlo. Si persiste, diligencia el formulario manualmente.</td>
+                </tr>
+                <tr>
+                    <td>Error de conexión interna de IA</td>
+                    <td><span class="badge badge-fatal">FATAL</span></td>
+                    <td>Comunícate con soporte técnico. Usa la creación manual mientras tanto.</td>
+                </tr>
+                <tr>
+                    <td>Campos no completados automáticamente</td>
+                    <td><span class="badge badge-warn">ADVERTENCIA</span></td>
+                    <td>Completa manualmente los campos vacíos antes de guardar la póliza.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Mensajes de éxito -->
+        <h3 style="font-size:15px; font-weight:700; color:var(--texto-principal); margin:0 0 14px 0;">Mensajes de confirmación (operaciones exitosas)</h3>
+        <div class="error-table-wrap">
+            <table class="error-table">
+                <thead>
+                <tr>
+                    <th>Acción completada</th>
+                    <th>Mensaje del sistema</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Registro de nuevo cliente</td>
+                    <td><span class="badge badge-success"><i class="fa fa-check"></i> "Cliente registrado exitosamente."</span></td>
+                </tr>
+                <tr>
+                    <td>Actualización de datos del cliente</td>
+                    <td><span class="badge badge-success"><i class="fa fa-check"></i> "Datos del cliente actualizados correctamente."</span></td>
+                </tr>
+                <tr>
+                    <td>Creación de póliza manual</td>
+                    <td><span class="badge badge-success"><i class="fa fa-check"></i> "Póliza creada exitosamente."</span></td>
+                </tr>
+                <tr>
+                    <td>Generación de póliza con IA</td>
+                    <td><span class="badge badge-success"><i class="fa fa-check"></i> "Póliza generada exitosamente a partir del documento."</span></td>
+                </tr>
+                <tr>
+                    <td>Edición de información de póliza</td>
+                    <td><span class="badge badge-success"><i class="fa fa-check"></i> "Póliza actualizada correctamente."</span></td>
+                </tr>
+                <tr>
+                    <td>Cancelación de póliza</td>
+                    <td><span class="badge badge-success"><i class="fa fa-check"></i> "La póliza ha sido cancelada."</span></td>
+                </tr>
+                <tr>
+                    <td>Actualización de perfil personal</td>
+                    <td><span class="badge badge-success"><i class="fa fa-check"></i> "Tus datos han sido actualizados correctamente."</span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="help-divider"></div>
+
+    <!-- ===== GLOSARIO ===== -->
+    <div class="help-section" id="sec-glosario">
+        <div class="section-header">
+            <div class="section-icon" style="background:#f0e0f8; color:#6a0080;">
+                <i class="fa fa-book"></i>
+            </div>
+            <div>
+                <p class="section-title">Glosario</p>
+                <p class="section-desc">Términos clave que encontrarás en la plataforma IPAS.</p>
+            </div>
+        </div>
+
+        <div class="glossary-grid">
+            <div class="glossary-card">
+                <div class="glossary-term">Dashboard</div>
+                <div class="glossary-def">Pantalla principal donde visualizas estadísticas, indicadores y accesos rápidos a las funciones del sistema.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Cliente</div>
+                <div class="glossary-def">Persona natural o jurídica registrada en el sistema a la cual se le gestionan pólizas de seguro.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Póliza</div>
+                <div class="glossary-def">Documento legal que representa un contrato de seguro entre el cliente y la aseguradora.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">IA (Inteligencia Artificial)</div>
+                <div class="glossary-def">Tecnología que extrae automáticamente información desde documentos PDF de pólizas para agilizar el registro.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Estado de Póliza</div>
+                <div class="glossary-def">Condición actual de una póliza: <strong>Activa</strong>, <strong>Cancelada</strong> o <strong>Vencida</strong>.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Estado de Pago</div>
+                <div class="glossary-def">Indica si la póliza ha sido <strong>Pagada</strong> o si se encuentra <strong>Pendiente</strong> de pago.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Vigencia</div>
+                <div class="glossary-def">Periodo de tiempo en el que una póliza de seguro está activa (fecha de inicio y fecha de vencimiento).</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Modal</div>
+                <div class="glossary-def">Ventana emergente que solicita confirmación o muestra información adicional sin salir de la pantalla actual.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Notificación (Toast)</div>
+                <div class="glossary-def">Mensaje emergente que aparece en la esquina superior derecha e informa el resultado de una acción.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Sesión</div>
+                <div class="glossary-def">Periodo de tiempo en el que permaneces autenticado dentro del sistema tras iniciar sesión.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Prima Neta / Prima Total</div>
+                <div class="glossary-def">Desglose económico del costo del seguro: valor base y monto final a pagar por el cliente.</div>
+            </div>
+            <div class="glossary-card">
+                <div class="glossary-term">Placa</div>
+                <div class="glossary-def">Identificador del vehículo asociado a una póliza de seguro vehicular.</div>
+            </div>
+        </div>
+    </div>
+
+</th:block>
+<th:block layout:fragment="jsVista">
+    <script th:src="@{/js/usuarios/asesor/ayuda.js}"></script>
+</th:block>
+
+
+</body>
+</html>

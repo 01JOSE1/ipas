@@ -7,10 +7,7 @@ import com.proyecto.ipas.negocio.servicio.poliza.aseguradora.AseguradoraServicio
 import com.proyecto.ipas.negocio.servicio.cliente.ClienteServicio;
 import com.proyecto.ipas.negocio.servicio.poliza.PolizaServicio;
 import com.proyecto.ipas.negocio.servicio.poliza.ramo.RamoServicio;
-import com.proyecto.ipas.presentacion.excepcion.ArchivoInvalidoExcepcion;
-import com.proyecto.ipas.presentacion.excepcion.ConflictoExcepcion;
-import com.proyecto.ipas.presentacion.excepcion.NegocioExcepcion;
-import com.proyecto.ipas.presentacion.excepcion.ValidacionDatosExcepcion;
+import com.proyecto.ipas.presentacion.excepcion.*;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.cliente.GestionClienteDTO;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.mensajeFrontend.AlertaRespuesta;
 import com.proyecto.ipas.presentacion.objetoTransferenciaDatos.poliza.CancelarPolizaDTO;
@@ -186,7 +183,7 @@ public class AsesorPolizaControlador {
 
             return "redirect:/asesor/poliza/registro-poliza";
 
-        } catch (IOException | ArchivoInvalidoExcepcion ex) {
+        } catch (IOException | ArchivoInvalidoExcepcion | IaProcesoExcepcion ex) {
             modelo.addAttribute("alertaRespuesta",
                     new AlertaRespuesta(TipoAlerta.ERROR, ex.getMessage()));
             return "usuarios/asesores/polizas/subirPdf";
