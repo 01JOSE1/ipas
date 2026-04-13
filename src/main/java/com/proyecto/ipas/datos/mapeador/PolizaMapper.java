@@ -74,7 +74,7 @@ public interface PolizaMapper {
     default Poliza crearPoliza(GestionPolizaDTO gestionPolizaDTO, RamoEntidad ramoEntidad, AseguradoraEntidad aseguradoraEntidad) {
         Ramo ramo = toRamo(ramoEntidad);
         Aseguradora aseguradora = toAseguradora(aseguradoraEntidad);
-        return Poliza.registrar(gestionPolizaDTO.getCodigoPoliza(), gestionPolizaDTO.getFechaInicio(), gestionPolizaDTO.getFechaFin(), gestionPolizaDTO.getPrimaNeta(), gestionPolizaDTO.getPrimaTotal(), gestionPolizaDTO.getEstadoPago(), gestionPolizaDTO.getPlaca(), ramo, aseguradora);
+        return Poliza.registrar(gestionPolizaDTO.getCodigoPoliza(), gestionPolizaDTO.getFechaInicio(), gestionPolizaDTO.getFechaFin(), gestionPolizaDTO.getPrimaNeta(), gestionPolizaDTO.getPrimaTotal(), gestionPolizaDTO.getEstadoPago(), gestionPolizaDTO.getPlaca(), gestionPolizaDTO.getDescripcion(), ramo, aseguradora);
     }
 
     /**

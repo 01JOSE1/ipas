@@ -165,6 +165,8 @@ public class PolizaServicio {
                     - Los formatos de cada campo son obligatorios y no negociables.
                     - Los campos representan conceptos, no etiquetas textuales exactas. Búscalos por su SIGNIFICADO
                       usando el contexto del documento, ya que cada póliza puede usar terminología diferente.
+                    - Los datos de contacto (teléfono, correo, dirección) en gestionClienteDTO corresponden
+                      SIEMPRE al tomador. Nunca uses datos de contacto de la aseguradora, agente o intermediario.
                 """;
 
             String datosPrompt = """
@@ -198,10 +200,28 @@ public class PolizaServicio {
                     - tipoDocumento: Tipo de documento de identidad. Debe ser exactamente uno de estos valores:
                       %s
                     - numeroDocumento: Número del documento de identidad del tomador. Solo números, sin puntos ni guiones ni espacios.
-                    - telefono: Debe ser una cadena de exactamente 10 dígitos numéricos. Si el número recibido tiene 7 dígitos, anteponer el prefijo "601"; si ya tiene 10 dígitos, dejarlo tal cual. Solo numeros sin espacios.
-                    - correo: Correo electrónico del tomador. Máximo 100 caracteres.
+                    - telefono: Número de teléfono de contacto del TOMADOR (no de la aseguradora ni de intermediarios).
+                      Debe ser una cadena de exactamente 10 dígitos numéricos. Si el número recibido tiene 7 dígitos,
+                      anteponer el prefijo "601"; si ya tiene 10 dígitos, dejarlo tal cual. Solo números sin espacios.
+                      null si no aparece en el documento.
+                    - correo: Correo electrónico de contacto del TOMADOR (no de la aseguradora ni de intermediarios).
+                      Máximo 100 caracteres. null si no aparece en el documento.
                     - direccion: Dirección de residencia o fiscal del tomador. Máximo 100 caracteres.
                     - ciudad: Ciudad de residencia o fiscal del tomador. Máximo 60 caracteres.
+
+                    IMPORTANTE - telefono y correo:
+                    - Ambos datos deben pertenecer exclusivamente al TOMADOR. Ignora cualquier correo o teléfono
+                      que pertenezca a la aseguradora, al agente, al broker, al defensor del consumidor,
+                      a la Superintendencia Financiera o a cualquier tercero.
+                    - REGLA CRÍTICA: Un correo o teléfono que aparezca en frases como "puede contactar a...",
+                      "podrá solicitar a...", "escríbanos a...", "comuníquese con..." NO es dato del tomador,
+                      es dato de la entidad receptora. Ignóralo completamente.
+                    - El correo del tomador es el que identifica al tomador como EMISOR o TITULAR del contacto,
+                      no como destinatario de una comunicación.
+                    - Si el documento no contiene teléfono ni correo propios del tomador, devuelve ambos en null.
+                      No inventes ni tomes datos de contacto de otras entidades.
+                    - Al menos uno de los dos (telefono o correo) debe tener valor SOLO si realmente pertenece
+                      al tomador. Si no hay ninguno del tomador, ambos van en null.
                     
                 Responde SOLO con este JSON:
                 {
@@ -224,7 +244,7 @@ public class PolizaServicio {
                     "telefono": null,
                     "correo": null,
                     "direccion": null,
-                    "ciudad": null,  
+                    "ciudad": null
                   }
                 }
 

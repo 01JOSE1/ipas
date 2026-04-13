@@ -60,7 +60,7 @@ public class Poliza {
      * @throws ValidacionDatosExcepcion si fechas, primas, o ramo incumplen las reglas de negocio
      * @throws NegocioExcepcion si el ramo AUTOMOVIL falta placa
      */
-    public static Poliza registrar(String codigoPoliza, LocalDate fechaInicio, LocalDate fechaFin, BigDecimal primaNeta, BigDecimal primaTotal, EstadoPagoPoliza estadoPago, String placa, Ramo ramo, Aseguradora aseguradora) {
+    public static Poliza registrar(String codigoPoliza, LocalDate fechaInicio, LocalDate fechaFin, BigDecimal primaNeta, BigDecimal primaTotal, EstadoPagoPoliza estadoPago, String placa, String descripcion, Ramo ramo, Aseguradora aseguradora) {
 
         validarCodigoPoliza(codigoPoliza);
         validarFechas(fechaInicio, fechaFin);
@@ -68,6 +68,7 @@ public class Poliza {
 
         Poliza poliza = new Poliza(codigoPoliza, fechaInicio, fechaFin, primaNeta, primaTotal, EstadoPoliza.ACTIVA, validarEstadoPago(estadoPago), ramo, aseguradora);
         poliza.placa = placa;
+        poliza.descripcion = descripcion;
         validarRamo(ramo, poliza.placa);
 
         return poliza;

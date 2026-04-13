@@ -40,7 +40,7 @@ public class GestionClienteDTO {
     @NotNull(message = "El tipo de documento es obligatorio", groups = EnCreacion.class)
     private TipoDocumentoCliente tipoDocumento;
 
-    @Length(min = 9, max = 15, message = "El numero de documento no debe ser menor a 9 y mayor a 15 caracteres")
+    @Length(min = 7, max = 15, message = "El numero de documento no debe ser menor a 7 y mayor a 15 caracteres")
     @NotBlank(message = "El numero de documento es obligatorio", groups = EnCreacion.class)
     private String numeroDocumento;
 
